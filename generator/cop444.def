@@ -1,0 +1,271 @@
+// *******************************************************************************************
+// *******************************************************************************************
+//
+//										COP 444 Generator code
+//
+// *******************************************************************************************
+// *******************************************************************************************
+
+//
+//	Opcodes are in the same order as the datasheet (except for the JP in pages 2+3). However :-
+//
+//	Opcodes 23xx are mapped to 1xx
+//	Opcodes 33xx are mapped to 2xx
+//
+//	JQID and LQID should take +1 cycle but this is not worth the added complexity.
+//
+
+// *******************************************************************************************
+//
+//											Substitutions
+//	
+// *******************************************************************************************
+
+//	@A 			Lower 7 bits in hexadecimal 3F
+//	@D 			Bits 3,4 and 5 as 0..7
+//	@J 			Lower 6 bits as 0..7
+//	@N 			Lower 4 bits in hexadecimal E
+//	@R 			Bits 4 and 5 as 0..3   2
+//	@S 			lower 6 bits as hex in 80-FF (for JSRP)
+// 	@T 			Tweaked lower 4 bits so 8..F becomes 9..F,0
+//	@L 			Lower 3 bits 
+
+// *******************************************************************************************
+//
+//									Register Definitions
+//
+// *******************************************************************************************
+
+//	A 			Accumulator (4 bits)
+//	B 			Memory Address Register (7 bits)
+//	C 			Carry (1 bit)
+//	D 			Output Port (4 bits)
+//	G 			Output Port (4 bits)
+//	EN 			Control register (4 bits)
+// 	PC 			Program Counter (11 bits)
+//	Q 			I/O Port (8 bits)
+//	SA,SB,SC 	Stack (11 bits each)
+// 	TIMER 		Timer (10 bits)
+//	TOV 		Timer overflow (1 bit)
+
+:static BYTE8 A,B,C,D,G,EN,Q,TOV,temp8;
+:static WORD16 PC,SA,SB,SC,TIMER;
+:static BYTE8 RAM[128];
+:static BYTE8 ROM[2048];
+
+// *******************************************************************************************
+//
+//											Macros
+//
+// *******************************************************************************************
+
+// 	FETCH()		Fetch next byte, bump PC, timer, check overflow.
+
+//	AM()		The 8 byte A,M value((A << 4) | READ(B))
+//  LBISKIP() 	Skip over LBIs
+//	PROGRAM(n)	Access Program ROM (n)
+//	READ(a) 	Access RAM(a)
+//	SKIP() 		Skip PC (+1 cycle)
+//	WRITE(a,n)	Write nibble N to RAM(a)
+
+:#define AM() 		((A << 4) | READ(B))
+:#define READ(a) 	(RAM[a])
+:#define WRITE(a,n) { RAM[a] = (n); }
+:#define SKIP() 	{ temp8 = FETCH(); if (IS2BYTE(temp8)) PC = (PC+1) & 0x7FF; }
+:#define PROGRAM(n) ROM[n]
+:#define LBISKIP() 	{ while (isLBIOpcode() != 0) { SKIP(); } }
+
+:#define IS2BYTE(n) (	((n) >= 0x60 && (n) <= 0x6F)|| (n) == 0x23 || (n) == 0x33)
+
+:static void ResetCop444() {
+:	PC = 0;A = B = C = D = EN = G = 0; // No timer or overflow flag ?
+:	SA = SB = SC = 0; 	// Clarity, not actually done but doesn't matter. 
+:}
+
+:static BYTE8 isLBIOpcode() {
+:	BYTE8 opcode = ROM[PC];
+:	if ((opcode & 0xC8) == 0x08) return -1;			// 00xx1xxx is short LBI
+:	if (opcode != 0x33) return 0;					// 33 1xxxxxxx is long LBI
+:	opcode = ROM[(PC+1) & 0x7FF];
+:	return (opcode & 0x80) != 0;
+:}
+
+// *******************************************************************************************
+//
+//								  Events & I/O Interfacing
+//
+// *******************************************************************************************
+
+//	INREAD() 	Read value in IN
+//	LREAD() 	Read value on L lines.
+//	SIOWRITE(n)	Called when XAS is executed (write to serial I/O register)
+//	UPDATED(b)	Called when D is written to.
+//	UPDATEG(b)	Called when G is written to.
+//	UPDATEQ(b) 	Called when Q is written to
+//	UPDATEEN(b)	Called when EN is written to 
+
+// *******************************************************************************************
+//
+//									Arithmetic Instructions
+//
+// *******************************************************************************************
+
+30		ASC			A = A + READ(B) + C;C = (A >> 4) & 1; A = A & 15; if (C != 0) SKIP();
+
+31 		ADD			A = (A + READ(B)) & 15
+
+4A 		ADT 		A = (A + 10) & 15
+
+51-5F	AISC.@N 	A = A + 0x@N;C = (A >> 4) & 1;A = A & 15;if (C != 0) SKIP();
+
+10 		CASC		A = (A ^ 15) + READ(B) + C;C = (A >> 4) & 1; A = A & 15; if (C != 0) SKIP();
+
+00		CLRA 		A = 0;
+
+40 		COMP 		A = A ^ 15;
+
+44 		NOP 		;
+
+32 		RC 			C = 0
+
+22 		SC 			C = 1
+
+02 		XOR 		A = A ^ READ(B)
+
+// *******************************************************************************************
+//
+//								Transfer of Control Instructions
+//	
+// *******************************************************************************************
+
+
+FF		JID 		temp8 = PROGRAM((PC & 0x700)|AM()); PC = (PC & 0x700) | temp8
+
+60-67	JMP.@L 		temp8 = FETCH();PC = (0x@L00)|temp8
+
+C0-FE 	JP.@J 		PC = (PC & 0x7C0) | 0x@J
+
+80-BE 	JSRP.@S 	SC = SB;SB = SA;SA = PC;PC = 0x@S
+
+68-6F	JSR.@L 		temp8 = FETCH();SC = SB;SB = SA;SA = PC;PC = (0x@L00)|temp8
+
+// Note: the Page 2 + 3 behaviour of JP 1xxx xxxx is handled directly, not generated.
+
+48 		RET 		PC = SA;SA = SB;SB = SC;SC = 0
+
+49 		RETSK 		PC = SA;SA = SB;SB = SC;SC = 0;SKIP()
+
+// SC is not cleared but it will make the display clearer.
+
+238 	HALT 		PC = (PC - 2) & 0x7FF;cycles += 200;TIMER += 200;
+
+239		IT 			if (TOV == 0) { PC = (PC - 2) & 0x7FF;cycles += 200;TIMER += 200; }
+
+// *******************************************************************************************
+//
+//								Memory Reference Instructions
+//
+// *******************************************************************************************
+
+23F 	CAMT 		TIMER = AM() << 2
+
+22F 	CTMA 		temp8 = TIMER >> 2;A = temp8 & 0xF;WRITE(B,(temp8 >> 4) & 0x0F)
+
+23C 	CAMQ		Q = AM();UPDATEQ(Q)
+
+22C 	CQMA 		A = Q & 15;WRITE(B,(Q >> 4) & 15)
+
+05-35,16 LD.@R 		A = READ(B);B = B ^ (@R << 4)
+
+100-17F	LD.@D,@N 	A = READ(0x@A)
+
+BF 		LQID 		Q = PROGRAM((PC & 0x700) | AM());SC = SB;UPDATEQ(Q)
+
+4C		RMB.0		temp8 = READ(B);WRITE(B,temp8 & 0x0E)
+45		RMB.1		temp8 = READ(B);WRITE(B,temp8 & 0x0D)
+42		RMB.2		temp8 = READ(B);WRITE(B,temp8 & 0x0B)
+43		RMB.3		temp8 = READ(B);WRITE(B,temp8 & 0x07)
+
+4D 		SMB.0 		temp8 = READ(B);WRITE(B,temp8 | 0x01)
+47 		SMB.1 		temp8 = READ(B);WRITE(B,temp8 | 0x02)
+46 		SMB.2 		temp8 = READ(B);WRITE(B,temp8 | 0x04)
+4B 		SMB.3 		temp8 = READ(B);WRITE(B,temp8 | 0x08)
+
+70-7F 	STII.@N 	WRITE(B,0x@N);B = (B & 0x70) + ((B + 1) & 0x0F)
+
+06-36,16 X.@R 		temp8 = READ(B);WRITE(B,A);A = temp8;B = B ^ (@R << 4)
+
+180-1FF	XAD.@D,@N 	temp8 = READ(0x@A);WRITE(0x@A,A);A = temp8 
+
+07-37,16 XDS.@R 	temp8 = READ(B);WRITE(B,A);A = temp8;B = B ^ (@R << 4); \
+					B = (B & 0x70) + ((B-1) & 0x0F); if ((B & 0x0F) == 0x0F) SKIP();
+
+04-34,16 XIS.@R 	temp8 = READ(B);WRITE(B,A);A = temp8;B = B ^ (@R << 4); \
+					B = (B & 0x70) + ((B+1) & 0x0F); if ((B & 0x0F) == 0x00) SKIP();
+
+// *******************************************************************************************
+//
+//								Register Reference instructions
+//
+// *******************************************************************************************
+
+50 		CAB 		B = (B & 0x70) | A
+
+4E 		CBA 		A = B & 0x0F
+
+08-0F 	LBI.0,@T  	B = 0x0@T;LBISKIP()
+18-1F 	LBI.1,@T  	B = 0x1@T;LBISKIP()
+28-2F 	LBI.2,@T  	B = 0x2@T;LBISKIP()
+38-3F 	LBI.3,@T  	B = 0x3@T;LBISKIP()
+
+280-2FF LBI.@R,@N 	B = 0x@A
+
+260-26F LEI.@N 		EN = 0x@N;UPDATEEN(EN) 		
+
+12 		XABR 		temp8 = A & 7;A = (B >> 4) & 7;B = (B & 0x0F) + (temp8 << 4);
+
+// *******************************************************************************************
+//
+//										Timer overflow
+//
+// *******************************************************************************************
+
+20 		SKC 		if (C != 0) SKIP()
+
+21 		SKE  		if (A == READ(B)) SKIP() 
+
+221 	SKGZ 		if (G == 0) SKIP()
+
+201 	SKGBZ.0 	if ((G & 1) == 0) SKIP()
+211 	SKGBZ.1 	if ((G & 2) == 0) SKIP()
+203 	SKGBZ.2 	if ((G & 4) == 0) SKIP()
+213 	SKGBZ.3 	if ((G & 8) == 0) SKIP()
+
+01 		SKMBZ.0 	if ((READ(B) & 1) == 0) SKIP()
+11 		SKMBZ.1 	if ((READ(B) & 2) == 0) SKIP()
+03 		SKMBZ.2 	if ((READ(B) & 4) == 0) SKIP()
+13 		SKMBZ.3 	if ((READ(B) & 8) == 0) SKIP()
+
+41 		SKT 		if (TOV != 0) { TOV = 0; SKIP(); }
+
+// *******************************************************************************************
+//
+//								Input/Output Instructions
+//
+// *******************************************************************************************
+
+22A 	ING 		A = G 									// G is output on Cosmos
+
+228 	ININ 		A = INREAD() 							// Only IN0 used.
+
+229 	INIL 		;	 									// We do not use INIL
+
+22E 	INL 		temp8 = LREAD();A = temp8 & 0xF;WRITE(B,(temp8 >> 4) & 15)
+
+23E 	OBD 		D = B & 0x0F;UPDATED(D)
+
+250-25F OGI.@N 		G = 0x@N;UPDATEG(G) 				
+
+23A 	OMG 		G = READ(B);UPDATEG(G)
+
+4F 		XAS 		SIOWRITE(A);A = 0
