@@ -447,7 +447,7 @@ class Assemble:
 code = """
 """.split("\n")[1:]
 
-asm = Assemble(sys.stdout)
+asm = Assemble(open("rom.lst","w"))
 try:
 	for f in sys.argv[1:]:
 		asm.assembleFile(f)
