@@ -445,7 +445,6 @@ class Assemble:
 		self.memory.writeBinary(name)
 
 code = """
-
 """.split("\n")[1:]
 
 asm = Assemble(sys.stdout)
@@ -458,7 +457,3 @@ except AssemblerException as aex:
 	print(aex.getMessage())
 
 sys.exit(0)
-
-# TODO:
-#	offset <n> in page
-# 	make the core use it.
