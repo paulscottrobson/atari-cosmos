@@ -35,7 +35,7 @@ static BYTE8 holoID;
 
 void HWIWriteColumns(BYTE8 colData) {
 	columnSelect = colData;
-	holoID = (columnSelect & 0x80) ? 1 : 2;
+	holoID = ((columnSelect & 0x80) == 0) ? 1 : 2;
 	//printf("Row(L):%02x Col:(GD)%02x Hol:(G3)%d\n",rowSelect,columnSelect & 0x7F,columnSelect >> 7);
 }
 

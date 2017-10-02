@@ -59,7 +59,7 @@ static GFXTEXTURE *hologram2 = NULL;
 static void _DBGXLoadHolograms() {
 	if (hologram1 == NULL) {
 		hologram1 = GFXLoadImage("hologram1.png");
-		hologram2 = hologram1;
+		hologram2 = GFXLoadImage("hologram2.png");
 	}
 }
 
@@ -163,8 +163,8 @@ void DBGXRender(int *address,int runMode) {
 				SDL_Rect rSrc,rDest;
 				rSrc.w = rSrc.h = 32;
 				rSrc.x = x * rSrc.w;rSrc.y = y * rSrc.h;
-				rDest.w = rDest.h = 64;
-				rDest.x = WIN_WIDTH/2-7*rDest.w/2+x * rDest.w;
+				rDest.w = rDest.h = 96;
+				rDest.x = WIN_WIDTH/2+64-7*rDest.w/2+x * rDest.w;
 				rDest.y = WIN_HEIGHT-64-6*rDest.h + y * rDest.h;
 				if ((b & (0x40 >> x)) == 0) {
 					rSrc.y += 6 * rSrc.h;
