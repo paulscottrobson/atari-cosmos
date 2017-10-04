@@ -24,5 +24,6 @@ BYTE8 HWIReadKeypad(BYTE8 Q);
 void HWITimerOverflow(void);
 void  HWIEndFrame(void);
 BYTE8 HWIGetHologramID(void);
+BYTE8 HWIReadGameID(void);
 
 #endif

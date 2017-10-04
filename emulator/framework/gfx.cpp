@@ -344,7 +344,9 @@ GFXTEXTURE *GFXLoadImage(const char *fileName) {
 }
 
 void GFXBlitTexture(GFXTEXTURE *src,SDL_Rect *srcRect,SDL_Rect *dstRect) {
-	SDL_BlitScaled(src,srcRect,mainSurface,dstRect);
+	if (src != NULL) {
+		SDL_BlitScaled(src,srcRect,mainSurface,dstRect);
+	}
 }
 
 // *******************************************************************************************************************************

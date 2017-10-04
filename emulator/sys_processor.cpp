@@ -31,7 +31,7 @@ static BYTE8 firstReset = 1;
 
 #include "_cop444_code.h"
 
-#define GAMEID()	(0x6)
+#define GAMEID()	HWIReadGameID()
 #define INREAD() 	(D & GAMEID()) ? 1 : 0;
 
 #define	LREAD() 	HWIReadKeypad(Q)

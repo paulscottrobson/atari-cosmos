@@ -58,8 +58,11 @@ static GFXTEXTURE *hologram2 = NULL;
 
 static void _DBGXLoadHolograms() {
 	if (hologram1 == NULL) {
-		hologram1 = GFXLoadImage("hologram1.png");
-		hologram2 = GFXLoadImage("hologram2.png");
+		char szName[64];
+		sprintf(szName,"holograms%cgame%02d_1.png",DIR_SEP,HWIReadGameID());
+		hologram1 = GFXLoadImage(szName);
+		sprintf(szName,"holograms%cgame%02d_2.png",DIR_SEP,HWIReadGameID());
+		hologram2 = GFXLoadImage(szName);
 	}
 }
 
