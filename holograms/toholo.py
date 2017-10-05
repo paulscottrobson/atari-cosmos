@@ -58,6 +58,6 @@ class Hologram:
 
 
 
-h = Hologram("test1.png","hologram1.png")
-h = Hologram("test2.png","hologram2.png")
+h = Hologram("test0.png","game00_1.png")
+h = Hologram("test0.png","game00_2.png")
 

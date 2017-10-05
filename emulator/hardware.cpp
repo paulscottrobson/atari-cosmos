@@ -99,6 +99,7 @@ void HWITimerOverflow(void) {
 					BYTE8 colMask = 0x40 >> col;
 					if (columnSelect & colMask) {
 						LEDCOUNTER(col,row) = FRAMES_LIT;
+						//if (row < 6) printf("Turn on %d %d\n",col,row);
 						currentRows[row] |= colMask;						
 					}
 				}
@@ -118,7 +119,8 @@ void HWIEndFrame() {
 				if (LEDCOUNTER(col,row) > 0) {
 					LEDCOUNTER(col,row)--;
 					if (LEDCOUNTER(col,row) == 0) {
-						currentRows[row] ^= (0x40 >> col);
+						//if (row < 6) printf("Turn off %d %d\n",col,row);
+						currentRows[row] &= 0xFF ^ (0x40 >> col);
 					}
 				}
 			}
@@ -131,5 +133,5 @@ void HWIEndFrame() {
 // *******************************************************************************************************************************
 
 BYTE8 HWIReadGameID(void) {
-	return 0;
+	return 5;
 }

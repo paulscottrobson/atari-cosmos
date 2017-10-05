@@ -1,9 +1,36 @@
 
 	clra
+	jsr 	FN__ClearMemory
 	jsr 	FN__GetGameID
+	lbi 	0,8
+	stii 	2
+
 loop:
-	jsr 	FN__ScanKeyboard
+	lbi 	0,8
+	ld 		0
+	aisc 	1
+	x 		0
+	rmb 	3
+	ld 		1
+	aisc 	7
+	x 		0
+	lbi 	2,13
+	ld 		0
+	aisc 	3
+	nop
+	x 		0
+
+repaint:
 	jsr 	FN__Repaint
+	jsr 	FN__ScanKeyboard
+
+	lbi 	3,0
+	ld 		0
+	aisc 	1
+	nop
+	x 		0
+	skc
+	jp 		repaint
 	jp 		loop
 
 HoloDisplay = 0,15 							; 0 display hologram 1, #0 display hologram 2
@@ -225,4 +252,31 @@ SKLoop:
 	skmbz 	2 								; return if has reached 4 0100
 	ret
 	jp 		SKLoop
+
+; **********************************************************************************************************
+;
+;										Clear Memory / Clear Screen
+;
+; **********************************************************************************************************
+
+FN__ClearScreen:
+	lbi 	1,15
+	jmp 	CMLoop
+FN__ClearMemory:
+	lbi 	7,15
+CMLoop:	
+	clra 									; inner loop, clear page.
+	xds 	0
+	jp 		CMLoop
+	xabr									; do previous page
+	aisc 	15
+	jp 		CMExit
+	xabr
+	jp 		CMLoop
+;
+CMExit:
+	lbi 	1,13 							; set the Left/Right LED
+	stii 	14
+	stii 	15
+	ret
 

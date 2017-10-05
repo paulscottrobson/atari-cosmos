@@ -55,9 +55,11 @@ static void _DBGXRender7Segment(int x1,int y1,int x2,int y2,int pattern) {
 
 static GFXTEXTURE *hologram1 = NULL;
 static GFXTEXTURE *hologram2 = NULL;
+static BYTE8 firstRun = 1;
 
 static void _DBGXLoadHolograms() {
-	if (hologram1 == NULL) {
+	if (firstRun != 0) {
+		firstRun = 0;
 		char szName[64];
 		sprintf(szName,"holograms%cgame%02d_1.png",DIR_SEP,HWIReadGameID());
 		hologram1 = GFXLoadImage(szName);
@@ -158,7 +160,7 @@ void DBGXRender(int *address,int runMode) {
 	_DBGXRender7Segment(GRID(22,1),GRID(26,5),HWIReadRow(LED_LEFT));
 	_DBGXRender7Segment(GRID(28,1),GRID(32,5),HWIReadRow(LED_RIGHT));	
 
-	if (runMode) {
+	if (runMode && hologram1 != NULL && hologram2 != NULL) {
 		BYTE8 holoID = HWIGetHologramID();
 		for (int y = 0;y < 6;y++) {
 			BYTE8 b = HWIReadRow(y);
