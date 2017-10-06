@@ -2,10 +2,12 @@
 	clra
 	jsr 	FN__ClearMemory
 	jsr 	FN__GetGameID
+
+game_init:
 	lbi 	0,8
 	stii 	2
 
-loop:
+game_code:
 	lbi 	0,8
 	ld 		0
 	aisc 	1
@@ -21,21 +23,13 @@ loop:
 	x 		0
 
 repaint:
-	jsr 	FN__Repaint
-	jsr 	FN__ScanKeyboard
-
-	lbi 	3,0
-	ld 		0
-	aisc 	1
-	nop
-	x 		0
-	skc
-	jp 		repaint
-	jp 		loop
+	jp 		game_code
 
 HoloDisplay = 0,15 							; 0 display hologram 1, #0 display hologram 2
 RPWork1 = 1,15 								; repaint temp, getgameID temp
 KeyboardBase = 2,0 							; 2,0 direction 2,1 control 2,2 fire 2,3 not used 2,4 workspace
+
+GameTimer = 2,9 							; Game timer (counts number of displays + keyboard scans)
 
 GameID = 2,12 								; Game number
 LeftDigit = 2,13
