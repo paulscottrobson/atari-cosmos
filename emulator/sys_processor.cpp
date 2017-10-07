@@ -48,7 +48,7 @@ static BYTE8 firstReset = 1;
 void CPUReset(void) {
 	if (firstReset) {
 		firstReset = 0;
-		srand(422);
+		srand(42);
 		for (BYTE8 i = 0;i < 128;i++) RAM[i] = rand() & 0x0F;
 	}
 	ResetCop444();

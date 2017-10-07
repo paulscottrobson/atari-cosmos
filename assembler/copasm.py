@@ -148,8 +148,8 @@ class ROMMemory:
 	def writeBinary(self,name):
 		print("Writing to binary "+name)
 		rom = [0 if x is None else x for x in self.memory]
-		#rom = "".join(chr(x) for x in rom)
-		open(name,"wb").write(bytes(rom))
+		rom = "".join(chr(x) for x in rom)
+		open(name,"wb").write(rom)
 		if self.listStream is not None:
 			k = [x for x in self.listing.keys()]			
 			k.sort()
@@ -455,5 +455,5 @@ try:
 	asm.writeBinary("rom.bin")
 except AssemblerException as aex:
 	print(aex.getMessage())
-
+	sys.exit(1)
 sys.exit(0)

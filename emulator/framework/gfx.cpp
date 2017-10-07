@@ -335,6 +335,7 @@ GFXTEXTURE *GFXLoadImage(const char *fileName) {
 	SDL_Surface *sfc = IMG_Load(fileName);
 	if (sfc == NULL) {
 		printf("Can't load %s\n",fileName);		
+		return NULL;
 	}
 	sfc = SDL_ConvertSurface(sfc,mainSurface->format,0);
 	if (sfc == NULL) {
