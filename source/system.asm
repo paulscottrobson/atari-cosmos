@@ -78,8 +78,9 @@
 ;			(0,15)		If non zero displays hologram 2, if zero displays hologram 1.
 ;			(1,1-14) 	Y values (8-15 row 0-5 LED 6 left 7 seg 7 right 7 seg)
 ;			(1,15)		Work
-;			(2,15) 		Work
 ; 			(2,x) 		For any x which has Y values 14 or 15 (e.g. the 7 segment) the digit value.
+;
+;			(3,8) 		Work
 ;						by convention only, (x,13) is the left LED (x,14) the right LED
 ;
 ; **********************************************************************************************************
@@ -205,7 +206,6 @@ SKLoop:
 
 FN__ClearScreen:
 	lbi 	1,15
-	jmp 	CMLoop
 FN__ClearMemory:
 	lbi 	7,15
 CMLoop:	
@@ -247,14 +247,14 @@ UPLoop:
 
 ; **********************************************************************************************************
 ;
-;								Swap the player data - swaps page 3 and 4.
+;								Swap the player data - swaps pages 0-2 and 5-7.
 ;
-;						Current players data is in 3 ; Other players data is in 4.
+;							  It's a sort of "task switch" between the two players
 ;
 ; **********************************************************************************************************
 
 FN__SwapPlayerData:
-	lbi 	3,15 							; last byte of #3
+	lbi 	2,15 							; last byte of #2
 SWLoop:
 	ld 		0 								; fetch byte there
 	jsr 	SWToggleBU
@@ -262,9 +262,13 @@ SWLoop:
 	jsr 	SWToggleBU
 	xds 	0
 	jp 		SWLoop
+	xabr  									; back one.
+	aisc 	15								; decrement, ret on underflow.	
 	ret
+	xabr
+	jmp 	SWLoop
 ;
-;	Sub-routine - toggles BU between 3 and 4.
+;	Sub-routine - toggles BU between 0-2 and 5-7 - note in 5-7 its backward e.g. 0<->7 1<->6 2<->5
 ;
 SWToggleBU:
 	xad 	RPWork1 						; save A
@@ -273,5 +277,3 @@ SWToggleBU:
 	xabr 									; this will AND 7 when it writes back, Bu is only 3 bits
 	ldd 	RPWork1 						; restore A
 	ret
-
-
