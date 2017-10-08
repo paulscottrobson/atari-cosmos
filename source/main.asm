@@ -1,4 +1,13 @@
 ; **********************************************************************************************************
+; **********************************************************************************************************
+;
+;											Main Program
+;
+; **********************************************************************************************************
+; **********************************************************************************************************
+
+
+; **********************************************************************************************************
 ;
 ;									Start / Restart of Program
 ;
@@ -7,8 +16,10 @@
 Reset:
 	clra
 	lei 	2
-	jsr 	ClearMemory 					; clear memory
+	jsrp 	ClearMemory 					; clear memory
 	jsrp 	GetGameID 						; figure out which game we are playing.
+	aisc 	15 								; if zero, this is a a hack to miss out the 
+	jp 		InitialiseGames 				; selector code automatically (for development)
 
 ; **********************************************************************************************************
 ;
@@ -32,6 +43,7 @@ SELReleaseKey:
 	jp 		SELWaitKey
 	jp 		SELReleaseKey
 SELWaitKey:									; wait for keyboard key to be pressed.
+	jsr 	Random
 	jsr 	SELSkipCtrlKey
 	jp 		SELWaitKey
 
@@ -139,7 +151,7 @@ Fail:
 
 FN__ClearScreen:
 	lbi 	1,15 							; just clear 0-1
-ClearMemory:
+FN__ClearMemory:
 	lbi 	7,15 							; clear 0-7.
 CMLoop:	
 	clra 									; inner loop, clear page.
@@ -181,7 +193,7 @@ CMExit:
 ; **********************************************************************************************************
 
 	offset 	48  			
-	jmp 	Fail 							; game 0 (game under development - no hologram on emulator)
+	jmp 	demogame 						; game 0 (game under development - no hologram on emulator)
 	jmp 	Fail 							; game 1
 	jmp 	Fail 							; game 2
 	jmp 	Fail 							; game 3
@@ -189,29 +201,3 @@ CMExit:
 	jmp 	demoGame 						; game 5
 	jmp 	Fail 							; game 6
 	jmp 	Fail 							; game 7
-
-
-	page 	16
-demogame:
-	skc 
-	jp 		game_code	
-game_init:
-	lbi 	0,8
-	stii 	2
-	ret
-
-game_code:
-	lbi 	0,8
-	ld 		0
-	aisc 	1
-	x 		0
-	rmb 	3
-	lbi 	2,13
-	ld 		0
-	aisc 	1
-	nop
-	x 		0
-
-repaint:
-	jsrp 	Update
-	jp 		game_code

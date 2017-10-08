@@ -156,6 +156,8 @@ class ROMMemory:
 
 	def writeBinary(self,name):
 		print("Writing to binary "+name)
+		used = [x for x in self.memory if x is not None]
+		print("Used {0} bytes of ROM ({1}%)".format(len(used),len(used)*100/2048))
 		rom = [0 if x is None else x for x in self.memory]
 		rom = "".join(chr(x) for x in rom)
 		open(name,"wb").write(rom)
@@ -470,8 +472,9 @@ code = """
 """.split("\n")[1:]
 
 asm = Assemble(open("rom.lst","w"))
+files = [x.strip() for x in open("asm.list").readlines() if x.strip() != "" and x[0] != '#']
 try:
-	for f in sys.argv[1:]:
+	for f in files:
 		asm.assembleFile(f)
 	asm.allocatePage2()
 	asm.patchTransfers()

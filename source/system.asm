@@ -1,4 +1,12 @@
 ; **********************************************************************************************************
+; **********************************************************************************************************
+;
+;										Utility and System Routines
+;
+; **********************************************************************************************************
+; **********************************************************************************************************
+
+; **********************************************************************************************************
 ;
 ;								Mapping from coordinates to screen bits
 ;
@@ -47,7 +55,6 @@
 ;				  Keyboard mapping - values put on lines L4-L7, data read from L0-L3
 ;
 ; **********************************************************************************************************
-
 
 	offset 	32
 											; keyboard mapping
@@ -252,13 +259,60 @@ FN__Update:
 	lbi 	GameSpeed 						; point to the game speed 
 	skmbz 	0 								; if bit 0 clear (slow) skip this adjustment
 	jsrp	Repaint 						; repaint
-	lbi 	Timer+6 						; point to the timers.
+	lbi 	Timer+4 						; point to the timers.
 UPTimerLoop:
 	ld 		0 								; get timer value
 	skmbz 	3 								; if is currently overflowing
-	cba 									; start the timer at B.
+	jp 		UPResetTimer
+	jp 		UPBumpTimer
+UPResetTimer:
+	cba 									; start the timer at B+2
+	aisc 	2
+UPBumpTimer:	
 	aisc 	1 								; bump timer (won't skip)
 	xds 	0 								; write back
 	jp 		UPTimerLoop
 	ret
+
+; **********************************************************************************************************
+;
+;										Random Number Generator.
+;
+; **********************************************************************************************************
+
+FN__Random:
+	cba 									; save B
+	xad 	RPWork1 						; in RPWork1 and RowTemp
+	xabr
+	xad 	RowTemp
+
+	lbi 	Random2 						; start by shifting it left.
+	rc 										; clear carry
+	ld 		0 								; add Random2 to itself
+	asc
+	nop
+	xds 	0 								; write it back, point at Random1.
+	ld 		0 								; add it to itself with carry in
+	asc 									; skip if carry out.
+	jp 		RANDXor 						; if carry clear do the XOR code.
+RANDContinue:	
+	x 		0  								; write back.
+
+	ldd 	RowTemp 						; reload Bu
+	xabr
+	ldd 	RPWork1 						; reload Bl
+	cab
+	ldd 	Random2 						; load the second digit
+	ret
+
+RANDXor:
+	x 		0 								; write back the Random1 value
+	clra  									; fetch 1
+	aisc 	1
+	xor 									; XOR with random1
+	xis 	0 								; point to random2
+	clra
+	aisc 	13 								; fetch 13
+	xor 									; XOR with random 2
+	jp 		RANDContinue					; write back and exit.
 
