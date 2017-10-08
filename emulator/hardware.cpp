@@ -22,15 +22,26 @@ static BYTE8 ledCount[8*7];
 //	Column and row values
 static BYTE8 columnSelect,rowSelect;
 //  Hologram number
-static BYTE8 holoID;
+static BYTE8 holoID = 0;
+// 	Game ID
+static BYTE8 currentGameID = 0;
 
-#define LEDCOUNTER(x,y) ledCount[(x)*7+(y)]
+#define LEDCOUNTER(x,y) ledCount[(x)+7*(y)]
 
 #define FRAMES_LIT 	(5)
 
 // *******************************************************************************************************************************
+//										Hardware Reset
+// *******************************************************************************************************************************
+
+void HWIReset(void) {
+	for (BYTE8 i = 0;i < 8;i++) currentRows[i] = 0;
+	for (BYTE8 i = 0;i < 8*7;i++) ledCount[i] = 0;
+	columnSelect = rowSelect = holoID = 0;
+}
+
+// *******************************************************************************************************************************
 //								Write to columns (e.g. Writing to G:D)
-//
 // *******************************************************************************************************************************
 
 void HWIWriteColumns(BYTE8 colData) {
@@ -99,7 +110,6 @@ void HWITimerOverflow(void) {
 					BYTE8 colMask = 0x40 >> col;
 					if (columnSelect & colMask) {
 						LEDCOUNTER(col,row) = FRAMES_LIT;
-						//if (row < 6) printf("Turn on %d %d\n",col,row);
 						currentRows[row] |= colMask;						
 					}
 				}
@@ -119,8 +129,7 @@ void HWIEndFrame() {
 				if (LEDCOUNTER(col,row) > 0) {
 					LEDCOUNTER(col,row)--;
 					if (LEDCOUNTER(col,row) == 0) {
-						//if (row < 6) printf("Turn off %d %d\n",col,row);
-						currentRows[row] &= 0xFF ^ (0x40 >> col);
+						currentRows[row] &= (0xFF ^ (0x40 >> col));
 					}
 				}
 			}
@@ -129,9 +138,13 @@ void HWIEndFrame() {
 }
 
 // *******************************************************************************************************************************
-//												Return game ID
+//											Set/Return game ID
 // *******************************************************************************************************************************
 
+void HWISetGameID(BYTE8 id) {
+	currentGameID = id & 0xF;
+}
+
 BYTE8 HWIReadGameID(void) {
-	return 5;
+	return currentGameID;
 }

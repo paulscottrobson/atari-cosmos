@@ -17,6 +17,7 @@
 
 #define DIM_FRAME_COUNT 	(5)
 
+void HWIReset(void);
 void HWIWriteColumns(BYTE8 rowSel);
 void HWISetSelectedRows(BYTE8 rowSel);
 BYTE8 HWIReadRow(BYTE8 row);
@@ -25,5 +26,5 @@ void HWITimerOverflow(void);
 void  HWIEndFrame(void);
 BYTE8 HWIGetHologramID(void);
 BYTE8 HWIReadGameID(void);
-
+void HWISetGameID(BYTE8 id);
 #endif

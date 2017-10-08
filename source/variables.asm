@@ -6,6 +6,7 @@ RPWork1 = 1,15 								; repaint temp, getgameID temp (must be in page 1 !)
 ;
 ;		Page 2 is application state, though the digit data is normally at 2,13 and 2,14
 ;
+InfoBits = 2,0 								; bit 0 is set if player dies. bit 3 is set for player 2 only.
 LeftDigit = 2,13 							; by convention, left and right digit addresses.
 RightDigit = 2,14
 ;

@@ -60,11 +60,13 @@ static BYTE8 firstRun = 1;
 static void _DBGXLoadHolograms() {
 	if (firstRun != 0) {
 		firstRun = 0;
-		char szName[64];
-		sprintf(szName,"holograms%cgame%02d_1.png",DIR_SEP,HWIReadGameID());
-		hologram1 = GFXLoadImage(szName);
-		sprintf(szName,"holograms%cgame%02d_2.png",DIR_SEP,HWIReadGameID());
-		hologram2 = GFXLoadImage(szName);
+		if (HWIReadGameID() != 0) {
+			char szName[64];
+			sprintf(szName,"holograms%cgame%02d_1.png",DIR_SEP,HWIReadGameID());
+			hologram1 = GFXLoadImage(szName);
+			sprintf(szName,"holograms%cgame%02d_2.png",DIR_SEP,HWIReadGameID());
+			hologram2 = GFXLoadImage(szName);
+		}
 	}
 }
 

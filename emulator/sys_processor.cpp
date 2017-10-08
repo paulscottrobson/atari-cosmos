@@ -52,6 +52,7 @@ void CPUReset(void) {
 		for (BYTE8 i = 0;i < 128;i++) RAM[i] = rand() & 0x0F;
 	}
 	ResetCop444();
+	HWIReset();
 	cycles = 0;
 }
 
@@ -147,13 +148,15 @@ void CPUWriteMemory(WORD16 address,WORD16 data) {
 }
 
 // *******************************************************************************************************************************
-//												Load a binary file into RAM
+//												Load a binary file into ROM
 // *******************************************************************************************************************************
 
 #include <stdio.h>
 
 void CPULoadBinary(const char *fileName) {
-	FILE *f = fopen(fileName,"rb");
+	BYTE8 id = atoi(fileName);
+	HWISetGameID(id);
+	FILE *f = fopen("rom.bin","rb");
 	fread(ROM,1,2048,f);
 	fclose(f);
 }

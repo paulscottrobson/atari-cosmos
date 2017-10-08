@@ -126,9 +126,18 @@ class ROMMemory:
 			raise AssemblerException("Bad origin address")
 		self.pointer = address
 
+	def findPage2Address(self):
+		addr = 0xBE
+		while self.memory[addr] is not None or self.memory[addr+1] is not None:
+			addr = addr - 2
+			if addr < 0:
+				return None
+		return addr
+
 	def write(self,instr,line = ""):
 		if self.listStream is not None:
-			self.listing["{0:05x}".format(self.pointer)] = "{0:03x} : {1:4x}       {2}".format(self.pointer,instr,line).strip()
+			line = "{0:03x} : {1:4x}       {2}".format(self.pointer,instr,line).strip()
+			self.listing["{0:05x}".format(self.pointer)] = line
 		if instr >= 0x100:
 			self._writeByte(instr >> 8)
 		self._writeByte(instr & 0xFF)
@@ -141,7 +150,7 @@ class ROMMemory:
 		if byte < 0 or byte >= 256:
 			raise AssemblerException("Byte out of range")
 		if self.memory[self.pointer] is not None:
-			raise AssemblerException("Overwriting previous code")
+			raise AssemblerException("Overwriting previous code {0:x}".format(self.pointer))
 		self.memory[self.pointer] = byte;
 		self.pointer += 1
 
@@ -433,6 +442,19 @@ class Assemble:
 		# erase patch list
 		self.patchList = []
 
+	def allocatePage2(self):
+		idents = [x for x in self.identifiers.keys() if x[:4] == "FN__"]
+		for id in idents:
+			fnaddress = self.identifiers[id]
+			address = self.memory.findPage2Address()
+			if address is None:
+				raise AssemblerException("Out of page 2 memory for FN__")
+			self.memory.setPointer(address)
+			self.memory._writeByte(0x60+int(fnaddress/256))
+			self.memory._writeByte(fnaddress % 256)
+			#print("{0} {1:x} {2:x}".format(id,fnaddress,address))
+			self.identifiers[id[4:]] = address
+
 	def assembleFile(self,name):
 		try:
 			print("Assembling "+name)
@@ -451,6 +473,7 @@ asm = Assemble(open("rom.lst","w"))
 try:
 	for f in sys.argv[1:]:
 		asm.assembleFile(f)
+	asm.allocatePage2()
 	asm.patchTransfers()
 	asm.writeBinary("rom.bin")
 except AssemblerException as aex:

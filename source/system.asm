@@ -172,7 +172,15 @@ GGIdentifyLoop:
 ;
 ; **********************************************************************************************************
 
-FN__ScanKeyboard:
+FN__ScanKeyboard:	
+	clra 									; clear lines D and G
+	cab
+	obd 	
+	ogi 	8 								; choose holo 2 									
+	ldd 	HoloDisplay 					; read the holo display location
+	aisc 	15 								; skip if non-zero.
+	ogi 	0 								; choose holo 1
+
 	clra 									; start with keyboard line 0.
 	lbi 	KeyboardBase+1 					; point to keyboard base, one after first slot.
 	x 		0 								; save current index in this "next" slot
@@ -193,33 +201,8 @@ SKLoop:
 	x 		0 								; store there.
 	skmbz 	2 								; return if has reached 4 0100
 	ret
-	jp 		SKLoop
+	jmp 	SKLoop
 
-; **********************************************************************************************************
-;
-;										Clear Memory / Clear Screen
-;
-; **********************************************************************************************************
-
-FN__ClearScreen:
-	lbi 	1,15
-FN__ClearMemory:
-	lbi 	7,15
-CMLoop:	
-	clra 									; inner loop, clear page.
-	xds 	0
-	jp 		CMLoop
-	xabr									; do previous page
-	aisc 	15
-	jp 		CMExit
-	xabr
-	jp 		CMLoop
-;
-CMExit:
-	lbi 	1,13 							; set the Left/Right LED
-	stii 	14
-	stii 	15
-	ret
 
 ; **********************************************************************************************************
 ;
@@ -242,7 +225,7 @@ SWLoop:
 	aisc 	15								; decrement, ret on underflow.	
 	ret
 	xabr
-	jmp 	SWLoop
+	jp 		SWLoop
 ;
 ;	Sub-routine - toggles BU between 0-2 and 5-7 - note in 5-7 its backward e.g. 0<->7 1<->6 2<->5
 ;
@@ -263,11 +246,12 @@ SWToggleBU:
 ; **********************************************************************************************************
 
 FN__Update:
-	jsr		FN__Repaint 					; repaint
-	jsr		FN__Repaint 					; repaint
+	jsrp	ScanKeyboard 					; scan keyboard
+	jsrp	Repaint 						; repaint
+	jsrp	Repaint 						; repaint
 	lbi 	GameSpeed 						; point to the game speed 
 	skmbz 	0 								; if bit 0 clear (slow) skip this adjustment
-	jsr		FN__Repaint 					; repaint
+	jsrp	Repaint 						; repaint
 	lbi 	Timer+6 						; point to the timers.
 UPTimerLoop:
 	ld 		0 								; get timer value
@@ -278,16 +262,3 @@ UPTimerLoop:
 	jp 		UPTimerLoop
 	ret
 
-Fail:
-	halt
-
-	page 	31	
-	offset 	48  							
-	jmp 	Fail 							; game 0 (game under development - no hologram on emulator)
-	jmp 	Fail 							; game 1
-	jmp 	Fail 							; game 2
-	jmp 	Fail 							; game 3
-	jmp 	Fail 							; game 4
-	jmp 	Fail 							; game 5
-	jmp 	Fail 							; game 6
-	jmp 	Fail 							; game 7
