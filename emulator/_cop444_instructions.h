@@ -1279,258 +1279,258 @@ case 0x27e: /** [337e] (unknown) **/
 case 0x27f: /** [337f] (unknown) **/
     break;
 case 0x280: /** [3380] lbi 0,0 **/
-    B = 0x00;break;
+    B = 0x00;LBISKIP();break;
 case 0x281: /** [3381] lbi 0,1 **/
-    B = 0x01;break;
+    B = 0x01;LBISKIP();break;
 case 0x282: /** [3382] lbi 0,2 **/
-    B = 0x02;break;
+    B = 0x02;LBISKIP();break;
 case 0x283: /** [3383] lbi 0,3 **/
-    B = 0x03;break;
+    B = 0x03;LBISKIP();break;
 case 0x284: /** [3384] lbi 0,4 **/
-    B = 0x04;break;
+    B = 0x04;LBISKIP();break;
 case 0x285: /** [3385] lbi 0,5 **/
-    B = 0x05;break;
+    B = 0x05;LBISKIP();break;
 case 0x286: /** [3386] lbi 0,6 **/
-    B = 0x06;break;
+    B = 0x06;LBISKIP();break;
 case 0x287: /** [3387] lbi 0,7 **/
-    B = 0x07;break;
+    B = 0x07;LBISKIP();break;
 case 0x288: /** [3388] lbi 0,8 **/
-    B = 0x08;break;
+    B = 0x08;LBISKIP();break;
 case 0x289: /** [3389] lbi 0,9 **/
-    B = 0x09;break;
+    B = 0x09;LBISKIP();break;
 case 0x28a: /** [338a] lbi 0,a **/
-    B = 0x0a;break;
+    B = 0x0a;LBISKIP();break;
 case 0x28b: /** [338b] lbi 0,b **/
-    B = 0x0b;break;
+    B = 0x0b;LBISKIP();break;
 case 0x28c: /** [338c] lbi 0,c **/
-    B = 0x0c;break;
+    B = 0x0c;LBISKIP();break;
 case 0x28d: /** [338d] lbi 0,d **/
-    B = 0x0d;break;
+    B = 0x0d;LBISKIP();break;
 case 0x28e: /** [338e] lbi 0,e **/
-    B = 0x0e;break;
+    B = 0x0e;LBISKIP();break;
 case 0x28f: /** [338f] lbi 0,f **/
-    B = 0x0f;break;
+    B = 0x0f;LBISKIP();break;
 case 0x290: /** [3390] lbi 1,0 **/
-    B = 0x10;break;
+    B = 0x10;LBISKIP();break;
 case 0x291: /** [3391] lbi 1,1 **/
-    B = 0x11;break;
+    B = 0x11;LBISKIP();break;
 case 0x292: /** [3392] lbi 1,2 **/
-    B = 0x12;break;
+    B = 0x12;LBISKIP();break;
 case 0x293: /** [3393] lbi 1,3 **/
-    B = 0x13;break;
+    B = 0x13;LBISKIP();break;
 case 0x294: /** [3394] lbi 1,4 **/
-    B = 0x14;break;
+    B = 0x14;LBISKIP();break;
 case 0x295: /** [3395] lbi 1,5 **/
-    B = 0x15;break;
+    B = 0x15;LBISKIP();break;
 case 0x296: /** [3396] lbi 1,6 **/
-    B = 0x16;break;
+    B = 0x16;LBISKIP();break;
 case 0x297: /** [3397] lbi 1,7 **/
-    B = 0x17;break;
+    B = 0x17;LBISKIP();break;
 case 0x298: /** [3398] lbi 1,8 **/
-    B = 0x18;break;
+    B = 0x18;LBISKIP();break;
 case 0x299: /** [3399] lbi 1,9 **/
-    B = 0x19;break;
+    B = 0x19;LBISKIP();break;
 case 0x29a: /** [339a] lbi 1,a **/
-    B = 0x1a;break;
+    B = 0x1a;LBISKIP();break;
 case 0x29b: /** [339b] lbi 1,b **/
-    B = 0x1b;break;
+    B = 0x1b;LBISKIP();break;
 case 0x29c: /** [339c] lbi 1,c **/
-    B = 0x1c;break;
+    B = 0x1c;LBISKIP();break;
 case 0x29d: /** [339d] lbi 1,d **/
-    B = 0x1d;break;
+    B = 0x1d;LBISKIP();break;
 case 0x29e: /** [339e] lbi 1,e **/
-    B = 0x1e;break;
+    B = 0x1e;LBISKIP();break;
 case 0x29f: /** [339f] lbi 1,f **/
-    B = 0x1f;break;
+    B = 0x1f;LBISKIP();break;
 case 0x2a0: /** [33a0] lbi 2,0 **/
-    B = 0x20;break;
+    B = 0x20;LBISKIP();break;
 case 0x2a1: /** [33a1] lbi 2,1 **/
-    B = 0x21;break;
+    B = 0x21;LBISKIP();break;
 case 0x2a2: /** [33a2] lbi 2,2 **/
-    B = 0x22;break;
+    B = 0x22;LBISKIP();break;
 case 0x2a3: /** [33a3] lbi 2,3 **/
-    B = 0x23;break;
+    B = 0x23;LBISKIP();break;
 case 0x2a4: /** [33a4] lbi 2,4 **/
-    B = 0x24;break;
+    B = 0x24;LBISKIP();break;
 case 0x2a5: /** [33a5] lbi 2,5 **/
-    B = 0x25;break;
+    B = 0x25;LBISKIP();break;
 case 0x2a6: /** [33a6] lbi 2,6 **/
-    B = 0x26;break;
+    B = 0x26;LBISKIP();break;
 case 0x2a7: /** [33a7] lbi 2,7 **/
-    B = 0x27;break;
+    B = 0x27;LBISKIP();break;
 case 0x2a8: /** [33a8] lbi 2,8 **/
-    B = 0x28;break;
+    B = 0x28;LBISKIP();break;
 case 0x2a9: /** [33a9] lbi 2,9 **/
-    B = 0x29;break;
+    B = 0x29;LBISKIP();break;
 case 0x2aa: /** [33aa] lbi 2,a **/
-    B = 0x2a;break;
+    B = 0x2a;LBISKIP();break;
 case 0x2ab: /** [33ab] lbi 2,b **/
-    B = 0x2b;break;
+    B = 0x2b;LBISKIP();break;
 case 0x2ac: /** [33ac] lbi 2,c **/
-    B = 0x2c;break;
+    B = 0x2c;LBISKIP();break;
 case 0x2ad: /** [33ad] lbi 2,d **/
-    B = 0x2d;break;
+    B = 0x2d;LBISKIP();break;
 case 0x2ae: /** [33ae] lbi 2,e **/
-    B = 0x2e;break;
+    B = 0x2e;LBISKIP();break;
 case 0x2af: /** [33af] lbi 2,f **/
-    B = 0x2f;break;
+    B = 0x2f;LBISKIP();break;
 case 0x2b0: /** [33b0] lbi 3,0 **/
-    B = 0x30;break;
+    B = 0x30;LBISKIP();break;
 case 0x2b1: /** [33b1] lbi 3,1 **/
-    B = 0x31;break;
+    B = 0x31;LBISKIP();break;
 case 0x2b2: /** [33b2] lbi 3,2 **/
-    B = 0x32;break;
+    B = 0x32;LBISKIP();break;
 case 0x2b3: /** [33b3] lbi 3,3 **/
-    B = 0x33;break;
+    B = 0x33;LBISKIP();break;
 case 0x2b4: /** [33b4] lbi 3,4 **/
-    B = 0x34;break;
+    B = 0x34;LBISKIP();break;
 case 0x2b5: /** [33b5] lbi 3,5 **/
-    B = 0x35;break;
+    B = 0x35;LBISKIP();break;
 case 0x2b6: /** [33b6] lbi 3,6 **/
-    B = 0x36;break;
+    B = 0x36;LBISKIP();break;
 case 0x2b7: /** [33b7] lbi 3,7 **/
-    B = 0x37;break;
+    B = 0x37;LBISKIP();break;
 case 0x2b8: /** [33b8] lbi 3,8 **/
-    B = 0x38;break;
+    B = 0x38;LBISKIP();break;
 case 0x2b9: /** [33b9] lbi 3,9 **/
-    B = 0x39;break;
+    B = 0x39;LBISKIP();break;
 case 0x2ba: /** [33ba] lbi 3,a **/
-    B = 0x3a;break;
+    B = 0x3a;LBISKIP();break;
 case 0x2bb: /** [33bb] lbi 3,b **/
-    B = 0x3b;break;
+    B = 0x3b;LBISKIP();break;
 case 0x2bc: /** [33bc] lbi 3,c **/
-    B = 0x3c;break;
+    B = 0x3c;LBISKIP();break;
 case 0x2bd: /** [33bd] lbi 3,d **/
-    B = 0x3d;break;
+    B = 0x3d;LBISKIP();break;
 case 0x2be: /** [33be] lbi 3,e **/
-    B = 0x3e;break;
+    B = 0x3e;LBISKIP();break;
 case 0x2bf: /** [33bf] lbi 3,f **/
-    B = 0x3f;break;
+    B = 0x3f;LBISKIP();break;
 case 0x2c0: /** [33c0] lbi 0,0 **/
-    B = 0x40;break;
+    B = 0x40;LBISKIP();break;
 case 0x2c1: /** [33c1] lbi 0,1 **/
-    B = 0x41;break;
+    B = 0x41;LBISKIP();break;
 case 0x2c2: /** [33c2] lbi 0,2 **/
-    B = 0x42;break;
+    B = 0x42;LBISKIP();break;
 case 0x2c3: /** [33c3] lbi 0,3 **/
-    B = 0x43;break;
+    B = 0x43;LBISKIP();break;
 case 0x2c4: /** [33c4] lbi 0,4 **/
-    B = 0x44;break;
+    B = 0x44;LBISKIP();break;
 case 0x2c5: /** [33c5] lbi 0,5 **/
-    B = 0x45;break;
+    B = 0x45;LBISKIP();break;
 case 0x2c6: /** [33c6] lbi 0,6 **/
-    B = 0x46;break;
+    B = 0x46;LBISKIP();break;
 case 0x2c7: /** [33c7] lbi 0,7 **/
-    B = 0x47;break;
+    B = 0x47;LBISKIP();break;
 case 0x2c8: /** [33c8] lbi 0,8 **/
-    B = 0x48;break;
+    B = 0x48;LBISKIP();break;
 case 0x2c9: /** [33c9] lbi 0,9 **/
-    B = 0x49;break;
+    B = 0x49;LBISKIP();break;
 case 0x2ca: /** [33ca] lbi 0,a **/
-    B = 0x4a;break;
+    B = 0x4a;LBISKIP();break;
 case 0x2cb: /** [33cb] lbi 0,b **/
-    B = 0x4b;break;
+    B = 0x4b;LBISKIP();break;
 case 0x2cc: /** [33cc] lbi 0,c **/
-    B = 0x4c;break;
+    B = 0x4c;LBISKIP();break;
 case 0x2cd: /** [33cd] lbi 0,d **/
-    B = 0x4d;break;
+    B = 0x4d;LBISKIP();break;
 case 0x2ce: /** [33ce] lbi 0,e **/
-    B = 0x4e;break;
+    B = 0x4e;LBISKIP();break;
 case 0x2cf: /** [33cf] lbi 0,f **/
-    B = 0x4f;break;
+    B = 0x4f;LBISKIP();break;
 case 0x2d0: /** [33d0] lbi 1,0 **/
-    B = 0x50;break;
+    B = 0x50;LBISKIP();break;
 case 0x2d1: /** [33d1] lbi 1,1 **/
-    B = 0x51;break;
+    B = 0x51;LBISKIP();break;
 case 0x2d2: /** [33d2] lbi 1,2 **/
-    B = 0x52;break;
+    B = 0x52;LBISKIP();break;
 case 0x2d3: /** [33d3] lbi 1,3 **/
-    B = 0x53;break;
+    B = 0x53;LBISKIP();break;
 case 0x2d4: /** [33d4] lbi 1,4 **/
-    B = 0x54;break;
+    B = 0x54;LBISKIP();break;
 case 0x2d5: /** [33d5] lbi 1,5 **/
-    B = 0x55;break;
+    B = 0x55;LBISKIP();break;
 case 0x2d6: /** [33d6] lbi 1,6 **/
-    B = 0x56;break;
+    B = 0x56;LBISKIP();break;
 case 0x2d7: /** [33d7] lbi 1,7 **/
-    B = 0x57;break;
+    B = 0x57;LBISKIP();break;
 case 0x2d8: /** [33d8] lbi 1,8 **/
-    B = 0x58;break;
+    B = 0x58;LBISKIP();break;
 case 0x2d9: /** [33d9] lbi 1,9 **/
-    B = 0x59;break;
+    B = 0x59;LBISKIP();break;
 case 0x2da: /** [33da] lbi 1,a **/
-    B = 0x5a;break;
+    B = 0x5a;LBISKIP();break;
 case 0x2db: /** [33db] lbi 1,b **/
-    B = 0x5b;break;
+    B = 0x5b;LBISKIP();break;
 case 0x2dc: /** [33dc] lbi 1,c **/
-    B = 0x5c;break;
+    B = 0x5c;LBISKIP();break;
 case 0x2dd: /** [33dd] lbi 1,d **/
-    B = 0x5d;break;
+    B = 0x5d;LBISKIP();break;
 case 0x2de: /** [33de] lbi 1,e **/
-    B = 0x5e;break;
+    B = 0x5e;LBISKIP();break;
 case 0x2df: /** [33df] lbi 1,f **/
-    B = 0x5f;break;
+    B = 0x5f;LBISKIP();break;
 case 0x2e0: /** [33e0] lbi 2,0 **/
-    B = 0x60;break;
+    B = 0x60;LBISKIP();break;
 case 0x2e1: /** [33e1] lbi 2,1 **/
-    B = 0x61;break;
+    B = 0x61;LBISKIP();break;
 case 0x2e2: /** [33e2] lbi 2,2 **/
-    B = 0x62;break;
+    B = 0x62;LBISKIP();break;
 case 0x2e3: /** [33e3] lbi 2,3 **/
-    B = 0x63;break;
+    B = 0x63;LBISKIP();break;
 case 0x2e4: /** [33e4] lbi 2,4 **/
-    B = 0x64;break;
+    B = 0x64;LBISKIP();break;
 case 0x2e5: /** [33e5] lbi 2,5 **/
-    B = 0x65;break;
+    B = 0x65;LBISKIP();break;
 case 0x2e6: /** [33e6] lbi 2,6 **/
-    B = 0x66;break;
+    B = 0x66;LBISKIP();break;
 case 0x2e7: /** [33e7] lbi 2,7 **/
-    B = 0x67;break;
+    B = 0x67;LBISKIP();break;
 case 0x2e8: /** [33e8] lbi 2,8 **/
-    B = 0x68;break;
+    B = 0x68;LBISKIP();break;
 case 0x2e9: /** [33e9] lbi 2,9 **/
-    B = 0x69;break;
+    B = 0x69;LBISKIP();break;
 case 0x2ea: /** [33ea] lbi 2,a **/
-    B = 0x6a;break;
+    B = 0x6a;LBISKIP();break;
 case 0x2eb: /** [33eb] lbi 2,b **/
-    B = 0x6b;break;
+    B = 0x6b;LBISKIP();break;
 case 0x2ec: /** [33ec] lbi 2,c **/
-    B = 0x6c;break;
+    B = 0x6c;LBISKIP();break;
 case 0x2ed: /** [33ed] lbi 2,d **/
-    B = 0x6d;break;
+    B = 0x6d;LBISKIP();break;
 case 0x2ee: /** [33ee] lbi 2,e **/
-    B = 0x6e;break;
+    B = 0x6e;LBISKIP();break;
 case 0x2ef: /** [33ef] lbi 2,f **/
-    B = 0x6f;break;
+    B = 0x6f;LBISKIP();break;
 case 0x2f0: /** [33f0] lbi 3,0 **/
-    B = 0x70;break;
+    B = 0x70;LBISKIP();break;
 case 0x2f1: /** [33f1] lbi 3,1 **/
-    B = 0x71;break;
+    B = 0x71;LBISKIP();break;
 case 0x2f2: /** [33f2] lbi 3,2 **/
-    B = 0x72;break;
+    B = 0x72;LBISKIP();break;
 case 0x2f3: /** [33f3] lbi 3,3 **/
-    B = 0x73;break;
+    B = 0x73;LBISKIP();break;
 case 0x2f4: /** [33f4] lbi 3,4 **/
-    B = 0x74;break;
+    B = 0x74;LBISKIP();break;
 case 0x2f5: /** [33f5] lbi 3,5 **/
-    B = 0x75;break;
+    B = 0x75;LBISKIP();break;
 case 0x2f6: /** [33f6] lbi 3,6 **/
-    B = 0x76;break;
+    B = 0x76;LBISKIP();break;
 case 0x2f7: /** [33f7] lbi 3,7 **/
-    B = 0x77;break;
+    B = 0x77;LBISKIP();break;
 case 0x2f8: /** [33f8] lbi 3,8 **/
-    B = 0x78;break;
+    B = 0x78;LBISKIP();break;
 case 0x2f9: /** [33f9] lbi 3,9 **/
-    B = 0x79;break;
+    B = 0x79;LBISKIP();break;
 case 0x2fa: /** [33fa] lbi 3,a **/
-    B = 0x7a;break;
+    B = 0x7a;LBISKIP();break;
 case 0x2fb: /** [33fb] lbi 3,b **/
-    B = 0x7b;break;
+    B = 0x7b;LBISKIP();break;
 case 0x2fc: /** [33fc] lbi 3,c **/
-    B = 0x7c;break;
+    B = 0x7c;LBISKIP();break;
 case 0x2fd: /** [33fd] lbi 3,d **/
-    B = 0x7d;break;
+    B = 0x7d;LBISKIP();break;
 case 0x2fe: /** [33fe] lbi 3,e **/
-    B = 0x7e;break;
+    B = 0x7e;LBISKIP();break;
 case 0x2ff: /** [33ff] lbi 3,f **/
-    B = 0x7f;break;
+    B = 0x7f;LBISKIP();break;

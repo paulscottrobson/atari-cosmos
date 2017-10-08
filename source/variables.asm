@@ -16,7 +16,7 @@ Timer = 3,0 								; 7 timers which control speed. These are increment every up
 											; by 7 (3,0) to 2 (3,6).
 
 GameSpeed = 3,7 							; Speed (0 = Slow, 1 = Fast)
-PlayerCount = 3,8 							; No of Players (0 = 1 Player,1 = 2 Players)
+PlayerCount = GameSpeed+1 					; No of Players (0 = 1 Player,1 = 2 Players)
 GameID = 3,9 								; Game number
 KeyboardBase = 3,10 						; 3,10 dir 3,11 control 3,12 fire 3,13 not used 3,14 workspace
 RowTemp = 3,14 								; repaint temp, getgameID temp
@@ -32,11 +32,6 @@ KFB_RIGHT = 1
 KFB_DOWN = 2
 KFB_LEFT = 3
 KFB_START = 0
-KFB_SKILL = 1
 KFB_PLAYERS = 2
+KFB_SKILL = 1
 KFB_FIRE = 0
-;
-;		Game running speed.
-;
-FastSpeed = 14 						 		; the number of iterations of the repaint / scan keyboard loop
-SlowSpeed = 13 								; per move in the game.

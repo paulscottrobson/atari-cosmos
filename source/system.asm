@@ -168,7 +168,7 @@ GGIdentifyLoop:
 
 ; **********************************************************************************************************
 ;
-;											 Scan the keyboard
+;										Scan the keyboard
 ;
 ; **********************************************************************************************************
 
@@ -258,6 +258,8 @@ SWToggleBU:
 ;
 ;				Timing System - calls repaint twice for fast, three times for slow
 ;
+;							Note: Must be called at level 0 (LQID)
+;
 ; **********************************************************************************************************
 
 FN__Update:
@@ -275,3 +277,17 @@ UPTimerLoop:
 	xds 	0 								; write back
 	jp 		UPTimerLoop
 	ret
+
+Fail:
+	halt
+
+	page 	31	
+	offset 	48  							
+	jmp 	Fail 							; game 0 (game under development - no hologram on emulator)
+	jmp 	Fail 							; game 1
+	jmp 	Fail 							; game 2
+	jmp 	Fail 							; game 3
+	jmp 	Fail 							; game 4
+	jmp 	Fail 							; game 5
+	jmp 	Fail 							; game 6
+	jmp 	Fail 							; game 7

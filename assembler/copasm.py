@@ -122,7 +122,7 @@ class ROMMemory:
 		return self.pointer
 
 	def setPointer(self,address):
-		if address < 0 or address >= 2048:
+		if address < 0 or address > 2048:
 			raise AssemblerException("Bad origin address")
 		self.pointer = address
 

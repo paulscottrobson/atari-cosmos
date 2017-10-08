@@ -1,23 +1,55 @@
 000 :    0       0001:  CLRA
-001 : 6f7e       0003:  JSR  FN__CLEARMEMORY
-003 : 6f50       0004:  JSR  FN__GETGAMEID
-005 : 3388       0007:  LBI  0,8
-007 :   72       0008:  STII  2
-008 : 3388       0011:  LBI  0,8
-00a :    5       0012:  LD   0
-00b :   51       0013:  AISC  1
-00c :    6       0014:  X   0
-00d :   43       0015:  RMB  3
-00e :   15       0016:  LD   1
-00f :   57       0017:  AISC  7
-010 :    6       0018:  X   0
-011 :   2c       0019:  LBI  2,13
-012 :    5       0020:  LD   0
-013 :   53       0021:  AISC  3
-014 :   44       0022:  NOP
-015 :    6       0023:  X   0
-016 : 6fa3       0026:  JSR  FN__UPDATE
-018 :   c8       0027:  JP   GAME_CODE
+001 : 3362       0002:  LEI  2
+003 : 6f7e       0003:  JSR  FN__CLEARMEMORY
+005 : 6f50       0004:  JSR  FN__GETGAMEID
+007 : 33b7       0009:  LBI  GAMESPEED
+009 :    0       0010:  CLRA
+00a :   55       0011:  AISC  5
+00b :    1       0012:  SKMBZ  0
+00c :   55       0013:  AISC  5
+00d : 23ad       0014:  XAD  LEFTDIGIT
+00f : 2338       0015:  LDD  PLAYERCOUNT
+011 :   51       0016:  AISC  1
+012 : 23ae       0017:  XAD  RIGHTDIGIT
+014 : 6827       0020:  JSR  SELSKIPCTRLKEY
+016 :   d8       0021:  JP   SELWAITKEY
+017 :   d4       0022:  JP   SELRELEASEKEY
+018 : 6827       0024:  JSR  SELSKIPCTRLKEY
+01a :   d8       0025:  JP   SELWAITKEY
+01b :    1       0027:  SKMBZ  KFB_START
+01c :   f0       0028:  JP   START
+01d :    3       0029:  SKMBZ  KFB_PLAYERS
+01e : 33b8       0030:  LBI  PLAYERCOUNT
+020 : 33b7       0031:  LBI  GAMESPEED
+022 :    0       0033:  CLRA
+023 :   51       0034:  AISC  1
+024 :    2       0035:  XOR
+025 :    6       0036:  X   0
+026 :   c7       0037:  JP   SELLOOP
+027 : 6f24       0042:  JSR  FN__REPAINT
+029 : 6f6b       0043:  JSR  FN__SCANKEYBOARD
+02b :   3a       0044:  LBI  KEYSCONTROL
+02c :    0       0045:  CLRA
+02d :   21       0046:  SKE
+02e :   49       0047:  RETSK
+02f :   48       0048:  RET
+030 : 3388       0053:  LBI  0,8
+032 :   72       0054:  STII  2
+033 : 3388       0057:  LBI  0,8
+035 :    5       0058:  LD   0
+036 :   51       0059:  AISC  1
+037 :    6       0060:  X   0
+038 :   43       0061:  RMB  3
+039 :   15       0062:  LD   1
+03a :   57       0063:  AISC  7
+03b :    6       0064:  X   0
+03c :   2c       0065:  LBI  2,13
+03d :    5       0066:  LD   0
+03e :   53       0067:  AISC  3
+03f :   44       0068:  NOP
+040 :    6       0069:  X   0
+041 : 6fa3       0072:  JSR  FN__UPDATE
+043 : 6033       0073:  JMP  GAME_CODE
 700 :    0       0009:  BYTE  $00
 701 :   40       0010:  BYTE  $40
 702 :   20       0011:  BYTE  $20
@@ -155,16 +187,25 @@
 79f :   12       0253:  XABR
 7a0 : 231f       0254:  LDD  RPWORK1
 7a2 :   48       0255:  RET
-7a3 : 6f24       0264:  JSR  FN__REPAINT
-7a5 : 6f24       0265:  JSR  FN__REPAINT
-7a7 : 33b7       0266:  LBI  GAMESPEED
-7a9 :    1       0267:  SKMBZ  0
-7aa : 6f24       0268:  JSR  FN__REPAINT
-7ac : 33b6       0269:  LBI  TIMER+6
-7ae :    5       0271:  LD   0
-7af :   13       0272:  SKMBZ  3
-7b0 :   4e       0273:  CBA
-7b1 :   51       0274:  AISC  1
-7b2 :    7       0275:  XDS  0
-7b3 :   ee       0276:  JP   UPTIMERLOOP
-7b4 :   48       0277:  RET
+7a3 : 6f24       0266:  JSR  FN__REPAINT
+7a5 : 6f24       0267:  JSR  FN__REPAINT
+7a7 : 33b7       0268:  LBI  GAMESPEED
+7a9 :    1       0269:  SKMBZ  0
+7aa : 6f24       0270:  JSR  FN__REPAINT
+7ac : 33b6       0271:  LBI  TIMER+6
+7ae :    5       0273:  LD   0
+7af :   13       0274:  SKMBZ  3
+7b0 :   4e       0275:  CBA
+7b1 :   51       0276:  AISC  1
+7b2 :    7       0277:  XDS  0
+7b3 :   ee       0278:  JP   UPTIMERLOOP
+7b4 :   48       0279:  RET
+7b5 : 3338       0282:  HALT
+7f0 : 67b5       0286:  JMP  FAIL
+7f2 : 67b5       0287:  JMP  FAIL
+7f4 : 67b5       0288:  JMP  FAIL
+7f6 : 67b5       0289:  JMP  FAIL
+7f8 : 67b5       0290:  JMP  FAIL
+7fa : 67b5       0291:  JMP  FAIL
+7fc : 67b5       0292:  JMP  FAIL
+7fe : 67b5       0293:  JMP  FAIL
