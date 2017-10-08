@@ -77,10 +77,7 @@
 ;	Uses 	(0,0-14) 	X values (1-6 column 0-5,0 don't display)
 ;			(0,15)		If non zero displays hologram 2, if zero displays hologram 1.
 ;			(1,1-14) 	Y values (8-15 row 0-5 LED 6 left 7 seg 7 right 7 seg)
-;			(1,15)		Work
 ; 			(2,x) 		For any x which has Y values 14 or 15 (e.g. the 7 segment) the digit value.
-;
-;			(3,8) 		Work
 ;						by convention only, (x,13) is the left LED (x,14) the right LED
 ;
 ; **********************************************************************************************************
@@ -226,27 +223,6 @@ CMExit:
 
 ; **********************************************************************************************************
 ;
-;				Timing System - calls repaint repeatedly the number of times depends on the speed
-;
-; **********************************************************************************************************
-
-FN__Update:
-	lbi 	GameSpeed 						; point to the game speed 
-	clra
-	aisc 	SlowSpeed
-	skmbz 	0 								; if bit 0 clear (slow) skip this adjustment
-	aisc 	FastSpeed-SlowSpeed
-UPLoop:
-	xad 	GameTimer 						; write count back
-	jsr		FN__Repaint 					; repaint
-	ldd 	GameTimer 						; fetch and bump timer
-	aisc 	1								; skip on overflow
-	jp 		UPLoop
-	jsr 	FN__ScanKeyboard 				; update the scanned keyboard.
-	ret
-
-; **********************************************************************************************************
-;
 ;								Swap the player data - swaps pages 0-2 and 5-7.
 ;
 ;							  It's a sort of "task switch" between the two players
@@ -276,4 +252,26 @@ SWToggleBU:
 	comp 									; it is now 1100 / 1011
 	xabr 									; this will AND 7 when it writes back, Bu is only 3 bits
 	ldd 	RPWork1 						; restore A
+	ret
+
+; **********************************************************************************************************
+;
+;				Timing System - calls repaint twice for fast, three times for slow
+;
+; **********************************************************************************************************
+
+FN__Update:
+	jsr		FN__Repaint 					; repaint
+	jsr		FN__Repaint 					; repaint
+	lbi 	GameSpeed 						; point to the game speed 
+	skmbz 	0 								; if bit 0 clear (slow) skip this adjustment
+	jsr		FN__Repaint 					; repaint
+	lbi 	Timer+6 						; point to the timers.
+UPTimerLoop:
+	ld 		0 								; get timer value
+	skmbz 	3 								; if is currently overflowing
+	cba 									; start the timer at B.
+	aisc 	1 								; bump timer (won't skip)
+	xds 	0 								; write back
+	jp 		UPTimerLoop
 	ret
