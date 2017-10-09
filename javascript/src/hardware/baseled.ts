@@ -23,7 +23,6 @@ abstract class BaseLED implements ILED {
         this.setHologram(1);
     }
     
-    
     lightOn(): void {
         if (!this.isOn) {
             this.setLightState(true);
@@ -34,14 +33,16 @@ abstract class BaseLED implements ILED {
 
     endOfFrame(): void {
         if (this.onFrameCount > 0) {
+            console.log(this.onFrameCount,this.isOn);
             this.onFrameCount--;
             if (this.onFrameCount == 0 && this.isOn) {
                 this.setLightState(false);
+                this.isOn = false;
             }
-            this.isOn = false;
         }
     }
 
     abstract setLightState(newState: boolean): void;
     abstract setHologram(hologram: number):void ;    
+    abstract destroy():void;
 }

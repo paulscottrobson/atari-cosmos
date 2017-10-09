@@ -27,4 +27,10 @@ interface ILED {
      * @memberof ILED
      */
     setHologram(hologram:number):void;
+    /**
+     * Destroy LED
+     * 
+     * @memberof ILED
+     */
+    destroy():void;
 }

@@ -1,14 +1,14 @@
 {
     "frames":{
         "logo": {
-            "frame":{ "x":0,"y":0,"w":254,"h":28 },
+            "frame":{ "x":0,"y":0,"w":238,"h":58 },
             "rotated":false,
             "trimmed":false,
-            "spriteSourceSize":{ "x":0,"y":0,"w":254,"h":28 },
-            "sourceSize":{ "w":254,"h":28 }
+            "spriteSourceSize":{ "x":0,"y":0,"w":238,"h":58 },
+            "sourceSize":{ "w":238,"h":58 }
         },
         "rectangle": {
-            "frame":{ "x":256,"y":0,"w":76,"h":51 },
+            "frame":{ "x":240,"y":0,"w":76,"h":51 },
             "rotated":false,
             "trimmed":false,
             "spriteSourceSize":{ "x":0,"y":0,"w":76,"h":51 },
@@ -21,7 +21,7 @@
         "image":"sprites.png",
         "size":{
              "w":512,
-             "h":53
+             "h":60
          },
          "scale":1
     }

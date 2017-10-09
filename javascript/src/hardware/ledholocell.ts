@@ -16,6 +16,11 @@ class LEDHoloCell extends BaseLED {
         this.lightOn();
     }
     
+    destroy() : void {
+        this.img.destroy();
+        this.img = this.game = null;
+    }
+    
     setLightState(newState: boolean): void {
         var frame:number = this.ledX + this.ledY * 14;
         if (!newState) {

@@ -14,20 +14,17 @@ var GameState = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     GameState.prototype.init = function (gameInfo) {
-        var img = this.game.add.image(this.game.width / 2, this.game.height - 16, "sprites", "logo");
+        var img = this.game.add.image(this.game.width / 2, this.game.height - 100, "sprites", "logo");
         img.anchor.x = 0.5;
-        img.anchor.y = 1;
-        img.width = this.game.width * 2 / 3;
+        img.anchor.y = 0.5;
+        img.width = this.game.width * 0.75;
         img.height = img.width / 6;
         var ex = new COP444(new DummyHardware());
         for (var n = 0; n < 2; n++)
             ex.execute();
-        for (var x = 0; x < 7; x++) {
-            for (var y = 0; y < 6; y++) {
-                var s = this.game.width / 8;
-                var led = new LEDHoloCell(this.game, this.game.width / 2 - s * 3.5 + x * s, y * s + 310, s, x, y);
-            }
-        }
+        var dsp = new HolographicDisplay(this.game, -1, 270, Math.floor(this.game.width / 7.5));
+        var s1 = new SevenSegmentDisplay(this.game, this.game.width / 2 - 110, 30, 90);
+        var s2 = new SevenSegmentDisplay(this.game, this.game.width / 2 + 30, 30, 90);
     };
     GameState.prototype.create = function () {
     };
@@ -1813,15 +1810,59 @@ var BaseLED = (function () {
     };
     BaseLED.prototype.endOfFrame = function () {
         if (this.onFrameCount > 0) {
+            console.log(this.onFrameCount, this.isOn);
             this.onFrameCount--;
             if (this.onFrameCount == 0 && this.isOn) {
                 this.setLightState(false);
+                this.isOn = false;
             }
-            this.isOn = false;
         }
     };
     BaseLED.OFF_TIME = 5;
     return BaseLED;
+}());
+var HolographicDisplay = (function () {
+    function HolographicDisplay(game, x, y, size) {
+        if (x < 0) {
+            x = game.width / 2 - size * 7 / 2;
+        }
+        this.cells = [];
+        for (var xc = 0; xc < 7; xc++) {
+            for (var yc = 0; yc < 6; yc++) {
+                this.cells[yc * 7 + xc] = new LEDHoloCell(game, x + xc * size, y + yc * size, size, xc, yc);
+            }
+        }
+        this.select(0, 0);
+    }
+    HolographicDisplay.prototype.select = function (x, y) {
+        this.xSel = x;
+        this.ySel = y;
+    };
+    HolographicDisplay.prototype.lightOn = function () {
+        this.cells[this.xSel + 7 * this.ySel].lightOn();
+    };
+    HolographicDisplay.prototype.endOfFrame = function () {
+        for (var _i = 0, _a = this.cells; _i < _a.length; _i++) {
+            var c = _a[_i];
+            c.endOfFrame();
+        }
+    };
+    HolographicDisplay.prototype.setLightState = function (newState) {
+    };
+    HolographicDisplay.prototype.setHologram = function (hologram) {
+        for (var _i = 0, _a = this.cells; _i < _a.length; _i++) {
+            var c = _a[_i];
+            c.setHologram(hologram);
+        }
+    };
+    HolographicDisplay.prototype.destroy = function () {
+        for (var _i = 0, _a = this.cells; _i < _a.length; _i++) {
+            var c = _a[_i];
+            c.destroy();
+        }
+        this.cells = null;
+    };
+    return HolographicDisplay;
 }());
 var DummyHardware = (function () {
     function DummyHardware() {
@@ -1862,6 +1903,42 @@ var DummyHardware = (function () {
     };
     return DummyHardware;
 }());
+var SevenSegmentDisplay = (function () {
+    function SevenSegmentDisplay(game, x, y, size) {
+        var ssize = size / 4;
+        this.segments = [];
+        this.segments[0] = new LEDRectangle(game, x, y, size + ssize, ssize);
+        this.segments[1] = new LEDRectangle(game, x + size, y, ssize, size + ssize);
+        this.segments[2] = new LEDRectangle(game, x + size, y + size, ssize, size + ssize);
+        this.segments[3] = new LEDRectangle(game, x, y + size * 2, size + ssize, ssize);
+        this.segments[4] = new LEDRectangle(game, x, y + size, ssize, size + ssize);
+        this.segments[5] = new LEDRectangle(game, x, y, ssize, size + ssize);
+        this.segments[6] = new LEDRectangle(game, x, y + size, size + ssize, ssize);
+        this.select(0);
+    }
+    SevenSegmentDisplay.prototype.select = function (n) {
+        this.selected = n;
+    };
+    SevenSegmentDisplay.prototype.lightOn = function () {
+        this.segments[this.selected].lightOn();
+    };
+    SevenSegmentDisplay.prototype.endOfFrame = function () {
+        for (var _i = 0, _a = this.segments; _i < _a.length; _i++) {
+            var c = _a[_i];
+            c.endOfFrame();
+        }
+    };
+    SevenSegmentDisplay.prototype.setLightState = function (newState) { };
+    SevenSegmentDisplay.prototype.setHologram = function (hologram) { };
+    SevenSegmentDisplay.prototype.destroy = function () {
+        for (var _i = 0, _a = this.segments; _i < _a.length; _i++) {
+            var c = _a[_i];
+            c.destroy();
+        }
+        this.segments = null;
+    };
+    return SevenSegmentDisplay;
+}());
 var LEDHoloCell = (function (_super) {
     __extends(LEDHoloCell, _super);
     function LEDHoloCell(game, x, y, size, ledX, ledY) {
@@ -1874,6 +1951,10 @@ var LEDHoloCell = (function (_super) {
         _this.lightOn();
         return _this;
     }
+    LEDHoloCell.prototype.destroy = function () {
+        this.img.destroy();
+        this.img = this.game = null;
+    };
     LEDHoloCell.prototype.setLightState = function (newState) {
         var frame = this.ledX + this.ledY * 14;
         if (!newState) {
@@ -1894,4 +1975,25 @@ var LEDHoloCell = (function (_super) {
         this.setLightState(this.isOn);
     };
     return LEDHoloCell;
+}(BaseLED));
+var LEDRectangle = (function (_super) {
+    __extends(LEDRectangle, _super);
+    function LEDRectangle(game, x, y, width, height) {
+        var _this = _super.call(this) || this;
+        _this.img = game.add.image(x, y, "sprites", "rectangle");
+        _this.img.width = width;
+        _this.img.height = height;
+        _this.lightOn();
+        return _this;
+    }
+    LEDRectangle.prototype.destroy = function () {
+        this.img.destroy();
+        this.img = null;
+    };
+    LEDRectangle.prototype.setLightState = function (newState) {
+        this.img.tint = (newState ? 0xFF0000 : 0x400000);
+    };
+    LEDRectangle.prototype.setHologram = function (hologram) {
+    };
+    return LEDRectangle;
 }(BaseLED));
