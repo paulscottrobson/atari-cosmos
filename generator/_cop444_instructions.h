@@ -131,13 +131,13 @@ case 0x040: /** [40] comp **/
 case 0x041: /** [41] skt **/
     if (TOV != 0) { TOV = 0; SKIP(); };break;
 case 0x042: /** [42] rmb 2 **/
-    temp8 = RAM[B];RAM[B] = (temp8 & 0x0B);break;
+    temp8 = RAM[B];RAM[B] = (temp8 & 0x0b);break;
 case 0x043: /** [43] rmb 3 **/
     temp8 = RAM[B];RAM[B] = (temp8 & 0x07);break;
 case 0x044: /** [44] nop **/
     ;;break;
 case 0x045: /** [45] rmb 1 **/
-    temp8 = RAM[B];RAM[B] = (temp8 & 0x0D);break;
+    temp8 = RAM[B];RAM[B] = (temp8 & 0x0d);break;
 case 0x046: /** [46] smb 2 **/
     temp8 = RAM[B];RAM[B] = (temp8 | 0x04);break;
 case 0x047: /** [47] smb 1 **/
@@ -151,7 +151,7 @@ case 0x04a: /** [4a] adt **/
 case 0x04b: /** [4b] smb 3 **/
     temp8 = RAM[B];RAM[B] = (temp8 | 0x08);break;
 case 0x04c: /** [4c] rmb 0 **/
-    temp8 = RAM[B];RAM[B] = (temp8 & 0x0E);break;
+    temp8 = RAM[B];RAM[B] = (temp8 & 0x0e);break;
 case 0x04d: /** [4d] smb 0 **/
     temp8 = RAM[B];RAM[B] = (temp8 | 0x01);break;
 case 0x04e: /** [4e] cba **/
@@ -383,131 +383,131 @@ case 0x0be: /** [be] jsrp 0be **/
 case 0x0bf: /** [bf] lqid **/
     Q = ROM[(PC & 0x700) | AM()];SC = SB;UPDATEQ(Q);break;
 case 0x0c0: /** [c0] jp 000 **/
-    PC = (PC & 0x7C0) | 0x000;break;
+    PC = (PC & 0x7c0) | 0x000;break;
 case 0x0c1: /** [c1] jp 001 **/
-    PC = (PC & 0x7C0) | 0x001;break;
+    PC = (PC & 0x7c0) | 0x001;break;
 case 0x0c2: /** [c2] jp 002 **/
-    PC = (PC & 0x7C0) | 0x002;break;
+    PC = (PC & 0x7c0) | 0x002;break;
 case 0x0c3: /** [c3] jp 003 **/
-    PC = (PC & 0x7C0) | 0x003;break;
+    PC = (PC & 0x7c0) | 0x003;break;
 case 0x0c4: /** [c4] jp 004 **/
-    PC = (PC & 0x7C0) | 0x004;break;
+    PC = (PC & 0x7c0) | 0x004;break;
 case 0x0c5: /** [c5] jp 005 **/
-    PC = (PC & 0x7C0) | 0x005;break;
+    PC = (PC & 0x7c0) | 0x005;break;
 case 0x0c6: /** [c6] jp 006 **/
-    PC = (PC & 0x7C0) | 0x006;break;
+    PC = (PC & 0x7c0) | 0x006;break;
 case 0x0c7: /** [c7] jp 007 **/
-    PC = (PC & 0x7C0) | 0x007;break;
+    PC = (PC & 0x7c0) | 0x007;break;
 case 0x0c8: /** [c8] jp 008 **/
-    PC = (PC & 0x7C0) | 0x008;break;
+    PC = (PC & 0x7c0) | 0x008;break;
 case 0x0c9: /** [c9] jp 009 **/
-    PC = (PC & 0x7C0) | 0x009;break;
+    PC = (PC & 0x7c0) | 0x009;break;
 case 0x0ca: /** [ca] jp 00a **/
-    PC = (PC & 0x7C0) | 0x00a;break;
+    PC = (PC & 0x7c0) | 0x00a;break;
 case 0x0cb: /** [cb] jp 00b **/
-    PC = (PC & 0x7C0) | 0x00b;break;
+    PC = (PC & 0x7c0) | 0x00b;break;
 case 0x0cc: /** [cc] jp 00c **/
-    PC = (PC & 0x7C0) | 0x00c;break;
+    PC = (PC & 0x7c0) | 0x00c;break;
 case 0x0cd: /** [cd] jp 00d **/
-    PC = (PC & 0x7C0) | 0x00d;break;
+    PC = (PC & 0x7c0) | 0x00d;break;
 case 0x0ce: /** [ce] jp 00e **/
-    PC = (PC & 0x7C0) | 0x00e;break;
+    PC = (PC & 0x7c0) | 0x00e;break;
 case 0x0cf: /** [cf] jp 00f **/
-    PC = (PC & 0x7C0) | 0x00f;break;
+    PC = (PC & 0x7c0) | 0x00f;break;
 case 0x0d0: /** [d0] jp 010 **/
-    PC = (PC & 0x7C0) | 0x010;break;
+    PC = (PC & 0x7c0) | 0x010;break;
 case 0x0d1: /** [d1] jp 011 **/
-    PC = (PC & 0x7C0) | 0x011;break;
+    PC = (PC & 0x7c0) | 0x011;break;
 case 0x0d2: /** [d2] jp 012 **/
-    PC = (PC & 0x7C0) | 0x012;break;
+    PC = (PC & 0x7c0) | 0x012;break;
 case 0x0d3: /** [d3] jp 013 **/
-    PC = (PC & 0x7C0) | 0x013;break;
+    PC = (PC & 0x7c0) | 0x013;break;
 case 0x0d4: /** [d4] jp 014 **/
-    PC = (PC & 0x7C0) | 0x014;break;
+    PC = (PC & 0x7c0) | 0x014;break;
 case 0x0d5: /** [d5] jp 015 **/
-    PC = (PC & 0x7C0) | 0x015;break;
+    PC = (PC & 0x7c0) | 0x015;break;
 case 0x0d6: /** [d6] jp 016 **/
-    PC = (PC & 0x7C0) | 0x016;break;
+    PC = (PC & 0x7c0) | 0x016;break;
 case 0x0d7: /** [d7] jp 017 **/
-    PC = (PC & 0x7C0) | 0x017;break;
+    PC = (PC & 0x7c0) | 0x017;break;
 case 0x0d8: /** [d8] jp 018 **/
-    PC = (PC & 0x7C0) | 0x018;break;
+    PC = (PC & 0x7c0) | 0x018;break;
 case 0x0d9: /** [d9] jp 019 **/
-    PC = (PC & 0x7C0) | 0x019;break;
+    PC = (PC & 0x7c0) | 0x019;break;
 case 0x0da: /** [da] jp 01a **/
-    PC = (PC & 0x7C0) | 0x01a;break;
+    PC = (PC & 0x7c0) | 0x01a;break;
 case 0x0db: /** [db] jp 01b **/
-    PC = (PC & 0x7C0) | 0x01b;break;
+    PC = (PC & 0x7c0) | 0x01b;break;
 case 0x0dc: /** [dc] jp 01c **/
-    PC = (PC & 0x7C0) | 0x01c;break;
+    PC = (PC & 0x7c0) | 0x01c;break;
 case 0x0dd: /** [dd] jp 01d **/
-    PC = (PC & 0x7C0) | 0x01d;break;
+    PC = (PC & 0x7c0) | 0x01d;break;
 case 0x0de: /** [de] jp 01e **/
-    PC = (PC & 0x7C0) | 0x01e;break;
+    PC = (PC & 0x7c0) | 0x01e;break;
 case 0x0df: /** [df] jp 01f **/
-    PC = (PC & 0x7C0) | 0x01f;break;
+    PC = (PC & 0x7c0) | 0x01f;break;
 case 0x0e0: /** [e0] jp 020 **/
-    PC = (PC & 0x7C0) | 0x020;break;
+    PC = (PC & 0x7c0) | 0x020;break;
 case 0x0e1: /** [e1] jp 021 **/
-    PC = (PC & 0x7C0) | 0x021;break;
+    PC = (PC & 0x7c0) | 0x021;break;
 case 0x0e2: /** [e2] jp 022 **/
-    PC = (PC & 0x7C0) | 0x022;break;
+    PC = (PC & 0x7c0) | 0x022;break;
 case 0x0e3: /** [e3] jp 023 **/
-    PC = (PC & 0x7C0) | 0x023;break;
+    PC = (PC & 0x7c0) | 0x023;break;
 case 0x0e4: /** [e4] jp 024 **/
-    PC = (PC & 0x7C0) | 0x024;break;
+    PC = (PC & 0x7c0) | 0x024;break;
 case 0x0e5: /** [e5] jp 025 **/
-    PC = (PC & 0x7C0) | 0x025;break;
+    PC = (PC & 0x7c0) | 0x025;break;
 case 0x0e6: /** [e6] jp 026 **/
-    PC = (PC & 0x7C0) | 0x026;break;
+    PC = (PC & 0x7c0) | 0x026;break;
 case 0x0e7: /** [e7] jp 027 **/
-    PC = (PC & 0x7C0) | 0x027;break;
+    PC = (PC & 0x7c0) | 0x027;break;
 case 0x0e8: /** [e8] jp 028 **/
-    PC = (PC & 0x7C0) | 0x028;break;
+    PC = (PC & 0x7c0) | 0x028;break;
 case 0x0e9: /** [e9] jp 029 **/
-    PC = (PC & 0x7C0) | 0x029;break;
+    PC = (PC & 0x7c0) | 0x029;break;
 case 0x0ea: /** [ea] jp 02a **/
-    PC = (PC & 0x7C0) | 0x02a;break;
+    PC = (PC & 0x7c0) | 0x02a;break;
 case 0x0eb: /** [eb] jp 02b **/
-    PC = (PC & 0x7C0) | 0x02b;break;
+    PC = (PC & 0x7c0) | 0x02b;break;
 case 0x0ec: /** [ec] jp 02c **/
-    PC = (PC & 0x7C0) | 0x02c;break;
+    PC = (PC & 0x7c0) | 0x02c;break;
 case 0x0ed: /** [ed] jp 02d **/
-    PC = (PC & 0x7C0) | 0x02d;break;
+    PC = (PC & 0x7c0) | 0x02d;break;
 case 0x0ee: /** [ee] jp 02e **/
-    PC = (PC & 0x7C0) | 0x02e;break;
+    PC = (PC & 0x7c0) | 0x02e;break;
 case 0x0ef: /** [ef] jp 02f **/
-    PC = (PC & 0x7C0) | 0x02f;break;
+    PC = (PC & 0x7c0) | 0x02f;break;
 case 0x0f0: /** [f0] jp 030 **/
-    PC = (PC & 0x7C0) | 0x030;break;
+    PC = (PC & 0x7c0) | 0x030;break;
 case 0x0f1: /** [f1] jp 031 **/
-    PC = (PC & 0x7C0) | 0x031;break;
+    PC = (PC & 0x7c0) | 0x031;break;
 case 0x0f2: /** [f2] jp 032 **/
-    PC = (PC & 0x7C0) | 0x032;break;
+    PC = (PC & 0x7c0) | 0x032;break;
 case 0x0f3: /** [f3] jp 033 **/
-    PC = (PC & 0x7C0) | 0x033;break;
+    PC = (PC & 0x7c0) | 0x033;break;
 case 0x0f4: /** [f4] jp 034 **/
-    PC = (PC & 0x7C0) | 0x034;break;
+    PC = (PC & 0x7c0) | 0x034;break;
 case 0x0f5: /** [f5] jp 035 **/
-    PC = (PC & 0x7C0) | 0x035;break;
+    PC = (PC & 0x7c0) | 0x035;break;
 case 0x0f6: /** [f6] jp 036 **/
-    PC = (PC & 0x7C0) | 0x036;break;
+    PC = (PC & 0x7c0) | 0x036;break;
 case 0x0f7: /** [f7] jp 037 **/
-    PC = (PC & 0x7C0) | 0x037;break;
+    PC = (PC & 0x7c0) | 0x037;break;
 case 0x0f8: /** [f8] jp 038 **/
-    PC = (PC & 0x7C0) | 0x038;break;
+    PC = (PC & 0x7c0) | 0x038;break;
 case 0x0f9: /** [f9] jp 039 **/
-    PC = (PC & 0x7C0) | 0x039;break;
+    PC = (PC & 0x7c0) | 0x039;break;
 case 0x0fa: /** [fa] jp 03a **/
-    PC = (PC & 0x7C0) | 0x03a;break;
+    PC = (PC & 0x7c0) | 0x03a;break;
 case 0x0fb: /** [fb] jp 03b **/
-    PC = (PC & 0x7C0) | 0x03b;break;
+    PC = (PC & 0x7c0) | 0x03b;break;
 case 0x0fc: /** [fc] jp 03c **/
-    PC = (PC & 0x7C0) | 0x03c;break;
+    PC = (PC & 0x7c0) | 0x03c;break;
 case 0x0fd: /** [fd] jp 03d **/
-    PC = (PC & 0x7C0) | 0x03d;break;
+    PC = (PC & 0x7c0) | 0x03d;break;
 case 0x0fe: /** [fe] jp 03e **/
-    PC = (PC & 0x7C0) | 0x03e;break;
+    PC = (PC & 0x7c0) | 0x03e;break;
 case 0x0ff: /** [ff] jid **/
     temp8 = ROM[(PC & 0x700)|AM()]; PC = (PC & 0x700) | temp8;break;
 case 0x100: /** [2300] ld 0,0 **/

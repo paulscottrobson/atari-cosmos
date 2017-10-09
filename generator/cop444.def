@@ -137,7 +137,7 @@ FF		JID 		temp8 = ROM[(PC & 0x700)|AM()]; PC = (PC & 0x700) | temp8
 
 60-67	JMP.@L 		temp8 = FETCH();PC = (0x@L00)|temp8
 
-C0-FE 	JP.@J 		PC = (PC & 0x7C0) | 0x@J
+C0-FE 	JP.@J 		PC = (PC & 0x7c0) | 0x@J
 
 80-BE 	JSRP.@S 	SC = SB;SB = SA;SA = PC;PC = 0x@S
 
@@ -175,9 +175,9 @@ C0-FE 	JP.@J 		PC = (PC & 0x7C0) | 0x@J
 
 BF 		LQID 		Q = ROM[(PC & 0x700) | AM()];SC = SB;UPDATEQ(Q)
 
-4C		RMB.0		temp8 = RAM[B];RAM[B] = (temp8 & 0x0E)
-45		RMB.1		temp8 = RAM[B];RAM[B] = (temp8 & 0x0D)
-42		RMB.2		temp8 = RAM[B];RAM[B] = (temp8 & 0x0B)
+4C		RMB.0		temp8 = RAM[B];RAM[B] = (temp8 & 0x0e)
+45		RMB.1		temp8 = RAM[B];RAM[B] = (temp8 & 0x0d)
+42		RMB.2		temp8 = RAM[B];RAM[B] = (temp8 & 0x0b)
 43		RMB.3		temp8 = RAM[B];RAM[B] = (temp8 & 0x07)
 
 4D 		SMB.0 		temp8 = RAM[B];RAM[B] = (temp8 | 0x01)

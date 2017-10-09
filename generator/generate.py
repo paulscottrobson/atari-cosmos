@@ -11,6 +11,27 @@ def sub(s,opcode):
 	s = s.replace("@L","{0:01x}".format((opcode & 0x7)+0))
 	return s 
 
+def jsProcess(s):
+	l = [ "TIMER","TOV","PC", "EN","SA","SB","SC", "G","Q","D","C","B","A","temp8"]
+	s = s.replace("break;","")
+	s = s.replace("cycles","this.cycles")
+	s = s.replace("AM()","((A<<4)|RAM[B])")
+	s = s.replace("RAM[","this.ramMemory[")
+	s = s.replace("ROM[","this.romMemory[")
+	s = s.replace("FETCH()","this.fetch()")
+	s = s.replace("LBISKIP()","this.lbiSkip()")
+	s = s.replace("SKIP()","this.skip()")
+	s = s.replace("INREAD(","this.hardware.readin(")
+	s = s.replace("LREAD(","this.hardware.readl(")
+	s = s.replace("UPDATED(","this.hardware.updated(")
+	s = s.replace("UPDATEG(","this.hardware.updateg(")
+	s = s.replace("UPDATEEN(","this.hardware.updateen(")
+	s = s.replace("UPDATEQ(","this.hardware.updateq(")
+	s = s.replace("SIOWRITE(","this.hardware.siowrite(")
+	for r in l:
+		s = s.replace(r,"this."+r.lower())
+	return s
+
 src = open("cop444.def").readlines()
 src = [x if x.find("//") < 0 else x[:x.find("//")] for x in src]
 src = [x.replace("\t"," ").strip() for x in src if x.strip() != ""]
@@ -62,14 +83,17 @@ h.close()
 
 funcList = ",".join([ "this.opcode_{0:03x}".format(x) for x in range(0,768) ])
 h = open("cop444generated.ts","w")
-h.write("	class COP444Opcodes extends COP444 {\n\n")
+h.write('/// <reference path="../../lib/phaser.comments.d.ts"/>\n')
+h.write('/// <reference path="../cpu/cop444base.ts"/>\n\n')
+
+h.write("abstract class COP444Opcodes extends COP444Base {\n\n")
 h.write("	getOpcodeFunctionTable(): Function[] {\n")
 h.write("		return [\n")
 h.write("			"+funcList+"\n")
 h.write("		];\n 	}\n")
 
 for opcode in range(0,768):
-	body = 'console.log("Test ${0:03x}");'.format(opcode)
+	body = jsProcess(code[opcode])
 	h.write("	opcode_{0:03x}():void {{ {1} }};\n".format(opcode,body))	
 h.write("}\n");
 h.close()
