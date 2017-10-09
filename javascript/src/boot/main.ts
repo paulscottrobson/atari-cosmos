@@ -12,8 +12,8 @@ class CosmosApplication extends Phaser.Game {
         // Call the super constructor.
         super({
             enableDebug: false,
-            width:1280,
-            height:800,
+            width:640,
+            height:960,
             renderer:Phaser.AUTO,
             parent:null,
             transparent: false,            

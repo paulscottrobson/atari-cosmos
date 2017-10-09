@@ -14,14 +14,18 @@ var GameState = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     GameState.prototype.init = function (gameInfo) {
+        var img = this.game.add.image(this.game.width / 2, this.game.height - 16, "sprites", "logo");
+        img.anchor.x = 0.5;
+        img.anchor.y = 1;
+        img.width = this.game.width * 2 / 3;
+        img.height = img.width / 6;
         var ex = new COP444(new DummyHardware());
         for (var n = 0; n < 2; n++)
             ex.execute();
-        for (var x = 0; x < 14; x++) {
-            for (var y = 0; y < 12; y++) {
-                var s = 64;
-                var img = this.game.add.sprite(x * s + 10, y * s + 10, "hologram", x + y * 14);
-                img.width = img.height = s;
+        for (var x = 0; x < 7; x++) {
+            for (var y = 0; y < 6; y++) {
+                var s = this.game.width / 8;
+                var led = new LEDHoloCell(this.game, this.game.width / 2 - s * 3.5 + x * s, y * s + 310, s, x, y);
             }
         }
     };
@@ -41,8 +45,8 @@ var CosmosApplication = (function (_super) {
     function CosmosApplication() {
         var _this = _super.call(this, {
             enableDebug: false,
-            width: 1280,
-            height: 800,
+            width: 640,
+            height: 960,
             renderer: Phaser.AUTO,
             parent: null,
             transparent: false,
@@ -1795,6 +1799,30 @@ var ROMImage = (function () {
     ];
     return ROMImage;
 }());
+var BaseLED = (function () {
+    function BaseLED() {
+        this.isOn = false;
+        this.setHologram(1);
+    }
+    BaseLED.prototype.lightOn = function () {
+        if (!this.isOn) {
+            this.setLightState(true);
+        }
+        this.isOn = true;
+        this.onFrameCount = BaseLED.OFF_TIME;
+    };
+    BaseLED.prototype.endOfFrame = function () {
+        if (this.onFrameCount > 0) {
+            this.onFrameCount--;
+            if (this.onFrameCount == 0 && this.isOn) {
+                this.setLightState(false);
+            }
+            this.isOn = false;
+        }
+    };
+    BaseLED.OFF_TIME = 5;
+    return BaseLED;
+}());
 var DummyHardware = (function () {
     function DummyHardware() {
     }
@@ -1834,3 +1862,36 @@ var DummyHardware = (function () {
     };
     return DummyHardware;
 }());
+var LEDHoloCell = (function (_super) {
+    __extends(LEDHoloCell, _super);
+    function LEDHoloCell(game, x, y, size, ledX, ledY) {
+        var _this = _super.call(this) || this;
+        _this.game = game;
+        _this.size = size;
+        _this.ledX = ledX;
+        _this.ledY = ledY;
+        _this.img = game.add.image(x, y, "hologram", 6);
+        _this.lightOn();
+        return _this;
+    }
+    LEDHoloCell.prototype.setLightState = function (newState) {
+        var frame = this.ledX + this.ledY * 14;
+        if (!newState) {
+            frame = frame + 6 * 14;
+        }
+        if (this.currentHologram == 2) {
+            frame = frame + 7;
+        }
+        if (this.img != null) {
+            if (this.img.frame != frame) {
+                this.img.frame = frame;
+            }
+            this.img.width = this.img.height = this.size;
+        }
+    };
+    LEDHoloCell.prototype.setHologram = function (hologram) {
+        this.currentHologram = hologram;
+        this.setLightState(this.isOn);
+    };
+    return LEDHoloCell;
+}(BaseLED));

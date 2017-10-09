@@ -1,0 +1,28 @@
+{
+    "frames":{
+        "logo": {
+            "frame":{ "x":0,"y":0,"w":254,"h":28 },
+            "rotated":false,
+            "trimmed":false,
+            "spriteSourceSize":{ "x":0,"y":0,"w":254,"h":28 },
+            "sourceSize":{ "w":254,"h":28 }
+        },
+        "rectangle": {
+            "frame":{ "x":256,"y":0,"w":76,"h":51 },
+            "rotated":false,
+            "trimmed":false,
+            "spriteSourceSize":{ "x":0,"y":0,"w":76,"h":51 },
+            "sourceSize":{ "w":76,"h":51 }
+        }
+    },
+    "meta":{
+        "app":"Paul Robson's Python texture packer",
+        "version":"1.0",
+        "image":"sprites.png",
+        "size":{
+             "w":512,
+             "h":53
+         },
+         "scale":1
+    }
+}
