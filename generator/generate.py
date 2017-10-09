@@ -59,3 +59,17 @@ for opcode in range(0,768):
 	h.write("case 0x{0:03x}: /** {1} **/\n".format(opcode,name))
 	h.write("    "+code[opcode]+"\n")
 h.close()		
+
+funcList = ",".join([ "this.opcode_{0:03x}".format(x) for x in range(0,768) ])
+h = open("cop444generated.ts","w")
+h.write("	class COP444Opcodes extends COP444 {\n\n")
+h.write("	getOpcodeFunctionTable(): Function[] {\n")
+h.write("		return [\n")
+h.write("			"+funcList+"\n")
+h.write("		];\n 	}\n")
+
+for opcode in range(0,768):
+	body = 'console.log("Test ${0:03x}");'.format(opcode)
+	h.write("	opcode_{0:03x}():void {{ {1} }};\n".format(opcode,body))	
+h.write("}\n");
+h.close()

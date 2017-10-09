@@ -3,7 +3,7 @@
 class GameState extends Phaser.State {
 
     init(gameInfo:any) : void {
-        var x:COP444Test = new COP444Test();
+        var x:COP444Opcodes = new COP444Opcodes();
     }
 
     create() : void {
