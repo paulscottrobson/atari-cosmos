@@ -27,6 +27,11 @@ class PreloadState extends Phaser.State {
         // Load the sprite atlas.
         this.game.load.atlas("sprites","assets/sprites/sprites.png",
                                        "assets/sprites/sprites.json");
+
+        // Load the hologram image
+        var name:string = "comb0"+(CosmosApplication.getGameID().toString())+".png";
+        this.game.load.spritesheet("hologram","assets/holograms/"+name,32,32);
+
         // Load the fonts
         for (var fontName of ["font"]) {
             this.game.load.bitmapFont(fontName,"assets/fonts/"+fontName+".png",

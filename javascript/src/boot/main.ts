@@ -6,6 +6,8 @@ window.onload = function() {
 
 class CosmosApplication extends Phaser.Game {
 
+    private static gameID = 3;
+
     constructor() {
         // Call the super constructor.
         super({
@@ -22,6 +24,17 @@ class CosmosApplication extends Phaser.Game {
         this.state.add("Preload", new PreloadState());
         this.state.add("Game",new GameState());
         this.state.start("Boot");
+    }
+
+    /**
+     * Retrieve the Game ID
+     * 
+     * @static
+     * @returns {number} 
+     * @memberof CosmosApplication
+     */
+    public static getGameID(): number {
+        return CosmosApplication.gameID;
     }
 
     /**

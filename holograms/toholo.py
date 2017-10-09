@@ -53,6 +53,14 @@ class Hologram:
 		self.result.save(targetFile,optimize=True,quality=75,bits=8)
 		#self.result.show()
 
+class Combiner:
+	def __init__(self,h1,h2,tgt):
+		i1 = Image.open(h1)
+		i2 = Image.open(h2)
+		comb = Image.new("RGBA",(i1.size[0]*2,i1.size[1]),(0,0,0,0))
+		comb.paste(i1,(0,0))		
+		comb.paste(i2,(i1.size[0],0))		
+		comb.save(tgt)
 
 
 
@@ -60,4 +68,8 @@ class Hologram:
 
 h = Hologram("test0.png","game00_1.png")
 h = Hologram("test0.png","game00_2.png")
+c = Combiner("game00_1.png","game00_2.png","comb00.png")
+h = Hologram("test1.png","game03_1.png")
+h = Hologram("test2.png","game03_2.png")
+c = Combiner("game03_1.png","game03_2.png","comb03.png")
 

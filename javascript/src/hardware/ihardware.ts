@@ -52,7 +52,7 @@ class DummyHardware implements IHardware {
         return n;
     }
     readin(): number {
-        var n:number = ((this.d & 3) != 0) ? 1 : 0 ;
+        var n:number = ((this.d & CosmosApplication.getGameID()) != 0) ? 1 : 0 ;
         console.log("Dummy:InIn:"+n.toString(16));
         return n;
     }

@@ -14,9 +14,16 @@ var GameState = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     GameState.prototype.init = function (gameInfo) {
-        var x = new COP444(new DummyHardware());
-        for (var n = 0; n < 2000; n++)
-            x.execute();
+        var ex = new COP444(new DummyHardware());
+        for (var n = 0; n < 2; n++)
+            ex.execute();
+        for (var x = 0; x < 14; x++) {
+            for (var y = 0; y < 12; y++) {
+                var s = 64;
+                var img = this.game.add.sprite(x * s + 10, y * s + 10, "hologram", x + y * 14);
+                img.width = img.height = s;
+            }
+        }
     };
     GameState.prototype.create = function () {
     };
@@ -47,11 +54,15 @@ var CosmosApplication = (function (_super) {
         _this.state.start("Boot");
         return _this;
     }
+    CosmosApplication.getGameID = function () {
+        return CosmosApplication.gameID;
+    };
     CosmosApplication.getURLName = function (key, defaultValue) {
         if (defaultValue === void 0) { defaultValue = ""; }
         var name = decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key.toLowerCase()).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
         return (name == "") ? defaultValue : name;
     };
+    CosmosApplication.gameID = 3;
     return CosmosApplication;
 }(Phaser.Game));
 var BootState = (function (_super) {
@@ -85,6 +96,8 @@ var PreloadState = (function (_super) {
         loader.anchor.setTo(0.5);
         this.game.load.setPreloadSprite(loader);
         this.game.load.atlas("sprites", "assets/sprites/sprites.png", "assets/sprites/sprites.json");
+        var name = "comb0" + (CosmosApplication.getGameID().toString()) + ".png";
+        this.game.load.spritesheet("hologram", "assets/holograms/" + name, 32, 32);
         for (var _i = 0, _a = ["font"]; _i < _a.length; _i++) {
             var fontName = _a[_i];
             this.game.load.bitmapFont(fontName, "assets/fonts/" + fontName + ".png", "assets/fonts/" + fontName + ".fnt");
@@ -1807,7 +1820,7 @@ var DummyHardware = (function () {
         return n;
     };
     DummyHardware.prototype.readin = function () {
-        var n = ((this.d & 3) != 0) ? 1 : 0;
+        var n = ((this.d & CosmosApplication.getGameID()) != 0) ? 1 : 0;
         console.log("Dummy:InIn:" + n.toString(16));
         return n;
     };
