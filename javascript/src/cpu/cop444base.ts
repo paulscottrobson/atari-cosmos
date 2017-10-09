@@ -30,6 +30,10 @@ abstract class COP444Base {
     protected romMemory:number[];
     protected hardware:IHardware;
 
+    constructor(hardware:IHardware) {
+        this.hardware = hardware;
+    }
+    
     abstract skip():void;
     abstract lbiSkip():void;
     abstract fetch():number;

@@ -3,7 +3,8 @@
 class GameState extends Phaser.State {
 
     init(gameInfo:any) : void {
-        var x:COP444 = new COP444();
+        var x:COP444 = new COP444(new DummyHardware());
+        for (var n = 0;n < 2000;n++) x.execute();
     }
 
     create() : void {
@@ -14,6 +15,4 @@ class GameState extends Phaser.State {
 
     update() : void {    
     }
-
-
 }    

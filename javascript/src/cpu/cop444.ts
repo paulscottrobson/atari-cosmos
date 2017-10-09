@@ -3,11 +3,19 @@
 
 class COP444 extends COP444Opcodes {
 
-    constructor() {
-        super();
+    private opcodeFunctions:Function[];
+    /**
+     * Constructor accesses the ROM Image and initialises RAM Memory.
+     * 
+     * @memberof COP444
+     */
+    constructor(hardware:IHardware) {
+        super(hardware);
         this.romMemory = ROMImage.rom;
-        this.ramMemory = []
+        this.ramMemory = [];
         for (var n:number = 0;n < 128;n++) this.ramMemory[n] = 0;
+        this.opcodeFunctions = this.getOpcodeFunctionTable();
+        this.reset();
     }
 
     /**
@@ -19,6 +27,7 @@ class COP444 extends COP444Opcodes {
         this.pc = this.a = this.b = this.c = this.d = this.en = this.g = 0;
         this.sa = this.sb = this.sc = 0;
         this.cycles = this.q = this.timer = this.tov = 0;
+        this.hardware.reset();
     }
 
     /**
@@ -28,9 +37,51 @@ class COP444 extends COP444Opcodes {
      * @memberof COP444Base
      */
     fetch():number {
-        return 0;
+        var opcode:number = this.romMemory[this.pc];
+        this.pc = (this.pc+1) & 0x7FF;
+        this.timer++;
+        if (this.timer >= 0x400) {
+            this.timer = 0;
+            this.tov = 1;
+            this.hardware.timerOverflow();
+        }
+        return opcode;
     }
     
+    /**
+     * Execute a single instruction
+     * 
+     * @returns {number} number of cycles since last end of frame call.
+     * @memberof COP444
+     */
+    execute(): number {
+        var opcode:number = this.fetch();
+        if (opcode == 0x23) {
+            opcode = this.fetch()|0x100;
+        }
+        if (opcode == 0x33) {
+            opcode = this.fetch()|0x200;
+        }
+        if (this.pc >= 0x80 && this.pc <= 0xFF) {
+            if (opcode >= 0x80 && opcode != 0xFF) {
+                this.pc = opcode;
+                opcode = 0x44;
+            }
+        }
+        this.opcodeFunctions[opcode].call(this);
+        this.cycles++;
+        return this.cycles;
+    }
+
+    /**
+     * Call to end frame, e.g. when cycles have been completed.
+     * 
+     * @memberof COP444
+     */
+    endOfFrame(): void {
+        this.cycles = 0;
+        this.hardware.endOfFrame();
+    }
     /**
      *  Skip an instruction (1 or 2 bytes)
      * 
