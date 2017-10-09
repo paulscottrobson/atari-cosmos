@@ -61,18 +61,12 @@
 
 // 	FETCH()		Fetch next byte, bump PC, timer, check overflow.
 
-//	AM()		The 8 byte A,M value((A << 4) | READ(B))
+//	AM()		The 8 byte A,M value((A << 4) | RAM[B])
 //  LBISKIP() 	Skip over LBIs
-//	PROGRAM(n)	Access Program ROM (n)
-//	READ(a) 	Access RAM(a)
 //	SKIP() 		Skip PC (+1 cycle)
-//	WRITE(a,n)	Write nibble N to RAM(a)
 
-:#define AM() 		((A << 4) | READ(B))
-:#define READ(a) 	(RAM[a])
-:#define WRITE(a,n) { RAM[a] = (n); }
+:#define AM() 		((A << 4) | RAM[B])
 :#define SKIP() 	{ temp8 = FETCH(); if (IS2BYTE(temp8)) PC = (PC+1) & 0x7FF; }
-:#define PROGRAM(n) ROM[n]
 :#define LBISKIP() 	{ while (isLBIOpcode() != 0) { SKIP(); } }
 
 :#define IS2BYTE(n) (	((n) >= 0x60 && (n) <= 0x6F)|| (n) == 0x23 || (n) == 0x33)
@@ -110,15 +104,15 @@
 //
 // *******************************************************************************************
 
-30		ASC			A = A + READ(B) + C;C = (A >> 4) & 1; A = A & 15; if (C != 0) SKIP();
+30		ASC			A = A + RAM[B] + C;C = (A >> 4) & 1; A = A & 15; if (C != 0) SKIP();
 
-31 		ADD			A = (A + READ(B)) & 15
+31 		ADD			A = (A + RAM[B]) & 15
 
 4A 		ADT 		A = (A + 10) & 15
 
 51-5F	AISC.@N 	A = A + 0x@N;C = (A >> 4) & 1;A = A & 15;if (C != 0) SKIP();
 
-10 		CASC		A = (A ^ 15) + READ(B) + C;C = (A >> 4) & 1; A = A & 15; if (C != 0) SKIP();
+10 		CASC		A = (A ^ 15) + RAM[B] + C;C = (A >> 4) & 1; A = A & 15; if (C != 0) SKIP();
 
 00		CLRA 		A = 0;
 
@@ -130,7 +124,7 @@
 
 22 		SC 			C = 1
 
-02 		XOR 		A = A ^ READ(B)
+02 		XOR 		A = A ^ RAM[B]
 
 // *******************************************************************************************
 //
@@ -139,7 +133,7 @@
 // *******************************************************************************************
 
 
-FF		JID 		temp8 = PROGRAM((PC & 0x700)|AM()); PC = (PC & 0x700) | temp8
+FF		JID 		temp8 = ROM[(PC & 0x700)|AM()]; PC = (PC & 0x700) | temp8
 
 60-67	JMP.@L 		temp8 = FETCH();PC = (0x@L00)|temp8
 
@@ -169,38 +163,38 @@ C0-FE 	JP.@J 		PC = (PC & 0x7C0) | 0x@J
 
 23F 	CAMT 		TIMER = AM() << 2
 
-22F 	CTMA 		temp8 = TIMER >> 2;A = temp8 & 0xF;WRITE(B,(temp8 >> 4) & 0x0F)
+22F 	CTMA 		temp8 = TIMER >> 2;A = temp8 & 0xF;RAM[B] = (temp8 >> 4) & 0x0F
 
 23C 	CAMQ		Q = AM();UPDATEQ(Q)
 
-22C 	CQMA 		A = Q & 15;WRITE(B,(Q >> 4) & 15)
+22C 	CQMA 		A = Q & 15;RAM[B] = ((Q >> 4) & 15)
 
-05-35,16 LD.@R 		A = READ(B);B = B ^ (@R << 4)
+05-35,16 LD.@R 		A = RAM[B];B = B ^ (@R << 4)
 
-100-17F	LD.@D,@N 	A = READ(0x@A)
+100-17F	LD.@D,@N 	A = RAM[0x@A]
 
-BF 		LQID 		Q = PROGRAM((PC & 0x700) | AM());SC = SB;UPDATEQ(Q)
+BF 		LQID 		Q = ROM[(PC & 0x700) | AM()];SC = SB;UPDATEQ(Q)
 
-4C		RMB.0		temp8 = READ(B);WRITE(B,temp8 & 0x0E)
-45		RMB.1		temp8 = READ(B);WRITE(B,temp8 & 0x0D)
-42		RMB.2		temp8 = READ(B);WRITE(B,temp8 & 0x0B)
-43		RMB.3		temp8 = READ(B);WRITE(B,temp8 & 0x07)
+4C		RMB.0		temp8 = RAM[B];RAM[B] = (temp8 & 0x0E)
+45		RMB.1		temp8 = RAM[B];RAM[B] = (temp8 & 0x0D)
+42		RMB.2		temp8 = RAM[B];RAM[B] = (temp8 & 0x0B)
+43		RMB.3		temp8 = RAM[B];RAM[B] = (temp8 & 0x07)
 
-4D 		SMB.0 		temp8 = READ(B);WRITE(B,temp8 | 0x01)
-47 		SMB.1 		temp8 = READ(B);WRITE(B,temp8 | 0x02)
-46 		SMB.2 		temp8 = READ(B);WRITE(B,temp8 | 0x04)
-4B 		SMB.3 		temp8 = READ(B);WRITE(B,temp8 | 0x08)
+4D 		SMB.0 		temp8 = RAM[B];RAM[B] = (temp8 | 0x01)
+47 		SMB.1 		temp8 = RAM[B];RAM[B] = (temp8 | 0x02)
+46 		SMB.2 		temp8 = RAM[B];RAM[B] = (temp8 | 0x04)
+4B 		SMB.3 		temp8 = RAM[B];RAM[B] = (temp8 | 0x08)
 
-70-7F 	STII.@N 	WRITE(B,0x@N);B = (B & 0x70) + ((B + 1) & 0x0F)
+70-7F 	STII.@N 	RAM[B] = (0x@N);B = (B & 0x70) + ((B + 1) & 0x0F)
 
-06-36,16 X.@R 		temp8 = READ(B);WRITE(B,A);A = temp8;B = B ^ (@R << 4)
+06-36,16 X.@R 		temp8 = RAM[B];RAM[B] = (A);A = temp8;B = B ^ (@R << 4)
 
-180-1FF	XAD.@D,@N 	temp8 = READ(0x@A);WRITE(0x@A,A);A = temp8 
+180-1FF	XAD.@D,@N 	temp8 = RAM[0x@A];RAM[0x@A] = (A);A = temp8 
 
-07-37,16 XDS.@R 	temp8 = READ(B);WRITE(B,A);A = temp8;B = B ^ (@R << 4); \
+07-37,16 XDS.@R 	temp8 = RAM[B];RAM[B] = (A);A = temp8;B = B ^ (@R << 4); \
 					B = (B & 0x70) + ((B-1) & 0x0F); if ((B & 0x0F) == 0x0F) SKIP();
 
-04-34,16 XIS.@R 	temp8 = READ(B);WRITE(B,A);A = temp8;B = B ^ (@R << 4); \
+04-34,16 XIS.@R 	temp8 = RAM[B];RAM[B] = (A);A = temp8;B = B ^ (@R << 4); \
 					B = (B & 0x70) + ((B+1) & 0x0F); if ((B & 0x0F) == 0x00) SKIP();
 
 // *******************************************************************************************
@@ -232,7 +226,7 @@ BF 		LQID 		Q = PROGRAM((PC & 0x700) | AM());SC = SB;UPDATEQ(Q)
 
 20 		SKC 		if (C != 0) SKIP()
 
-21 		SKE  		if (A == READ(B)) SKIP() 
+21 		SKE  		if (A == RAM[B]) SKIP() 
 
 221 	SKGZ 		if (G == 0) SKIP()
 
@@ -241,10 +235,10 @@ BF 		LQID 		Q = PROGRAM((PC & 0x700) | AM());SC = SB;UPDATEQ(Q)
 203 	SKGBZ.2 	if ((G & 4) == 0) SKIP()
 213 	SKGBZ.3 	if ((G & 8) == 0) SKIP()
 
-01 		SKMBZ.0 	if ((READ(B) & 1) == 0) SKIP()
-11 		SKMBZ.1 	if ((READ(B) & 2) == 0) SKIP()
-03 		SKMBZ.2 	if ((READ(B) & 4) == 0) SKIP()
-13 		SKMBZ.3 	if ((READ(B) & 8) == 0) SKIP()
+01 		SKMBZ.0 	if ((RAM[B] & 1) == 0) SKIP()
+11 		SKMBZ.1 	if ((RAM[B] & 2) == 0) SKIP()
+03 		SKMBZ.2 	if ((RAM[B] & 4) == 0) SKIP()
+13 		SKMBZ.3 	if ((RAM[B] & 8) == 0) SKIP()
 
 41 		SKT 		if (TOV != 0) { TOV = 0; SKIP(); }
 
@@ -260,12 +254,12 @@ BF 		LQID 		Q = PROGRAM((PC & 0x700) | AM());SC = SB;UPDATEQ(Q)
 
 229 	INIL 		;	 									// We do not use INIL
 
-22E 	INL 		temp8 = LREAD();A = temp8 & 0xF;WRITE(B,(temp8 >> 4) & 15)
+22E 	INL 		temp8 = LREAD();A = temp8 & 0xF;RAM[B] = ((temp8 >> 4) & 15)
 
 23E 	OBD 		D = B & 0x0F;UPDATED(D)
 
 250-25F OGI.@N 		G = 0x@N;UPDATEG(G) 				
 
-23A 	OMG 		G = READ(B);UPDATEG(G)
+23A 	OMG 		G = RAM[B];UPDATEG(G)
 
 4F 		XAS 		SIOWRITE(A);A = 0

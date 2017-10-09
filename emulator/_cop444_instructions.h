@@ -1,19 +1,19 @@
 case 0x000: /** [0] clra **/
     A = 0;;break;
 case 0x001: /** [1] skmbz 0 **/
-    if ((READ(B) & 1) == 0) SKIP();break;
+    if ((RAM[B] & 1) == 0) SKIP();break;
 case 0x002: /** [2] xor **/
-    A = A ^ READ(B);break;
+    A = A ^ RAM[B];break;
 case 0x003: /** [3] skmbz 2 **/
-    if ((READ(B) & 4) == 0) SKIP();break;
+    if ((RAM[B] & 4) == 0) SKIP();break;
 case 0x004: /** [4] xis 0 **/
-    temp8 = READ(B);WRITE(B,A);A = temp8;B = B ^ (0 << 4); B = (B & 0x70) + ((B+1) & 0x0F); if ((B & 0x0F) == 0x00) SKIP();;break;
+    temp8 = RAM[B];RAM[B] = (A);A = temp8;B = B ^ (0 << 4); B = (B & 0x70) + ((B+1) & 0x0F); if ((B & 0x0F) == 0x00) SKIP();;break;
 case 0x005: /** [5] ld 0 **/
-    A = READ(B);B = B ^ (0 << 4);break;
+    A = RAM[B];B = B ^ (0 << 4);break;
 case 0x006: /** [6] x 0 **/
-    temp8 = READ(B);WRITE(B,A);A = temp8;B = B ^ (0 << 4);break;
+    temp8 = RAM[B];RAM[B] = (A);A = temp8;B = B ^ (0 << 4);break;
 case 0x007: /** [7] xds 0 **/
-    temp8 = READ(B);WRITE(B,A);A = temp8;B = B ^ (0 << 4); B = (B & 0x70) + ((B-1) & 0x0F); if ((B & 0x0F) == 0x0F) SKIP();;break;
+    temp8 = RAM[B];RAM[B] = (A);A = temp8;B = B ^ (0 << 4); B = (B & 0x70) + ((B-1) & 0x0F); if ((B & 0x0F) == 0x0F) SKIP();;break;
 case 0x008: /** [8] lbi 0,9 **/
     B = 0x09;LBISKIP();break;
 case 0x009: /** [9] lbi 0,a **/
@@ -31,21 +31,21 @@ case 0x00e: /** [e] lbi 0,f **/
 case 0x00f: /** [f] lbi 0,0 **/
     B = 0x00;LBISKIP();break;
 case 0x010: /** [10] casc **/
-    A = (A ^ 15) + READ(B) + C;C = (A >> 4) & 1; A = A & 15; if (C != 0) SKIP();;break;
+    A = (A ^ 15) + RAM[B] + C;C = (A >> 4) & 1; A = A & 15; if (C != 0) SKIP();;break;
 case 0x011: /** [11] skmbz 1 **/
-    if ((READ(B) & 2) == 0) SKIP();break;
+    if ((RAM[B] & 2) == 0) SKIP();break;
 case 0x012: /** [12] xabr **/
     temp8 = A & 7;A = (B >> 4) & 7;B = (B & 0x0F) + (temp8 << 4);;break;
 case 0x013: /** [13] skmbz 3 **/
-    if ((READ(B) & 8) == 0) SKIP();break;
+    if ((RAM[B] & 8) == 0) SKIP();break;
 case 0x014: /** [14] xis 1 **/
-    temp8 = READ(B);WRITE(B,A);A = temp8;B = B ^ (1 << 4); B = (B & 0x70) + ((B+1) & 0x0F); if ((B & 0x0F) == 0x00) SKIP();;break;
+    temp8 = RAM[B];RAM[B] = (A);A = temp8;B = B ^ (1 << 4); B = (B & 0x70) + ((B+1) & 0x0F); if ((B & 0x0F) == 0x00) SKIP();;break;
 case 0x015: /** [15] ld 1 **/
-    A = READ(B);B = B ^ (1 << 4);break;
+    A = RAM[B];B = B ^ (1 << 4);break;
 case 0x016: /** [16] x 1 **/
-    temp8 = READ(B);WRITE(B,A);A = temp8;B = B ^ (1 << 4);break;
+    temp8 = RAM[B];RAM[B] = (A);A = temp8;B = B ^ (1 << 4);break;
 case 0x017: /** [17] xds 1 **/
-    temp8 = READ(B);WRITE(B,A);A = temp8;B = B ^ (1 << 4); B = (B & 0x70) + ((B-1) & 0x0F); if ((B & 0x0F) == 0x0F) SKIP();;break;
+    temp8 = RAM[B];RAM[B] = (A);A = temp8;B = B ^ (1 << 4); B = (B & 0x70) + ((B-1) & 0x0F); if ((B & 0x0F) == 0x0F) SKIP();;break;
 case 0x018: /** [18] lbi 1,9 **/
     B = 0x19;LBISKIP();break;
 case 0x019: /** [19] lbi 1,a **/
@@ -65,19 +65,19 @@ case 0x01f: /** [1f] lbi 1,0 **/
 case 0x020: /** [20] skc **/
     if (C != 0) SKIP();break;
 case 0x021: /** [21] ske **/
-    if (A == READ(B)) SKIP();break;
+    if (A == RAM[B]) SKIP();break;
 case 0x022: /** [22] sc **/
     C = 1;break;
 case 0x023: /** [23] (unknown) **/
     break;
 case 0x024: /** [24] xis 2 **/
-    temp8 = READ(B);WRITE(B,A);A = temp8;B = B ^ (2 << 4); B = (B & 0x70) + ((B+1) & 0x0F); if ((B & 0x0F) == 0x00) SKIP();;break;
+    temp8 = RAM[B];RAM[B] = (A);A = temp8;B = B ^ (2 << 4); B = (B & 0x70) + ((B+1) & 0x0F); if ((B & 0x0F) == 0x00) SKIP();;break;
 case 0x025: /** [25] ld 2 **/
-    A = READ(B);B = B ^ (2 << 4);break;
+    A = RAM[B];B = B ^ (2 << 4);break;
 case 0x026: /** [26] x 2 **/
-    temp8 = READ(B);WRITE(B,A);A = temp8;B = B ^ (2 << 4);break;
+    temp8 = RAM[B];RAM[B] = (A);A = temp8;B = B ^ (2 << 4);break;
 case 0x027: /** [27] xds 2 **/
-    temp8 = READ(B);WRITE(B,A);A = temp8;B = B ^ (2 << 4); B = (B & 0x70) + ((B-1) & 0x0F); if ((B & 0x0F) == 0x0F) SKIP();;break;
+    temp8 = RAM[B];RAM[B] = (A);A = temp8;B = B ^ (2 << 4); B = (B & 0x70) + ((B-1) & 0x0F); if ((B & 0x0F) == 0x0F) SKIP();;break;
 case 0x028: /** [28] lbi 2,9 **/
     B = 0x29;LBISKIP();break;
 case 0x029: /** [29] lbi 2,a **/
@@ -95,21 +95,21 @@ case 0x02e: /** [2e] lbi 2,f **/
 case 0x02f: /** [2f] lbi 2,0 **/
     B = 0x20;LBISKIP();break;
 case 0x030: /** [30] asc **/
-    A = A + READ(B) + C;C = (A >> 4) & 1; A = A & 15; if (C != 0) SKIP();;break;
+    A = A + RAM[B] + C;C = (A >> 4) & 1; A = A & 15; if (C != 0) SKIP();;break;
 case 0x031: /** [31] add **/
-    A = (A + READ(B)) & 15;break;
+    A = (A + RAM[B]) & 15;break;
 case 0x032: /** [32] rc **/
     C = 0;break;
 case 0x033: /** [33] (unknown) **/
     break;
 case 0x034: /** [34] xis 3 **/
-    temp8 = READ(B);WRITE(B,A);A = temp8;B = B ^ (3 << 4); B = (B & 0x70) + ((B+1) & 0x0F); if ((B & 0x0F) == 0x00) SKIP();;break;
+    temp8 = RAM[B];RAM[B] = (A);A = temp8;B = B ^ (3 << 4); B = (B & 0x70) + ((B+1) & 0x0F); if ((B & 0x0F) == 0x00) SKIP();;break;
 case 0x035: /** [35] ld 3 **/
-    A = READ(B);B = B ^ (3 << 4);break;
+    A = RAM[B];B = B ^ (3 << 4);break;
 case 0x036: /** [36] x 3 **/
-    temp8 = READ(B);WRITE(B,A);A = temp8;B = B ^ (3 << 4);break;
+    temp8 = RAM[B];RAM[B] = (A);A = temp8;B = B ^ (3 << 4);break;
 case 0x037: /** [37] xds 3 **/
-    temp8 = READ(B);WRITE(B,A);A = temp8;B = B ^ (3 << 4); B = (B & 0x70) + ((B-1) & 0x0F); if ((B & 0x0F) == 0x0F) SKIP();;break;
+    temp8 = RAM[B];RAM[B] = (A);A = temp8;B = B ^ (3 << 4); B = (B & 0x70) + ((B-1) & 0x0F); if ((B & 0x0F) == 0x0F) SKIP();;break;
 case 0x038: /** [38] lbi 3,9 **/
     B = 0x39;LBISKIP();break;
 case 0x039: /** [39] lbi 3,a **/
@@ -131,17 +131,17 @@ case 0x040: /** [40] comp **/
 case 0x041: /** [41] skt **/
     if (TOV != 0) { TOV = 0; SKIP(); };break;
 case 0x042: /** [42] rmb 2 **/
-    temp8 = READ(B);WRITE(B,temp8 & 0x0B);break;
+    temp8 = RAM[B];RAM[B] = (temp8 & 0x0B);break;
 case 0x043: /** [43] rmb 3 **/
-    temp8 = READ(B);WRITE(B,temp8 & 0x07);break;
+    temp8 = RAM[B];RAM[B] = (temp8 & 0x07);break;
 case 0x044: /** [44] nop **/
     ;;break;
 case 0x045: /** [45] rmb 1 **/
-    temp8 = READ(B);WRITE(B,temp8 & 0x0D);break;
+    temp8 = RAM[B];RAM[B] = (temp8 & 0x0D);break;
 case 0x046: /** [46] smb 2 **/
-    temp8 = READ(B);WRITE(B,temp8 | 0x04);break;
+    temp8 = RAM[B];RAM[B] = (temp8 | 0x04);break;
 case 0x047: /** [47] smb 1 **/
-    temp8 = READ(B);WRITE(B,temp8 | 0x02);break;
+    temp8 = RAM[B];RAM[B] = (temp8 | 0x02);break;
 case 0x048: /** [48] ret **/
     PC = SA;SA = SB;SB = SC;SC = 0;break;
 case 0x049: /** [49] retsk **/
@@ -149,11 +149,11 @@ case 0x049: /** [49] retsk **/
 case 0x04a: /** [4a] adt **/
     A = (A + 10) & 15;break;
 case 0x04b: /** [4b] smb 3 **/
-    temp8 = READ(B);WRITE(B,temp8 | 0x08);break;
+    temp8 = RAM[B];RAM[B] = (temp8 | 0x08);break;
 case 0x04c: /** [4c] rmb 0 **/
-    temp8 = READ(B);WRITE(B,temp8 & 0x0E);break;
+    temp8 = RAM[B];RAM[B] = (temp8 & 0x0E);break;
 case 0x04d: /** [4d] smb 0 **/
-    temp8 = READ(B);WRITE(B,temp8 | 0x01);break;
+    temp8 = RAM[B];RAM[B] = (temp8 | 0x01);break;
 case 0x04e: /** [4e] cba **/
     A = B & 0x0F;break;
 case 0x04f: /** [4f] xas **/
@@ -223,37 +223,37 @@ case 0x06e: /** [6e] jsr 6 **/
 case 0x06f: /** [6f] jsr 7 **/
     temp8 = FETCH();SC = SB;SB = SA;SA = PC;PC = (0x700)|temp8;break;
 case 0x070: /** [70] stii 0 **/
-    WRITE(B,0x0);B = (B & 0x70) + ((B + 1) & 0x0F);break;
+    RAM[B] = (0x0);B = (B & 0x70) + ((B + 1) & 0x0F);break;
 case 0x071: /** [71] stii 1 **/
-    WRITE(B,0x1);B = (B & 0x70) + ((B + 1) & 0x0F);break;
+    RAM[B] = (0x1);B = (B & 0x70) + ((B + 1) & 0x0F);break;
 case 0x072: /** [72] stii 2 **/
-    WRITE(B,0x2);B = (B & 0x70) + ((B + 1) & 0x0F);break;
+    RAM[B] = (0x2);B = (B & 0x70) + ((B + 1) & 0x0F);break;
 case 0x073: /** [73] stii 3 **/
-    WRITE(B,0x3);B = (B & 0x70) + ((B + 1) & 0x0F);break;
+    RAM[B] = (0x3);B = (B & 0x70) + ((B + 1) & 0x0F);break;
 case 0x074: /** [74] stii 4 **/
-    WRITE(B,0x4);B = (B & 0x70) + ((B + 1) & 0x0F);break;
+    RAM[B] = (0x4);B = (B & 0x70) + ((B + 1) & 0x0F);break;
 case 0x075: /** [75] stii 5 **/
-    WRITE(B,0x5);B = (B & 0x70) + ((B + 1) & 0x0F);break;
+    RAM[B] = (0x5);B = (B & 0x70) + ((B + 1) & 0x0F);break;
 case 0x076: /** [76] stii 6 **/
-    WRITE(B,0x6);B = (B & 0x70) + ((B + 1) & 0x0F);break;
+    RAM[B] = (0x6);B = (B & 0x70) + ((B + 1) & 0x0F);break;
 case 0x077: /** [77] stii 7 **/
-    WRITE(B,0x7);B = (B & 0x70) + ((B + 1) & 0x0F);break;
+    RAM[B] = (0x7);B = (B & 0x70) + ((B + 1) & 0x0F);break;
 case 0x078: /** [78] stii 8 **/
-    WRITE(B,0x8);B = (B & 0x70) + ((B + 1) & 0x0F);break;
+    RAM[B] = (0x8);B = (B & 0x70) + ((B + 1) & 0x0F);break;
 case 0x079: /** [79] stii 9 **/
-    WRITE(B,0x9);B = (B & 0x70) + ((B + 1) & 0x0F);break;
+    RAM[B] = (0x9);B = (B & 0x70) + ((B + 1) & 0x0F);break;
 case 0x07a: /** [7a] stii a **/
-    WRITE(B,0xa);B = (B & 0x70) + ((B + 1) & 0x0F);break;
+    RAM[B] = (0xa);B = (B & 0x70) + ((B + 1) & 0x0F);break;
 case 0x07b: /** [7b] stii b **/
-    WRITE(B,0xb);B = (B & 0x70) + ((B + 1) & 0x0F);break;
+    RAM[B] = (0xb);B = (B & 0x70) + ((B + 1) & 0x0F);break;
 case 0x07c: /** [7c] stii c **/
-    WRITE(B,0xc);B = (B & 0x70) + ((B + 1) & 0x0F);break;
+    RAM[B] = (0xc);B = (B & 0x70) + ((B + 1) & 0x0F);break;
 case 0x07d: /** [7d] stii d **/
-    WRITE(B,0xd);B = (B & 0x70) + ((B + 1) & 0x0F);break;
+    RAM[B] = (0xd);B = (B & 0x70) + ((B + 1) & 0x0F);break;
 case 0x07e: /** [7e] stii e **/
-    WRITE(B,0xe);B = (B & 0x70) + ((B + 1) & 0x0F);break;
+    RAM[B] = (0xe);B = (B & 0x70) + ((B + 1) & 0x0F);break;
 case 0x07f: /** [7f] stii f **/
-    WRITE(B,0xf);B = (B & 0x70) + ((B + 1) & 0x0F);break;
+    RAM[B] = (0xf);B = (B & 0x70) + ((B + 1) & 0x0F);break;
 case 0x080: /** [80] jsrp 080 **/
     SC = SB;SB = SA;SA = PC;PC = 0x080;break;
 case 0x081: /** [81] jsrp 081 **/
@@ -381,7 +381,7 @@ case 0x0bd: /** [bd] jsrp 0bd **/
 case 0x0be: /** [be] jsrp 0be **/
     SC = SB;SB = SA;SA = PC;PC = 0x0be;break;
 case 0x0bf: /** [bf] lqid **/
-    Q = PROGRAM((PC & 0x700) | AM());SC = SB;UPDATEQ(Q);break;
+    Q = ROM[(PC & 0x700) | AM()];SC = SB;UPDATEQ(Q);break;
 case 0x0c0: /** [c0] jp 000 **/
     PC = (PC & 0x7C0) | 0x000;break;
 case 0x0c1: /** [c1] jp 001 **/
@@ -509,519 +509,519 @@ case 0x0fd: /** [fd] jp 03d **/
 case 0x0fe: /** [fe] jp 03e **/
     PC = (PC & 0x7C0) | 0x03e;break;
 case 0x0ff: /** [ff] jid **/
-    temp8 = PROGRAM((PC & 0x700)|AM()); PC = (PC & 0x700) | temp8;break;
+    temp8 = ROM[(PC & 0x700)|AM()]; PC = (PC & 0x700) | temp8;break;
 case 0x100: /** [2300] ld 0,0 **/
-    A = READ(0x00);break;
+    A = RAM[0x00];break;
 case 0x101: /** [2301] ld 0,1 **/
-    A = READ(0x01);break;
+    A = RAM[0x01];break;
 case 0x102: /** [2302] ld 0,2 **/
-    A = READ(0x02);break;
+    A = RAM[0x02];break;
 case 0x103: /** [2303] ld 0,3 **/
-    A = READ(0x03);break;
+    A = RAM[0x03];break;
 case 0x104: /** [2304] ld 0,4 **/
-    A = READ(0x04);break;
+    A = RAM[0x04];break;
 case 0x105: /** [2305] ld 0,5 **/
-    A = READ(0x05);break;
+    A = RAM[0x05];break;
 case 0x106: /** [2306] ld 0,6 **/
-    A = READ(0x06);break;
+    A = RAM[0x06];break;
 case 0x107: /** [2307] ld 0,7 **/
-    A = READ(0x07);break;
+    A = RAM[0x07];break;
 case 0x108: /** [2308] ld 0,8 **/
-    A = READ(0x08);break;
+    A = RAM[0x08];break;
 case 0x109: /** [2309] ld 0,9 **/
-    A = READ(0x09);break;
+    A = RAM[0x09];break;
 case 0x10a: /** [230a] ld 0,a **/
-    A = READ(0x0a);break;
+    A = RAM[0x0a];break;
 case 0x10b: /** [230b] ld 0,b **/
-    A = READ(0x0b);break;
+    A = RAM[0x0b];break;
 case 0x10c: /** [230c] ld 0,c **/
-    A = READ(0x0c);break;
+    A = RAM[0x0c];break;
 case 0x10d: /** [230d] ld 0,d **/
-    A = READ(0x0d);break;
+    A = RAM[0x0d];break;
 case 0x10e: /** [230e] ld 0,e **/
-    A = READ(0x0e);break;
+    A = RAM[0x0e];break;
 case 0x10f: /** [230f] ld 0,f **/
-    A = READ(0x0f);break;
+    A = RAM[0x0f];break;
 case 0x110: /** [2310] ld 1,0 **/
-    A = READ(0x10);break;
+    A = RAM[0x10];break;
 case 0x111: /** [2311] ld 1,1 **/
-    A = READ(0x11);break;
+    A = RAM[0x11];break;
 case 0x112: /** [2312] ld 1,2 **/
-    A = READ(0x12);break;
+    A = RAM[0x12];break;
 case 0x113: /** [2313] ld 1,3 **/
-    A = READ(0x13);break;
+    A = RAM[0x13];break;
 case 0x114: /** [2314] ld 1,4 **/
-    A = READ(0x14);break;
+    A = RAM[0x14];break;
 case 0x115: /** [2315] ld 1,5 **/
-    A = READ(0x15);break;
+    A = RAM[0x15];break;
 case 0x116: /** [2316] ld 1,6 **/
-    A = READ(0x16);break;
+    A = RAM[0x16];break;
 case 0x117: /** [2317] ld 1,7 **/
-    A = READ(0x17);break;
+    A = RAM[0x17];break;
 case 0x118: /** [2318] ld 1,8 **/
-    A = READ(0x18);break;
+    A = RAM[0x18];break;
 case 0x119: /** [2319] ld 1,9 **/
-    A = READ(0x19);break;
+    A = RAM[0x19];break;
 case 0x11a: /** [231a] ld 1,a **/
-    A = READ(0x1a);break;
+    A = RAM[0x1a];break;
 case 0x11b: /** [231b] ld 1,b **/
-    A = READ(0x1b);break;
+    A = RAM[0x1b];break;
 case 0x11c: /** [231c] ld 1,c **/
-    A = READ(0x1c);break;
+    A = RAM[0x1c];break;
 case 0x11d: /** [231d] ld 1,d **/
-    A = READ(0x1d);break;
+    A = RAM[0x1d];break;
 case 0x11e: /** [231e] ld 1,e **/
-    A = READ(0x1e);break;
+    A = RAM[0x1e];break;
 case 0x11f: /** [231f] ld 1,f **/
-    A = READ(0x1f);break;
+    A = RAM[0x1f];break;
 case 0x120: /** [2320] ld 2,0 **/
-    A = READ(0x20);break;
+    A = RAM[0x20];break;
 case 0x121: /** [2321] ld 2,1 **/
-    A = READ(0x21);break;
+    A = RAM[0x21];break;
 case 0x122: /** [2322] ld 2,2 **/
-    A = READ(0x22);break;
+    A = RAM[0x22];break;
 case 0x123: /** [2323] ld 2,3 **/
-    A = READ(0x23);break;
+    A = RAM[0x23];break;
 case 0x124: /** [2324] ld 2,4 **/
-    A = READ(0x24);break;
+    A = RAM[0x24];break;
 case 0x125: /** [2325] ld 2,5 **/
-    A = READ(0x25);break;
+    A = RAM[0x25];break;
 case 0x126: /** [2326] ld 2,6 **/
-    A = READ(0x26);break;
+    A = RAM[0x26];break;
 case 0x127: /** [2327] ld 2,7 **/
-    A = READ(0x27);break;
+    A = RAM[0x27];break;
 case 0x128: /** [2328] ld 2,8 **/
-    A = READ(0x28);break;
+    A = RAM[0x28];break;
 case 0x129: /** [2329] ld 2,9 **/
-    A = READ(0x29);break;
+    A = RAM[0x29];break;
 case 0x12a: /** [232a] ld 2,a **/
-    A = READ(0x2a);break;
+    A = RAM[0x2a];break;
 case 0x12b: /** [232b] ld 2,b **/
-    A = READ(0x2b);break;
+    A = RAM[0x2b];break;
 case 0x12c: /** [232c] ld 2,c **/
-    A = READ(0x2c);break;
+    A = RAM[0x2c];break;
 case 0x12d: /** [232d] ld 2,d **/
-    A = READ(0x2d);break;
+    A = RAM[0x2d];break;
 case 0x12e: /** [232e] ld 2,e **/
-    A = READ(0x2e);break;
+    A = RAM[0x2e];break;
 case 0x12f: /** [232f] ld 2,f **/
-    A = READ(0x2f);break;
+    A = RAM[0x2f];break;
 case 0x130: /** [2330] ld 3,0 **/
-    A = READ(0x30);break;
+    A = RAM[0x30];break;
 case 0x131: /** [2331] ld 3,1 **/
-    A = READ(0x31);break;
+    A = RAM[0x31];break;
 case 0x132: /** [2332] ld 3,2 **/
-    A = READ(0x32);break;
+    A = RAM[0x32];break;
 case 0x133: /** [2333] ld 3,3 **/
-    A = READ(0x33);break;
+    A = RAM[0x33];break;
 case 0x134: /** [2334] ld 3,4 **/
-    A = READ(0x34);break;
+    A = RAM[0x34];break;
 case 0x135: /** [2335] ld 3,5 **/
-    A = READ(0x35);break;
+    A = RAM[0x35];break;
 case 0x136: /** [2336] ld 3,6 **/
-    A = READ(0x36);break;
+    A = RAM[0x36];break;
 case 0x137: /** [2337] ld 3,7 **/
-    A = READ(0x37);break;
+    A = RAM[0x37];break;
 case 0x138: /** [2338] ld 3,8 **/
-    A = READ(0x38);break;
+    A = RAM[0x38];break;
 case 0x139: /** [2339] ld 3,9 **/
-    A = READ(0x39);break;
+    A = RAM[0x39];break;
 case 0x13a: /** [233a] ld 3,a **/
-    A = READ(0x3a);break;
+    A = RAM[0x3a];break;
 case 0x13b: /** [233b] ld 3,b **/
-    A = READ(0x3b);break;
+    A = RAM[0x3b];break;
 case 0x13c: /** [233c] ld 3,c **/
-    A = READ(0x3c);break;
+    A = RAM[0x3c];break;
 case 0x13d: /** [233d] ld 3,d **/
-    A = READ(0x3d);break;
+    A = RAM[0x3d];break;
 case 0x13e: /** [233e] ld 3,e **/
-    A = READ(0x3e);break;
+    A = RAM[0x3e];break;
 case 0x13f: /** [233f] ld 3,f **/
-    A = READ(0x3f);break;
+    A = RAM[0x3f];break;
 case 0x140: /** [2340] ld 4,0 **/
-    A = READ(0x40);break;
+    A = RAM[0x40];break;
 case 0x141: /** [2341] ld 4,1 **/
-    A = READ(0x41);break;
+    A = RAM[0x41];break;
 case 0x142: /** [2342] ld 4,2 **/
-    A = READ(0x42);break;
+    A = RAM[0x42];break;
 case 0x143: /** [2343] ld 4,3 **/
-    A = READ(0x43);break;
+    A = RAM[0x43];break;
 case 0x144: /** [2344] ld 4,4 **/
-    A = READ(0x44);break;
+    A = RAM[0x44];break;
 case 0x145: /** [2345] ld 4,5 **/
-    A = READ(0x45);break;
+    A = RAM[0x45];break;
 case 0x146: /** [2346] ld 4,6 **/
-    A = READ(0x46);break;
+    A = RAM[0x46];break;
 case 0x147: /** [2347] ld 4,7 **/
-    A = READ(0x47);break;
+    A = RAM[0x47];break;
 case 0x148: /** [2348] ld 4,8 **/
-    A = READ(0x48);break;
+    A = RAM[0x48];break;
 case 0x149: /** [2349] ld 4,9 **/
-    A = READ(0x49);break;
+    A = RAM[0x49];break;
 case 0x14a: /** [234a] ld 4,a **/
-    A = READ(0x4a);break;
+    A = RAM[0x4a];break;
 case 0x14b: /** [234b] ld 4,b **/
-    A = READ(0x4b);break;
+    A = RAM[0x4b];break;
 case 0x14c: /** [234c] ld 4,c **/
-    A = READ(0x4c);break;
+    A = RAM[0x4c];break;
 case 0x14d: /** [234d] ld 4,d **/
-    A = READ(0x4d);break;
+    A = RAM[0x4d];break;
 case 0x14e: /** [234e] ld 4,e **/
-    A = READ(0x4e);break;
+    A = RAM[0x4e];break;
 case 0x14f: /** [234f] ld 4,f **/
-    A = READ(0x4f);break;
+    A = RAM[0x4f];break;
 case 0x150: /** [2350] ld 5,0 **/
-    A = READ(0x50);break;
+    A = RAM[0x50];break;
 case 0x151: /** [2351] ld 5,1 **/
-    A = READ(0x51);break;
+    A = RAM[0x51];break;
 case 0x152: /** [2352] ld 5,2 **/
-    A = READ(0x52);break;
+    A = RAM[0x52];break;
 case 0x153: /** [2353] ld 5,3 **/
-    A = READ(0x53);break;
+    A = RAM[0x53];break;
 case 0x154: /** [2354] ld 5,4 **/
-    A = READ(0x54);break;
+    A = RAM[0x54];break;
 case 0x155: /** [2355] ld 5,5 **/
-    A = READ(0x55);break;
+    A = RAM[0x55];break;
 case 0x156: /** [2356] ld 5,6 **/
-    A = READ(0x56);break;
+    A = RAM[0x56];break;
 case 0x157: /** [2357] ld 5,7 **/
-    A = READ(0x57);break;
+    A = RAM[0x57];break;
 case 0x158: /** [2358] ld 5,8 **/
-    A = READ(0x58);break;
+    A = RAM[0x58];break;
 case 0x159: /** [2359] ld 5,9 **/
-    A = READ(0x59);break;
+    A = RAM[0x59];break;
 case 0x15a: /** [235a] ld 5,a **/
-    A = READ(0x5a);break;
+    A = RAM[0x5a];break;
 case 0x15b: /** [235b] ld 5,b **/
-    A = READ(0x5b);break;
+    A = RAM[0x5b];break;
 case 0x15c: /** [235c] ld 5,c **/
-    A = READ(0x5c);break;
+    A = RAM[0x5c];break;
 case 0x15d: /** [235d] ld 5,d **/
-    A = READ(0x5d);break;
+    A = RAM[0x5d];break;
 case 0x15e: /** [235e] ld 5,e **/
-    A = READ(0x5e);break;
+    A = RAM[0x5e];break;
 case 0x15f: /** [235f] ld 5,f **/
-    A = READ(0x5f);break;
+    A = RAM[0x5f];break;
 case 0x160: /** [2360] ld 6,0 **/
-    A = READ(0x60);break;
+    A = RAM[0x60];break;
 case 0x161: /** [2361] ld 6,1 **/
-    A = READ(0x61);break;
+    A = RAM[0x61];break;
 case 0x162: /** [2362] ld 6,2 **/
-    A = READ(0x62);break;
+    A = RAM[0x62];break;
 case 0x163: /** [2363] ld 6,3 **/
-    A = READ(0x63);break;
+    A = RAM[0x63];break;
 case 0x164: /** [2364] ld 6,4 **/
-    A = READ(0x64);break;
+    A = RAM[0x64];break;
 case 0x165: /** [2365] ld 6,5 **/
-    A = READ(0x65);break;
+    A = RAM[0x65];break;
 case 0x166: /** [2366] ld 6,6 **/
-    A = READ(0x66);break;
+    A = RAM[0x66];break;
 case 0x167: /** [2367] ld 6,7 **/
-    A = READ(0x67);break;
+    A = RAM[0x67];break;
 case 0x168: /** [2368] ld 6,8 **/
-    A = READ(0x68);break;
+    A = RAM[0x68];break;
 case 0x169: /** [2369] ld 6,9 **/
-    A = READ(0x69);break;
+    A = RAM[0x69];break;
 case 0x16a: /** [236a] ld 6,a **/
-    A = READ(0x6a);break;
+    A = RAM[0x6a];break;
 case 0x16b: /** [236b] ld 6,b **/
-    A = READ(0x6b);break;
+    A = RAM[0x6b];break;
 case 0x16c: /** [236c] ld 6,c **/
-    A = READ(0x6c);break;
+    A = RAM[0x6c];break;
 case 0x16d: /** [236d] ld 6,d **/
-    A = READ(0x6d);break;
+    A = RAM[0x6d];break;
 case 0x16e: /** [236e] ld 6,e **/
-    A = READ(0x6e);break;
+    A = RAM[0x6e];break;
 case 0x16f: /** [236f] ld 6,f **/
-    A = READ(0x6f);break;
+    A = RAM[0x6f];break;
 case 0x170: /** [2370] ld 7,0 **/
-    A = READ(0x70);break;
+    A = RAM[0x70];break;
 case 0x171: /** [2371] ld 7,1 **/
-    A = READ(0x71);break;
+    A = RAM[0x71];break;
 case 0x172: /** [2372] ld 7,2 **/
-    A = READ(0x72);break;
+    A = RAM[0x72];break;
 case 0x173: /** [2373] ld 7,3 **/
-    A = READ(0x73);break;
+    A = RAM[0x73];break;
 case 0x174: /** [2374] ld 7,4 **/
-    A = READ(0x74);break;
+    A = RAM[0x74];break;
 case 0x175: /** [2375] ld 7,5 **/
-    A = READ(0x75);break;
+    A = RAM[0x75];break;
 case 0x176: /** [2376] ld 7,6 **/
-    A = READ(0x76);break;
+    A = RAM[0x76];break;
 case 0x177: /** [2377] ld 7,7 **/
-    A = READ(0x77);break;
+    A = RAM[0x77];break;
 case 0x178: /** [2378] ld 7,8 **/
-    A = READ(0x78);break;
+    A = RAM[0x78];break;
 case 0x179: /** [2379] ld 7,9 **/
-    A = READ(0x79);break;
+    A = RAM[0x79];break;
 case 0x17a: /** [237a] ld 7,a **/
-    A = READ(0x7a);break;
+    A = RAM[0x7a];break;
 case 0x17b: /** [237b] ld 7,b **/
-    A = READ(0x7b);break;
+    A = RAM[0x7b];break;
 case 0x17c: /** [237c] ld 7,c **/
-    A = READ(0x7c);break;
+    A = RAM[0x7c];break;
 case 0x17d: /** [237d] ld 7,d **/
-    A = READ(0x7d);break;
+    A = RAM[0x7d];break;
 case 0x17e: /** [237e] ld 7,e **/
-    A = READ(0x7e);break;
+    A = RAM[0x7e];break;
 case 0x17f: /** [237f] ld 7,f **/
-    A = READ(0x7f);break;
+    A = RAM[0x7f];break;
 case 0x180: /** [2380] xad 0,0 **/
-    temp8 = READ(0x00);WRITE(0x00,A);A = temp8;break;
+    temp8 = RAM[0x00];RAM[0x00] = (A);A = temp8;break;
 case 0x181: /** [2381] xad 0,1 **/
-    temp8 = READ(0x01);WRITE(0x01,A);A = temp8;break;
+    temp8 = RAM[0x01];RAM[0x01] = (A);A = temp8;break;
 case 0x182: /** [2382] xad 0,2 **/
-    temp8 = READ(0x02);WRITE(0x02,A);A = temp8;break;
+    temp8 = RAM[0x02];RAM[0x02] = (A);A = temp8;break;
 case 0x183: /** [2383] xad 0,3 **/
-    temp8 = READ(0x03);WRITE(0x03,A);A = temp8;break;
+    temp8 = RAM[0x03];RAM[0x03] = (A);A = temp8;break;
 case 0x184: /** [2384] xad 0,4 **/
-    temp8 = READ(0x04);WRITE(0x04,A);A = temp8;break;
+    temp8 = RAM[0x04];RAM[0x04] = (A);A = temp8;break;
 case 0x185: /** [2385] xad 0,5 **/
-    temp8 = READ(0x05);WRITE(0x05,A);A = temp8;break;
+    temp8 = RAM[0x05];RAM[0x05] = (A);A = temp8;break;
 case 0x186: /** [2386] xad 0,6 **/
-    temp8 = READ(0x06);WRITE(0x06,A);A = temp8;break;
+    temp8 = RAM[0x06];RAM[0x06] = (A);A = temp8;break;
 case 0x187: /** [2387] xad 0,7 **/
-    temp8 = READ(0x07);WRITE(0x07,A);A = temp8;break;
+    temp8 = RAM[0x07];RAM[0x07] = (A);A = temp8;break;
 case 0x188: /** [2388] xad 0,8 **/
-    temp8 = READ(0x08);WRITE(0x08,A);A = temp8;break;
+    temp8 = RAM[0x08];RAM[0x08] = (A);A = temp8;break;
 case 0x189: /** [2389] xad 0,9 **/
-    temp8 = READ(0x09);WRITE(0x09,A);A = temp8;break;
+    temp8 = RAM[0x09];RAM[0x09] = (A);A = temp8;break;
 case 0x18a: /** [238a] xad 0,a **/
-    temp8 = READ(0x0a);WRITE(0x0a,A);A = temp8;break;
+    temp8 = RAM[0x0a];RAM[0x0a] = (A);A = temp8;break;
 case 0x18b: /** [238b] xad 0,b **/
-    temp8 = READ(0x0b);WRITE(0x0b,A);A = temp8;break;
+    temp8 = RAM[0x0b];RAM[0x0b] = (A);A = temp8;break;
 case 0x18c: /** [238c] xad 0,c **/
-    temp8 = READ(0x0c);WRITE(0x0c,A);A = temp8;break;
+    temp8 = RAM[0x0c];RAM[0x0c] = (A);A = temp8;break;
 case 0x18d: /** [238d] xad 0,d **/
-    temp8 = READ(0x0d);WRITE(0x0d,A);A = temp8;break;
+    temp8 = RAM[0x0d];RAM[0x0d] = (A);A = temp8;break;
 case 0x18e: /** [238e] xad 0,e **/
-    temp8 = READ(0x0e);WRITE(0x0e,A);A = temp8;break;
+    temp8 = RAM[0x0e];RAM[0x0e] = (A);A = temp8;break;
 case 0x18f: /** [238f] xad 0,f **/
-    temp8 = READ(0x0f);WRITE(0x0f,A);A = temp8;break;
+    temp8 = RAM[0x0f];RAM[0x0f] = (A);A = temp8;break;
 case 0x190: /** [2390] xad 1,0 **/
-    temp8 = READ(0x10);WRITE(0x10,A);A = temp8;break;
+    temp8 = RAM[0x10];RAM[0x10] = (A);A = temp8;break;
 case 0x191: /** [2391] xad 1,1 **/
-    temp8 = READ(0x11);WRITE(0x11,A);A = temp8;break;
+    temp8 = RAM[0x11];RAM[0x11] = (A);A = temp8;break;
 case 0x192: /** [2392] xad 1,2 **/
-    temp8 = READ(0x12);WRITE(0x12,A);A = temp8;break;
+    temp8 = RAM[0x12];RAM[0x12] = (A);A = temp8;break;
 case 0x193: /** [2393] xad 1,3 **/
-    temp8 = READ(0x13);WRITE(0x13,A);A = temp8;break;
+    temp8 = RAM[0x13];RAM[0x13] = (A);A = temp8;break;
 case 0x194: /** [2394] xad 1,4 **/
-    temp8 = READ(0x14);WRITE(0x14,A);A = temp8;break;
+    temp8 = RAM[0x14];RAM[0x14] = (A);A = temp8;break;
 case 0x195: /** [2395] xad 1,5 **/
-    temp8 = READ(0x15);WRITE(0x15,A);A = temp8;break;
+    temp8 = RAM[0x15];RAM[0x15] = (A);A = temp8;break;
 case 0x196: /** [2396] xad 1,6 **/
-    temp8 = READ(0x16);WRITE(0x16,A);A = temp8;break;
+    temp8 = RAM[0x16];RAM[0x16] = (A);A = temp8;break;
 case 0x197: /** [2397] xad 1,7 **/
-    temp8 = READ(0x17);WRITE(0x17,A);A = temp8;break;
+    temp8 = RAM[0x17];RAM[0x17] = (A);A = temp8;break;
 case 0x198: /** [2398] xad 1,8 **/
-    temp8 = READ(0x18);WRITE(0x18,A);A = temp8;break;
+    temp8 = RAM[0x18];RAM[0x18] = (A);A = temp8;break;
 case 0x199: /** [2399] xad 1,9 **/
-    temp8 = READ(0x19);WRITE(0x19,A);A = temp8;break;
+    temp8 = RAM[0x19];RAM[0x19] = (A);A = temp8;break;
 case 0x19a: /** [239a] xad 1,a **/
-    temp8 = READ(0x1a);WRITE(0x1a,A);A = temp8;break;
+    temp8 = RAM[0x1a];RAM[0x1a] = (A);A = temp8;break;
 case 0x19b: /** [239b] xad 1,b **/
-    temp8 = READ(0x1b);WRITE(0x1b,A);A = temp8;break;
+    temp8 = RAM[0x1b];RAM[0x1b] = (A);A = temp8;break;
 case 0x19c: /** [239c] xad 1,c **/
-    temp8 = READ(0x1c);WRITE(0x1c,A);A = temp8;break;
+    temp8 = RAM[0x1c];RAM[0x1c] = (A);A = temp8;break;
 case 0x19d: /** [239d] xad 1,d **/
-    temp8 = READ(0x1d);WRITE(0x1d,A);A = temp8;break;
+    temp8 = RAM[0x1d];RAM[0x1d] = (A);A = temp8;break;
 case 0x19e: /** [239e] xad 1,e **/
-    temp8 = READ(0x1e);WRITE(0x1e,A);A = temp8;break;
+    temp8 = RAM[0x1e];RAM[0x1e] = (A);A = temp8;break;
 case 0x19f: /** [239f] xad 1,f **/
-    temp8 = READ(0x1f);WRITE(0x1f,A);A = temp8;break;
+    temp8 = RAM[0x1f];RAM[0x1f] = (A);A = temp8;break;
 case 0x1a0: /** [23a0] xad 2,0 **/
-    temp8 = READ(0x20);WRITE(0x20,A);A = temp8;break;
+    temp8 = RAM[0x20];RAM[0x20] = (A);A = temp8;break;
 case 0x1a1: /** [23a1] xad 2,1 **/
-    temp8 = READ(0x21);WRITE(0x21,A);A = temp8;break;
+    temp8 = RAM[0x21];RAM[0x21] = (A);A = temp8;break;
 case 0x1a2: /** [23a2] xad 2,2 **/
-    temp8 = READ(0x22);WRITE(0x22,A);A = temp8;break;
+    temp8 = RAM[0x22];RAM[0x22] = (A);A = temp8;break;
 case 0x1a3: /** [23a3] xad 2,3 **/
-    temp8 = READ(0x23);WRITE(0x23,A);A = temp8;break;
+    temp8 = RAM[0x23];RAM[0x23] = (A);A = temp8;break;
 case 0x1a4: /** [23a4] xad 2,4 **/
-    temp8 = READ(0x24);WRITE(0x24,A);A = temp8;break;
+    temp8 = RAM[0x24];RAM[0x24] = (A);A = temp8;break;
 case 0x1a5: /** [23a5] xad 2,5 **/
-    temp8 = READ(0x25);WRITE(0x25,A);A = temp8;break;
+    temp8 = RAM[0x25];RAM[0x25] = (A);A = temp8;break;
 case 0x1a6: /** [23a6] xad 2,6 **/
-    temp8 = READ(0x26);WRITE(0x26,A);A = temp8;break;
+    temp8 = RAM[0x26];RAM[0x26] = (A);A = temp8;break;
 case 0x1a7: /** [23a7] xad 2,7 **/
-    temp8 = READ(0x27);WRITE(0x27,A);A = temp8;break;
+    temp8 = RAM[0x27];RAM[0x27] = (A);A = temp8;break;
 case 0x1a8: /** [23a8] xad 2,8 **/
-    temp8 = READ(0x28);WRITE(0x28,A);A = temp8;break;
+    temp8 = RAM[0x28];RAM[0x28] = (A);A = temp8;break;
 case 0x1a9: /** [23a9] xad 2,9 **/
-    temp8 = READ(0x29);WRITE(0x29,A);A = temp8;break;
+    temp8 = RAM[0x29];RAM[0x29] = (A);A = temp8;break;
 case 0x1aa: /** [23aa] xad 2,a **/
-    temp8 = READ(0x2a);WRITE(0x2a,A);A = temp8;break;
+    temp8 = RAM[0x2a];RAM[0x2a] = (A);A = temp8;break;
 case 0x1ab: /** [23ab] xad 2,b **/
-    temp8 = READ(0x2b);WRITE(0x2b,A);A = temp8;break;
+    temp8 = RAM[0x2b];RAM[0x2b] = (A);A = temp8;break;
 case 0x1ac: /** [23ac] xad 2,c **/
-    temp8 = READ(0x2c);WRITE(0x2c,A);A = temp8;break;
+    temp8 = RAM[0x2c];RAM[0x2c] = (A);A = temp8;break;
 case 0x1ad: /** [23ad] xad 2,d **/
-    temp8 = READ(0x2d);WRITE(0x2d,A);A = temp8;break;
+    temp8 = RAM[0x2d];RAM[0x2d] = (A);A = temp8;break;
 case 0x1ae: /** [23ae] xad 2,e **/
-    temp8 = READ(0x2e);WRITE(0x2e,A);A = temp8;break;
+    temp8 = RAM[0x2e];RAM[0x2e] = (A);A = temp8;break;
 case 0x1af: /** [23af] xad 2,f **/
-    temp8 = READ(0x2f);WRITE(0x2f,A);A = temp8;break;
+    temp8 = RAM[0x2f];RAM[0x2f] = (A);A = temp8;break;
 case 0x1b0: /** [23b0] xad 3,0 **/
-    temp8 = READ(0x30);WRITE(0x30,A);A = temp8;break;
+    temp8 = RAM[0x30];RAM[0x30] = (A);A = temp8;break;
 case 0x1b1: /** [23b1] xad 3,1 **/
-    temp8 = READ(0x31);WRITE(0x31,A);A = temp8;break;
+    temp8 = RAM[0x31];RAM[0x31] = (A);A = temp8;break;
 case 0x1b2: /** [23b2] xad 3,2 **/
-    temp8 = READ(0x32);WRITE(0x32,A);A = temp8;break;
+    temp8 = RAM[0x32];RAM[0x32] = (A);A = temp8;break;
 case 0x1b3: /** [23b3] xad 3,3 **/
-    temp8 = READ(0x33);WRITE(0x33,A);A = temp8;break;
+    temp8 = RAM[0x33];RAM[0x33] = (A);A = temp8;break;
 case 0x1b4: /** [23b4] xad 3,4 **/
-    temp8 = READ(0x34);WRITE(0x34,A);A = temp8;break;
+    temp8 = RAM[0x34];RAM[0x34] = (A);A = temp8;break;
 case 0x1b5: /** [23b5] xad 3,5 **/
-    temp8 = READ(0x35);WRITE(0x35,A);A = temp8;break;
+    temp8 = RAM[0x35];RAM[0x35] = (A);A = temp8;break;
 case 0x1b6: /** [23b6] xad 3,6 **/
-    temp8 = READ(0x36);WRITE(0x36,A);A = temp8;break;
+    temp8 = RAM[0x36];RAM[0x36] = (A);A = temp8;break;
 case 0x1b7: /** [23b7] xad 3,7 **/
-    temp8 = READ(0x37);WRITE(0x37,A);A = temp8;break;
+    temp8 = RAM[0x37];RAM[0x37] = (A);A = temp8;break;
 case 0x1b8: /** [23b8] xad 3,8 **/
-    temp8 = READ(0x38);WRITE(0x38,A);A = temp8;break;
+    temp8 = RAM[0x38];RAM[0x38] = (A);A = temp8;break;
 case 0x1b9: /** [23b9] xad 3,9 **/
-    temp8 = READ(0x39);WRITE(0x39,A);A = temp8;break;
+    temp8 = RAM[0x39];RAM[0x39] = (A);A = temp8;break;
 case 0x1ba: /** [23ba] xad 3,a **/
-    temp8 = READ(0x3a);WRITE(0x3a,A);A = temp8;break;
+    temp8 = RAM[0x3a];RAM[0x3a] = (A);A = temp8;break;
 case 0x1bb: /** [23bb] xad 3,b **/
-    temp8 = READ(0x3b);WRITE(0x3b,A);A = temp8;break;
+    temp8 = RAM[0x3b];RAM[0x3b] = (A);A = temp8;break;
 case 0x1bc: /** [23bc] xad 3,c **/
-    temp8 = READ(0x3c);WRITE(0x3c,A);A = temp8;break;
+    temp8 = RAM[0x3c];RAM[0x3c] = (A);A = temp8;break;
 case 0x1bd: /** [23bd] xad 3,d **/
-    temp8 = READ(0x3d);WRITE(0x3d,A);A = temp8;break;
+    temp8 = RAM[0x3d];RAM[0x3d] = (A);A = temp8;break;
 case 0x1be: /** [23be] xad 3,e **/
-    temp8 = READ(0x3e);WRITE(0x3e,A);A = temp8;break;
+    temp8 = RAM[0x3e];RAM[0x3e] = (A);A = temp8;break;
 case 0x1bf: /** [23bf] xad 3,f **/
-    temp8 = READ(0x3f);WRITE(0x3f,A);A = temp8;break;
+    temp8 = RAM[0x3f];RAM[0x3f] = (A);A = temp8;break;
 case 0x1c0: /** [23c0] xad 4,0 **/
-    temp8 = READ(0x40);WRITE(0x40,A);A = temp8;break;
+    temp8 = RAM[0x40];RAM[0x40] = (A);A = temp8;break;
 case 0x1c1: /** [23c1] xad 4,1 **/
-    temp8 = READ(0x41);WRITE(0x41,A);A = temp8;break;
+    temp8 = RAM[0x41];RAM[0x41] = (A);A = temp8;break;
 case 0x1c2: /** [23c2] xad 4,2 **/
-    temp8 = READ(0x42);WRITE(0x42,A);A = temp8;break;
+    temp8 = RAM[0x42];RAM[0x42] = (A);A = temp8;break;
 case 0x1c3: /** [23c3] xad 4,3 **/
-    temp8 = READ(0x43);WRITE(0x43,A);A = temp8;break;
+    temp8 = RAM[0x43];RAM[0x43] = (A);A = temp8;break;
 case 0x1c4: /** [23c4] xad 4,4 **/
-    temp8 = READ(0x44);WRITE(0x44,A);A = temp8;break;
+    temp8 = RAM[0x44];RAM[0x44] = (A);A = temp8;break;
 case 0x1c5: /** [23c5] xad 4,5 **/
-    temp8 = READ(0x45);WRITE(0x45,A);A = temp8;break;
+    temp8 = RAM[0x45];RAM[0x45] = (A);A = temp8;break;
 case 0x1c6: /** [23c6] xad 4,6 **/
-    temp8 = READ(0x46);WRITE(0x46,A);A = temp8;break;
+    temp8 = RAM[0x46];RAM[0x46] = (A);A = temp8;break;
 case 0x1c7: /** [23c7] xad 4,7 **/
-    temp8 = READ(0x47);WRITE(0x47,A);A = temp8;break;
+    temp8 = RAM[0x47];RAM[0x47] = (A);A = temp8;break;
 case 0x1c8: /** [23c8] xad 4,8 **/
-    temp8 = READ(0x48);WRITE(0x48,A);A = temp8;break;
+    temp8 = RAM[0x48];RAM[0x48] = (A);A = temp8;break;
 case 0x1c9: /** [23c9] xad 4,9 **/
-    temp8 = READ(0x49);WRITE(0x49,A);A = temp8;break;
+    temp8 = RAM[0x49];RAM[0x49] = (A);A = temp8;break;
 case 0x1ca: /** [23ca] xad 4,a **/
-    temp8 = READ(0x4a);WRITE(0x4a,A);A = temp8;break;
+    temp8 = RAM[0x4a];RAM[0x4a] = (A);A = temp8;break;
 case 0x1cb: /** [23cb] xad 4,b **/
-    temp8 = READ(0x4b);WRITE(0x4b,A);A = temp8;break;
+    temp8 = RAM[0x4b];RAM[0x4b] = (A);A = temp8;break;
 case 0x1cc: /** [23cc] xad 4,c **/
-    temp8 = READ(0x4c);WRITE(0x4c,A);A = temp8;break;
+    temp8 = RAM[0x4c];RAM[0x4c] = (A);A = temp8;break;
 case 0x1cd: /** [23cd] xad 4,d **/
-    temp8 = READ(0x4d);WRITE(0x4d,A);A = temp8;break;
+    temp8 = RAM[0x4d];RAM[0x4d] = (A);A = temp8;break;
 case 0x1ce: /** [23ce] xad 4,e **/
-    temp8 = READ(0x4e);WRITE(0x4e,A);A = temp8;break;
+    temp8 = RAM[0x4e];RAM[0x4e] = (A);A = temp8;break;
 case 0x1cf: /** [23cf] xad 4,f **/
-    temp8 = READ(0x4f);WRITE(0x4f,A);A = temp8;break;
+    temp8 = RAM[0x4f];RAM[0x4f] = (A);A = temp8;break;
 case 0x1d0: /** [23d0] xad 5,0 **/
-    temp8 = READ(0x50);WRITE(0x50,A);A = temp8;break;
+    temp8 = RAM[0x50];RAM[0x50] = (A);A = temp8;break;
 case 0x1d1: /** [23d1] xad 5,1 **/
-    temp8 = READ(0x51);WRITE(0x51,A);A = temp8;break;
+    temp8 = RAM[0x51];RAM[0x51] = (A);A = temp8;break;
 case 0x1d2: /** [23d2] xad 5,2 **/
-    temp8 = READ(0x52);WRITE(0x52,A);A = temp8;break;
+    temp8 = RAM[0x52];RAM[0x52] = (A);A = temp8;break;
 case 0x1d3: /** [23d3] xad 5,3 **/
-    temp8 = READ(0x53);WRITE(0x53,A);A = temp8;break;
+    temp8 = RAM[0x53];RAM[0x53] = (A);A = temp8;break;
 case 0x1d4: /** [23d4] xad 5,4 **/
-    temp8 = READ(0x54);WRITE(0x54,A);A = temp8;break;
+    temp8 = RAM[0x54];RAM[0x54] = (A);A = temp8;break;
 case 0x1d5: /** [23d5] xad 5,5 **/
-    temp8 = READ(0x55);WRITE(0x55,A);A = temp8;break;
+    temp8 = RAM[0x55];RAM[0x55] = (A);A = temp8;break;
 case 0x1d6: /** [23d6] xad 5,6 **/
-    temp8 = READ(0x56);WRITE(0x56,A);A = temp8;break;
+    temp8 = RAM[0x56];RAM[0x56] = (A);A = temp8;break;
 case 0x1d7: /** [23d7] xad 5,7 **/
-    temp8 = READ(0x57);WRITE(0x57,A);A = temp8;break;
+    temp8 = RAM[0x57];RAM[0x57] = (A);A = temp8;break;
 case 0x1d8: /** [23d8] xad 5,8 **/
-    temp8 = READ(0x58);WRITE(0x58,A);A = temp8;break;
+    temp8 = RAM[0x58];RAM[0x58] = (A);A = temp8;break;
 case 0x1d9: /** [23d9] xad 5,9 **/
-    temp8 = READ(0x59);WRITE(0x59,A);A = temp8;break;
+    temp8 = RAM[0x59];RAM[0x59] = (A);A = temp8;break;
 case 0x1da: /** [23da] xad 5,a **/
-    temp8 = READ(0x5a);WRITE(0x5a,A);A = temp8;break;
+    temp8 = RAM[0x5a];RAM[0x5a] = (A);A = temp8;break;
 case 0x1db: /** [23db] xad 5,b **/
-    temp8 = READ(0x5b);WRITE(0x5b,A);A = temp8;break;
+    temp8 = RAM[0x5b];RAM[0x5b] = (A);A = temp8;break;
 case 0x1dc: /** [23dc] xad 5,c **/
-    temp8 = READ(0x5c);WRITE(0x5c,A);A = temp8;break;
+    temp8 = RAM[0x5c];RAM[0x5c] = (A);A = temp8;break;
 case 0x1dd: /** [23dd] xad 5,d **/
-    temp8 = READ(0x5d);WRITE(0x5d,A);A = temp8;break;
+    temp8 = RAM[0x5d];RAM[0x5d] = (A);A = temp8;break;
 case 0x1de: /** [23de] xad 5,e **/
-    temp8 = READ(0x5e);WRITE(0x5e,A);A = temp8;break;
+    temp8 = RAM[0x5e];RAM[0x5e] = (A);A = temp8;break;
 case 0x1df: /** [23df] xad 5,f **/
-    temp8 = READ(0x5f);WRITE(0x5f,A);A = temp8;break;
+    temp8 = RAM[0x5f];RAM[0x5f] = (A);A = temp8;break;
 case 0x1e0: /** [23e0] xad 6,0 **/
-    temp8 = READ(0x60);WRITE(0x60,A);A = temp8;break;
+    temp8 = RAM[0x60];RAM[0x60] = (A);A = temp8;break;
 case 0x1e1: /** [23e1] xad 6,1 **/
-    temp8 = READ(0x61);WRITE(0x61,A);A = temp8;break;
+    temp8 = RAM[0x61];RAM[0x61] = (A);A = temp8;break;
 case 0x1e2: /** [23e2] xad 6,2 **/
-    temp8 = READ(0x62);WRITE(0x62,A);A = temp8;break;
+    temp8 = RAM[0x62];RAM[0x62] = (A);A = temp8;break;
 case 0x1e3: /** [23e3] xad 6,3 **/
-    temp8 = READ(0x63);WRITE(0x63,A);A = temp8;break;
+    temp8 = RAM[0x63];RAM[0x63] = (A);A = temp8;break;
 case 0x1e4: /** [23e4] xad 6,4 **/
-    temp8 = READ(0x64);WRITE(0x64,A);A = temp8;break;
+    temp8 = RAM[0x64];RAM[0x64] = (A);A = temp8;break;
 case 0x1e5: /** [23e5] xad 6,5 **/
-    temp8 = READ(0x65);WRITE(0x65,A);A = temp8;break;
+    temp8 = RAM[0x65];RAM[0x65] = (A);A = temp8;break;
 case 0x1e6: /** [23e6] xad 6,6 **/
-    temp8 = READ(0x66);WRITE(0x66,A);A = temp8;break;
+    temp8 = RAM[0x66];RAM[0x66] = (A);A = temp8;break;
 case 0x1e7: /** [23e7] xad 6,7 **/
-    temp8 = READ(0x67);WRITE(0x67,A);A = temp8;break;
+    temp8 = RAM[0x67];RAM[0x67] = (A);A = temp8;break;
 case 0x1e8: /** [23e8] xad 6,8 **/
-    temp8 = READ(0x68);WRITE(0x68,A);A = temp8;break;
+    temp8 = RAM[0x68];RAM[0x68] = (A);A = temp8;break;
 case 0x1e9: /** [23e9] xad 6,9 **/
-    temp8 = READ(0x69);WRITE(0x69,A);A = temp8;break;
+    temp8 = RAM[0x69];RAM[0x69] = (A);A = temp8;break;
 case 0x1ea: /** [23ea] xad 6,a **/
-    temp8 = READ(0x6a);WRITE(0x6a,A);A = temp8;break;
+    temp8 = RAM[0x6a];RAM[0x6a] = (A);A = temp8;break;
 case 0x1eb: /** [23eb] xad 6,b **/
-    temp8 = READ(0x6b);WRITE(0x6b,A);A = temp8;break;
+    temp8 = RAM[0x6b];RAM[0x6b] = (A);A = temp8;break;
 case 0x1ec: /** [23ec] xad 6,c **/
-    temp8 = READ(0x6c);WRITE(0x6c,A);A = temp8;break;
+    temp8 = RAM[0x6c];RAM[0x6c] = (A);A = temp8;break;
 case 0x1ed: /** [23ed] xad 6,d **/
-    temp8 = READ(0x6d);WRITE(0x6d,A);A = temp8;break;
+    temp8 = RAM[0x6d];RAM[0x6d] = (A);A = temp8;break;
 case 0x1ee: /** [23ee] xad 6,e **/
-    temp8 = READ(0x6e);WRITE(0x6e,A);A = temp8;break;
+    temp8 = RAM[0x6e];RAM[0x6e] = (A);A = temp8;break;
 case 0x1ef: /** [23ef] xad 6,f **/
-    temp8 = READ(0x6f);WRITE(0x6f,A);A = temp8;break;
+    temp8 = RAM[0x6f];RAM[0x6f] = (A);A = temp8;break;
 case 0x1f0: /** [23f0] xad 7,0 **/
-    temp8 = READ(0x70);WRITE(0x70,A);A = temp8;break;
+    temp8 = RAM[0x70];RAM[0x70] = (A);A = temp8;break;
 case 0x1f1: /** [23f1] xad 7,1 **/
-    temp8 = READ(0x71);WRITE(0x71,A);A = temp8;break;
+    temp8 = RAM[0x71];RAM[0x71] = (A);A = temp8;break;
 case 0x1f2: /** [23f2] xad 7,2 **/
-    temp8 = READ(0x72);WRITE(0x72,A);A = temp8;break;
+    temp8 = RAM[0x72];RAM[0x72] = (A);A = temp8;break;
 case 0x1f3: /** [23f3] xad 7,3 **/
-    temp8 = READ(0x73);WRITE(0x73,A);A = temp8;break;
+    temp8 = RAM[0x73];RAM[0x73] = (A);A = temp8;break;
 case 0x1f4: /** [23f4] xad 7,4 **/
-    temp8 = READ(0x74);WRITE(0x74,A);A = temp8;break;
+    temp8 = RAM[0x74];RAM[0x74] = (A);A = temp8;break;
 case 0x1f5: /** [23f5] xad 7,5 **/
-    temp8 = READ(0x75);WRITE(0x75,A);A = temp8;break;
+    temp8 = RAM[0x75];RAM[0x75] = (A);A = temp8;break;
 case 0x1f6: /** [23f6] xad 7,6 **/
-    temp8 = READ(0x76);WRITE(0x76,A);A = temp8;break;
+    temp8 = RAM[0x76];RAM[0x76] = (A);A = temp8;break;
 case 0x1f7: /** [23f7] xad 7,7 **/
-    temp8 = READ(0x77);WRITE(0x77,A);A = temp8;break;
+    temp8 = RAM[0x77];RAM[0x77] = (A);A = temp8;break;
 case 0x1f8: /** [23f8] xad 7,8 **/
-    temp8 = READ(0x78);WRITE(0x78,A);A = temp8;break;
+    temp8 = RAM[0x78];RAM[0x78] = (A);A = temp8;break;
 case 0x1f9: /** [23f9] xad 7,9 **/
-    temp8 = READ(0x79);WRITE(0x79,A);A = temp8;break;
+    temp8 = RAM[0x79];RAM[0x79] = (A);A = temp8;break;
 case 0x1fa: /** [23fa] xad 7,a **/
-    temp8 = READ(0x7a);WRITE(0x7a,A);A = temp8;break;
+    temp8 = RAM[0x7a];RAM[0x7a] = (A);A = temp8;break;
 case 0x1fb: /** [23fb] xad 7,b **/
-    temp8 = READ(0x7b);WRITE(0x7b,A);A = temp8;break;
+    temp8 = RAM[0x7b];RAM[0x7b] = (A);A = temp8;break;
 case 0x1fc: /** [23fc] xad 7,c **/
-    temp8 = READ(0x7c);WRITE(0x7c,A);A = temp8;break;
+    temp8 = RAM[0x7c];RAM[0x7c] = (A);A = temp8;break;
 case 0x1fd: /** [23fd] xad 7,d **/
-    temp8 = READ(0x7d);WRITE(0x7d,A);A = temp8;break;
+    temp8 = RAM[0x7d];RAM[0x7d] = (A);A = temp8;break;
 case 0x1fe: /** [23fe] xad 7,e **/
-    temp8 = READ(0x7e);WRITE(0x7e,A);A = temp8;break;
+    temp8 = RAM[0x7e];RAM[0x7e] = (A);A = temp8;break;
 case 0x1ff: /** [23ff] xad 7,f **/
-    temp8 = READ(0x7f);WRITE(0x7f,A);A = temp8;break;
+    temp8 = RAM[0x7f];RAM[0x7f] = (A);A = temp8;break;
 case 0x200: /** [3300] (unknown) **/
     break;
 case 0x201: /** [3301] skgbz 0 **/
@@ -1111,13 +1111,13 @@ case 0x22a: /** [332a] ing **/
 case 0x22b: /** [332b] (unknown) **/
     break;
 case 0x22c: /** [332c] cqma **/
-    A = Q & 15;WRITE(B,(Q >> 4) & 15);break;
+    A = Q & 15;RAM[B] = ((Q >> 4) & 15);break;
 case 0x22d: /** [332d] (unknown) **/
     break;
 case 0x22e: /** [332e] inl **/
-    temp8 = LREAD();A = temp8 & 0xF;WRITE(B,(temp8 >> 4) & 15);break;
+    temp8 = LREAD();A = temp8 & 0xF;RAM[B] = ((temp8 >> 4) & 15);break;
 case 0x22f: /** [332f] ctma **/
-    temp8 = TIMER >> 2;A = temp8 & 0xF;WRITE(B,(temp8 >> 4) & 0x0F);break;
+    temp8 = TIMER >> 2;A = temp8 & 0xF;RAM[B] = (temp8 >> 4) & 0x0F;break;
 case 0x230: /** [3330] (unknown) **/
     break;
 case 0x231: /** [3331] (unknown) **/
@@ -1139,7 +1139,7 @@ case 0x238: /** [3338] halt **/
 case 0x239: /** [3339] it **/
     if (TOV == 0) { PC = (PC - 2) & 0x7FF;cycles += 200;TIMER += 200; };break;
 case 0x23a: /** [333a] omg **/
-    G = READ(B);UPDATEG(G);break;
+    G = RAM[B];UPDATEG(G);break;
 case 0x23b: /** [333b] (unknown) **/
     break;
 case 0x23c: /** [333c] camq **/

@@ -1,20 +1,44 @@
 /// <reference path="../../lib/phaser.comments.d.ts"/>
 
 window.onload = function() {
-    var game = new MainApplication()
+    var game = new CosmosApplication()
 }
 
-class MainApplication extends Phaser.Game {
+class CosmosApplication extends Phaser.Game {
 
     constructor() {
         // Call the super constructor.
-        super(1440,900,Phaser.AUTO,"",null,false,false);
+        super({
+            enableDebug: false,
+            width:1280,
+            height:800,
+            renderer:Phaser.AUTO,
+            parent:null,
+            transparent: false,            
+            antialias: true
+        });
         // Create a new state and switch to it.
         this.state.add("Boot", new BootState());
         this.state.add("Preload", new PreloadState());
         this.state.add("Game",new GameState());
         this.state.start("Boot");
     }
+
+    /**
+     * Extract a key from the query string, return default value if ""
+     * 
+     * @static
+     * @param {string} key 
+     * @param {string} [defaultValue=""] 
+     * @returns {string} 
+     * 
+     * @memberOf CosmosApplication
+     */
+    static getURLName(key:string,defaultValue:string = "") : string {
+        var name:string = decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key.toLowerCase()).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
+        return (name == "") ? defaultValue:name;
+    }    
+
 }
 
 /**
@@ -32,4 +56,5 @@ class BootState extends Phaser.State {
         this.game.scale.pageAlignVertically = true;
         this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL; 
     }
+
 }

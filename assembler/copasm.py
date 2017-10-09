@@ -158,14 +158,20 @@ class ROMMemory:
 		print("Writing to binary "+name)
 		used = [x for x in self.memory if x is not None]
 		print("Used {0} bytes of ROM ({1}%)".format(len(used),len(used)*100/2048))
-		rom = [0 if x is None else x for x in self.memory]
-		rom = "".join(chr(x) for x in rom)
+		romNum = [0 if x is None else x for x in self.memory]
+		rom = "".join(chr(x) for x in romNum)
 		open(name,"wb").write(rom)
 		if self.listStream is not None:
 			k = [x for x in self.listing.keys()]			
 			k.sort()
 			for item in k:
 				self.listStream.write(self.listing[item]+"\n")
+		h = open(name.replace(".bin",".ts"),"w")
+		h.write("class ROMImage {\n")
+		h.write("public static rom:number[] = [\n")
+		h.write(",".join([str(x) for x in romNum])+"\n")
+		h.write("];\n}\n")
+		h.close()
 
 # *************************************************************************************************************
 #
