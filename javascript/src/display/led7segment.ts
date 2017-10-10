@@ -1,5 +1,11 @@
 /// <reference path="../../lib/phaser.comments.d.ts"/>
 
+/**
+ * Single seven segment digit.
+ * 
+ * @class SevenSegmentDisplay
+ * @implements {ILED}
+ */
 class SevenSegmentDisplay implements ILED {
 
     private segments:LEDRectangle[];

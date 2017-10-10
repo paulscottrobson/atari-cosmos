@@ -13,7 +13,8 @@ class LEDHoloCell extends BaseLED {
         super();
         this.game = game;this.size = size;this.ledX = ledX;this.ledY = ledY;
         this.img = game.add.image(x,y,"hologram",6);
-        this.lightOn();
+        //this.lightOn();
+        this.setLightState(false);
     }
     
     destroy() : void {

@@ -7,6 +7,7 @@
  */
 interface IHardware {
 
+    destroy():void;
     reset():void;
     updateen(n:number):void;
     updated(n:number):void;
@@ -30,6 +31,9 @@ class DummyHardware implements IHardware {
 
     private d:number;
 
+    destroy():void {        
+    }
+    
     reset(): void { 
         console.log("Dummy:Reset");
     }

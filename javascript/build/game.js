@@ -14,21 +14,16 @@ var GameState = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     GameState.prototype.init = function (gameInfo) {
-        var img = this.game.add.image(this.game.width / 2, this.game.height - 100, "sprites", "logo");
-        img.anchor.x = 0.5;
-        img.anchor.y = 0.5;
-        img.width = this.game.width * 0.75;
-        img.height = img.width / 6;
-        var ex = new COP444(new DummyHardware());
-        for (var n = 0; n < 2; n++)
-            ex.execute();
-        var dsp = new HolographicDisplay(this.game, -1, 270, Math.floor(this.game.width / 7.5));
-        var s1 = new SevenSegmentDisplay(this.game, this.game.width / 2 - 110, 30, 90);
-        var s2 = new SevenSegmentDisplay(this.game, this.game.width / 2 + 30, 30, 90);
+        this.hardware = new Hardware(this.game);
+        this.cpu = new COP444(this.hardware);
+        for (var n = 0; n < 1142; n++)
+            this.cpu.execute();
     };
     GameState.prototype.create = function () {
     };
     GameState.prototype.destroy = function () {
+        this.hardware.destroy();
+        this.hardware = null;
     };
     GameState.prototype.update = function () {
     };
@@ -1788,14 +1783,6 @@ var COP444 = (function (_super) {
     };
     return COP444;
 }(COP444Opcodes));
-var ROMImage = (function () {
-    function ROMImage() {
-    }
-    ROMImage.rom = [
-        0, 51, 98, 188, 178, 95, 241, 51, 183, 0, 85, 1, 85, 35, 173, 35, 56, 81, 35, 174, 104, 42, 216, 212, 104, 176, 104, 42, 216, 1, 241, 3, 51, 184, 51, 183, 0, 81, 2, 6, 96, 7, 182, 180, 58, 0, 33, 73, 72, 104, 79, 190, 104, 79, 35, 56, 51, 208, 75, 95, 77, 51, 208, 1, 96, 69, 190, 96, 73, 47, 1, 96, 0, 51, 185, 75, 0, 86, 255, 186, 51, 185, 75, 0, 86, 34, 255, 51, 56, 30, 51, 255, 0, 7, 220, 18, 95, 228, 18, 220, 28, 126, 127, 72, 112, 114, 116, 118, 120, 122, 124, 126, 100, 0, 96, 87, 96, 87, 96, 87, 96, 87, 100, 0, 96, 87, 96, 87, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 103, 178, 103, 80, 103, 107, 103, 36, 103, 159, 96, 89, 96, 90, 103, 137, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 198, 51, 136, 114, 72, 51, 136, 5, 81, 6, 67, 44, 5, 81, 68, 6, 184, 59, 1, 96, 61, 198, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 32, 16, 8, 4, 2, 1, 1, 2, 4, 8, 16, 32, 64, 128, 63, 6, 91, 79, 102, 109, 125, 7, 127, 103, 113, 0, 0, 0, 0, 0, 128, 64, 32, 16, 30, 21, 51, 57, 65, 68, 78, 95, 72, 80, 35, 190, 0, 191, 19, 229, 21, 75, 53, 82, 252, 0, 81, 191, 35, 15, 95, 68, 30, 51, 44, 75, 32, 67, 51, 58, 80, 51, 62, 35, 62, 80, 103, 45, 0, 81, 80, 35, 159, 51, 62, 51, 40, 61, 6, 0, 1, 35, 31, 51, 185, 2, 6, 30, 5, 48, 210, 51, 185, 5, 72, 0, 80, 51, 62, 51, 88, 35, 15, 95, 51, 80, 0, 58, 6, 0, 82, 191, 5, 7, 51, 46, 68, 4, 4, 81, 6, 3, 72, 103, 121, 46, 5, 111, 151, 6, 111, 151, 7, 202, 18, 95, 72, 18, 202, 35, 159, 18, 64, 18, 35, 31, 72, 180, 182, 182, 51, 183, 1, 182, 51, 180, 5, 19, 236, 238, 78, 82, 81, 7, 232, 72, 78, 35, 159, 18, 35, 190, 51, 182, 50, 5, 48, 68, 7, 5, 48, 204, 6, 35, 62, 18, 35, 31, 80, 35, 54, 72, 6, 0, 81, 2, 4, 0, 93, 2, 194, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-    ];
-    return ROMImage;
-}());
 var BaseLED = (function () {
     function BaseLED() {
         this.isOn = false;
@@ -1810,7 +1797,6 @@ var BaseLED = (function () {
     };
     BaseLED.prototype.endOfFrame = function () {
         if (this.onFrameCount > 0) {
-            console.log(this.onFrameCount, this.isOn);
             this.onFrameCount--;
             if (this.onFrameCount == 0 && this.isOn) {
                 this.setLightState(false);
@@ -1864,45 +1850,6 @@ var HolographicDisplay = (function () {
     };
     return HolographicDisplay;
 }());
-var DummyHardware = (function () {
-    function DummyHardware() {
-    }
-    DummyHardware.prototype.reset = function () {
-        console.log("Dummy:Reset");
-    };
-    DummyHardware.prototype.updateen = function (n) {
-        console.log("Dummy:EN:" + n.toString(16));
-    };
-    DummyHardware.prototype.updated = function (n) {
-        this.d = n;
-        console.log("Dummy:D:" + n.toString(16));
-    };
-    DummyHardware.prototype.updateg = function (n) {
-        console.log("Dummy:G:" + n.toString(16));
-    };
-    DummyHardware.prototype.updateq = function (n) {
-        console.log("Dummy:Q:" + n.toString(16));
-    };
-    DummyHardware.prototype.readl = function () {
-        var n = 0;
-        console.log("Dummy:InL:" + n.toString(16));
-        return n;
-    };
-    DummyHardware.prototype.readin = function () {
-        var n = ((this.d & CosmosApplication.getGameID()) != 0) ? 1 : 0;
-        console.log("Dummy:InIn:" + n.toString(16));
-        return n;
-    };
-    DummyHardware.prototype.siowrite = function (n) {
-    };
-    DummyHardware.prototype.timerOverflow = function () {
-        console.log("Dummy:TOV");
-    };
-    DummyHardware.prototype.endOfFrame = function () {
-        console.log("Dummy:EOF");
-    };
-    return DummyHardware;
-}());
 var SevenSegmentDisplay = (function () {
     function SevenSegmentDisplay(game, x, y, size) {
         var ssize = size / 4;
@@ -1948,7 +1895,7 @@ var LEDHoloCell = (function (_super) {
         _this.ledX = ledX;
         _this.ledY = ledY;
         _this.img = game.add.image(x, y, "hologram", 6);
-        _this.lightOn();
+        _this.setLightState(false);
         return _this;
     }
     LEDHoloCell.prototype.destroy = function () {
@@ -1983,7 +1930,8 @@ var LEDRectangle = (function (_super) {
         _this.img = game.add.image(x, y, "sprites", "rectangle");
         _this.img.width = width;
         _this.img.height = height;
-        _this.lightOn();
+        _this.img.tint = 0xFF0000;
+        _this.setLightState(false);
         return _this;
     }
     LEDRectangle.prototype.destroy = function () {
@@ -1991,9 +1939,149 @@ var LEDRectangle = (function (_super) {
         this.img = null;
     };
     LEDRectangle.prototype.setLightState = function (newState) {
-        this.img.tint = (newState ? 0xFF0000 : 0x400000);
+        this.img.alpha = (newState ? 1 : 0.3);
     };
     LEDRectangle.prototype.setHologram = function (hologram) {
     };
     return LEDRectangle;
 }(BaseLED));
+var ROMImage = (function () {
+    function ROMImage() {
+    }
+    ROMImage.rom = [
+        0, 51, 98, 188, 178, 95, 241, 51, 183, 0, 85, 1, 85, 35, 173, 35, 56, 81, 35, 174, 104, 42, 216, 212, 104, 176, 104, 42, 216, 1, 241, 3, 51, 184, 51, 183, 0, 81, 2, 6, 96, 7, 182, 180, 58, 0, 33, 73, 72, 104, 79, 190, 104, 79, 35, 56, 51, 208, 75, 95, 77, 51, 208, 1, 96, 69, 190, 96, 73, 47, 1, 96, 0, 51, 185, 75, 0, 86, 255, 186, 51, 185, 75, 0, 86, 34, 255, 51, 56, 30, 51, 255, 0, 7, 220, 18, 95, 228, 18, 220, 28, 126, 127, 72, 112, 114, 116, 118, 120, 122, 124, 126, 100, 0, 96, 87, 96, 87, 96, 87, 96, 87, 100, 0, 96, 87, 96, 87, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 103, 178, 103, 80, 103, 107, 103, 36, 103, 159, 96, 89, 96, 90, 103, 137, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 32, 198, 51, 136, 114, 72, 51, 136, 5, 81, 6, 67, 44, 5, 81, 68, 6, 184, 59, 1, 96, 61, 198, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 32, 16, 8, 4, 2, 1, 1, 2, 4, 8, 16, 32, 64, 128, 63, 6, 91, 79, 102, 109, 125, 7, 127, 103, 113, 0, 0, 0, 0, 0, 128, 64, 32, 16, 30, 21, 51, 57, 65, 68, 78, 95, 72, 80, 35, 190, 0, 191, 19, 229, 21, 75, 53, 82, 252, 0, 81, 191, 35, 15, 95, 68, 30, 51, 44, 75, 32, 67, 51, 58, 80, 51, 62, 35, 62, 80, 103, 45, 0, 81, 80, 35, 159, 51, 62, 51, 40, 61, 6, 0, 1, 35, 31, 51, 185, 2, 6, 30, 5, 48, 210, 51, 185, 5, 72, 0, 80, 51, 62, 51, 88, 35, 15, 95, 51, 80, 0, 58, 6, 0, 82, 191, 5, 7, 51, 46, 68, 4, 4, 81, 6, 3, 72, 103, 121, 46, 5, 111, 151, 6, 111, 151, 7, 202, 18, 95, 72, 18, 202, 35, 159, 18, 64, 18, 35, 31, 72, 180, 182, 182, 51, 183, 1, 182, 51, 180, 5, 19, 236, 238, 78, 82, 81, 7, 232, 72, 78, 35, 159, 18, 35, 190, 51, 182, 50, 5, 48, 68, 7, 5, 48, 204, 6, 35, 62, 18, 35, 31, 80, 35, 54, 72, 6, 0, 81, 2, 4, 0, 93, 2, 194, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    ];
+    return ROMImage;
+}());
+var CosmosDisplay = (function () {
+    function CosmosDisplay(game) {
+        this.holoDisplay = new HolographicDisplay(game, -1, 270, Math.floor(game.width / 7.5));
+        this.digits = [];
+        this.digits[0] = new SevenSegmentDisplay(game, game.width / 2 - 110, 30, 90);
+        this.digits[1] = new SevenSegmentDisplay(game, game.width / 2 + 30, 30, 90);
+        this.logo = game.add.image(game.width / 2, game.height - 100, "sprites", "logo");
+        this.logo.anchor.x = 0.5;
+        this.logo.anchor.y = 0.5;
+        this.logo.width = game.width * 0.75;
+        this.logo.height = this.logo.width / 6;
+    }
+    CosmosDisplay.prototype.destroy = function () {
+        this.holoDisplay.destroy();
+        this.digits[0].destroy();
+        this.digits[1].destroy();
+        this.logo.destroy();
+        this.holoDisplay = this.logo = this.digits = null;
+    };
+    CosmosDisplay.prototype.turnOn = function (x, y) {
+        switch (y) {
+            case 6:
+                this.digits[0].select(6 - x);
+                this.digits[0].lightOn();
+                break;
+            case 7:
+                this.digits[1].select(6 - x);
+                this.digits[1].lightOn();
+                break;
+            default:
+                this.holoDisplay.select(x, y);
+                this.holoDisplay.lightOn();
+                break;
+        }
+    };
+    CosmosDisplay.prototype.endOfFrame = function () {
+        this.holoDisplay.endOfFrame();
+        this.digits[0].endOfFrame();
+        this.digits[1].endOfFrame();
+    };
+    return CosmosDisplay;
+}());
+var Hardware = (function () {
+    function Hardware(game) {
+        this.display = new CosmosDisplay(game);
+        this.reset();
+    }
+    Hardware.prototype.destroy = function () {
+        this.display.destroy();
+        this.display = null;
+    };
+    Hardware.prototype.reset = function () {
+        this.gColumns = this.dColumns = this.qRows = 0;
+    };
+    Hardware.prototype.updateen = function (n) { };
+    Hardware.prototype.updated = function (n) {
+        this.dColumns = n;
+    };
+    Hardware.prototype.updateg = function (n) {
+        this.gColumns = n;
+    };
+    Hardware.prototype.updateq = function (n) {
+        this.qRows = n;
+    };
+    Hardware.prototype.readl = function () {
+        return 0;
+    };
+    Hardware.prototype.readin = function () {
+        var n = ((this.dColumns & CosmosApplication.getGameID()) != 0) ? 1 : 0;
+        return n;
+    };
+    Hardware.prototype.siowrite = function (n) {
+    };
+    Hardware.prototype.timerOverflow = function () {
+        var xCol = this.gColumns * 16 + this.dColumns;
+        var yRow = this.qRows;
+        for (var y = 0; y < 8; y++) {
+            if ((yRow & (0x01 << y)) != 0) {
+                for (var x = 0; x < 7; x++) {
+                    if ((xCol & (0x40 >> x)) != 0) {
+                        this.display.turnOn(x, y);
+                    }
+                }
+            }
+        }
+    };
+    Hardware.prototype.endOfFrame = function () {
+        this.display.endOfFrame();
+    };
+    return Hardware;
+}());
+var DummyHardware = (function () {
+    function DummyHardware() {
+    }
+    DummyHardware.prototype.destroy = function () {
+    };
+    DummyHardware.prototype.reset = function () {
+        console.log("Dummy:Reset");
+    };
+    DummyHardware.prototype.updateen = function (n) {
+        console.log("Dummy:EN:" + n.toString(16));
+    };
+    DummyHardware.prototype.updated = function (n) {
+        this.d = n;
+        console.log("Dummy:D:" + n.toString(16));
+    };
+    DummyHardware.prototype.updateg = function (n) {
+        console.log("Dummy:G:" + n.toString(16));
+    };
+    DummyHardware.prototype.updateq = function (n) {
+        console.log("Dummy:Q:" + n.toString(16));
+    };
+    DummyHardware.prototype.readl = function () {
+        var n = 0;
+        console.log("Dummy:InL:" + n.toString(16));
+        return n;
+    };
+    DummyHardware.prototype.readin = function () {
+        var n = ((this.d & CosmosApplication.getGameID()) != 0) ? 1 : 0;
+        console.log("Dummy:InIn:" + n.toString(16));
+        return n;
+    };
+    DummyHardware.prototype.siowrite = function (n) {
+    };
+    DummyHardware.prototype.timerOverflow = function () {
+        console.log("Dummy:TOV");
+    };
+    DummyHardware.prototype.endOfFrame = function () {
+        console.log("Dummy:EOF");
+    };
+    return DummyHardware;
+}());

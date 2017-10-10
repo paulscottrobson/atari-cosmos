@@ -33,7 +33,7 @@ abstract class BaseLED implements ILED {
 
     endOfFrame(): void {
         if (this.onFrameCount > 0) {
-            console.log(this.onFrameCount,this.isOn);
+            //console.log(this.onFrameCount,this.isOn);
             this.onFrameCount--;
             if (this.onFrameCount == 0 && this.isOn) {
                 this.setLightState(false);
