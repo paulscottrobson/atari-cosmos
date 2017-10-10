@@ -278,6 +278,7 @@ UPBumpTimer:
 ;
 ;										Random Number Generator.
 ;
+;									 Preserves B, all 7 bits of it
 ; **********************************************************************************************************
 
 FN__Random:
@@ -316,3 +317,36 @@ RANDXor:
 	xor 									; XOR with random 2
 	jp 		RANDContinue					; write back and exit.
 
+; **********************************************************************************************************
+;
+;									Initialisation done in every game
+;
+; **********************************************************************************************************
+
+CommonInitialise:
+	lbi 	0,Player 						; put player in bottom centre.
+	stii 	4
+	lbi 	1,Player
+	stii 	8+5
+	ret
+
+; **********************************************************************************************************
+;
+;								  Increment the seven segment LED pair
+;
+;							Note: if counts past 99 will change 2,RightDigit-1
+; **********************************************************************************************************
+
+FN__BumpCounter:
+	lbi 	2,RightDigit 					; point to right digit.
+BumpLoop:
+	ld 		0 								; bump it.
+	aisc 	1
+	x 		0
+	ld 		0 								; reget it
+	aisc 	6								; skip if bumping left
+	ret
+	xds 	0 								; write it back, will be zero and decrement.
+	jp 		BumpLoop
+
+	

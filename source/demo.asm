@@ -14,12 +14,8 @@ game_code:
 	aisc 	1
 	x 		0
 	rmb 	3
-	lbi 	2,13
-	ld 		0
-	aisc 	1
-	nop
-	x 		0
-
+	jsrp 	BumpCounter
+	
 repaint:
 	jsrp 	Update
 

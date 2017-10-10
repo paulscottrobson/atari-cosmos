@@ -33,10 +33,10 @@ SELLoop:
 	aisc 	5 								; 5 (S) for slow
 	skmbz 	0 
 	aisc 	5 								; 10 is F.
-	xad 	LeftDigit	
+	xad 	2,LeftDigit	
 	ldd 	PlayerCount 					; get player count
 	aisc 	1 								; make 0/1 1/2
-	xad 	RightDigit
+	xad 	2,RightDigit
 
 SELReleaseKey:
 	jsr 	SELSkipCtrlKey
@@ -95,7 +95,7 @@ InitialiseGames:
 ; **********************************************************************************************************
 
 TurnOver:
-	lbi 	5,0 							; current players kill bit.
+	lbi 	5,InfoBits						; current players kill bit.
 	skmbz 	0 								; skipped if still alive.
 	jmp 	Player2IsDead 
 	jsrp 	SwapPlayerData 					; swap player data round.
@@ -127,21 +127,13 @@ RunGameCode:
 
 RunInitCode:
 	jsrp 	ClearScreen 					; clear the screen
+	jsr 	CommonInitialise 
 	lbi 	GameID 							; this is the same as RunSetupCode except it is called 
 	smb 	3 								; with carry set, and you are supposed to return from it !
 	clra
 	aisc 	6
 	sc
 	jid
-
-; **********************************************************************************************************
-;
-;										Come here for undefined games
-;
-; **********************************************************************************************************
-
-Fail:
-	halt
 
 ; **********************************************************************************************************
 ;
@@ -164,7 +156,7 @@ CMLoop:
 	jp 		CMLoop
 ;
 CMExit:
-	lbi 	1,13 							; set the Left/Right LED
+	lbi 	1,LeftDigit						; set the Left/Right LED
 	stii 	14
 	stii 	15
 	ret
@@ -194,10 +186,10 @@ CMExit:
 
 	offset 	48  			
 	jmp 	demogame 						; game 0 (game under development - no hologram on emulator)
-	jmp 	Fail 							; game 1
-	jmp 	Fail 							; game 2
+	halt 									; game 1
+	halt 									; game 2
 	jmp 	demogame 						; game 3
-	jmp 	Fail 							; game 4
+	halt 									; game 4
 	jmp 	demoGame 						; game 5
-	jmp 	Fail 							; game 6
-	jmp 	Fail 							; game 7
+	halt 									; game 6
+	halt 									; game 7
