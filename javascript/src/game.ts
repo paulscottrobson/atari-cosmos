@@ -21,6 +21,9 @@ class GameState extends Phaser.State {
     }
 
     update() : void {    
-        //this.hardware.endOfFrame();
+        var elapsed:number = this.game.time.elapsedMS * 250;
+        while (this.cpu.execute() < elapsed) {}
+        this.cpu.endOfFrame();
+        this.hardware.endOfFrame();
     }
 }    

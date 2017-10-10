@@ -12,7 +12,7 @@
 abstract class BaseLED implements ILED {
 
     // Number of frames before it goes off.
-    private static OFF_TIME = 5;
+    private static OFF_TIME = 15;
     // Current state
     protected isOn:boolean;
     // Frame count till off.

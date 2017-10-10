@@ -3,37 +3,58 @@
 class Hardware implements IHardware {
 
     private display:CosmosDisplay;
+    private keypad:IKeypad;
     private gColumns:number;
     private dColumns:number;
     private qRows:number;
 
     constructor(game:Phaser.Game) {
         this.display = new CosmosDisplay(game);
+        this.keypad = new Keypad(game);
         this.reset();
     }
 
     destroy(): void {
         this.display.destroy();
-        this.display = null;
+        this.keypad.destroy();
+        this.display = this.keypad = null;
     }
 
     reset(): void { 
         this.gColumns = this.dColumns = this.qRows = 0;        
     }
+
     updateen(n: number): void { }
 
     updated(n: number): void {
         this.dColumns = n;
     }
+
     updateg(n: number): void {
         this.gColumns = n;
     }
+
     updateq(n: number): void {
         this.qRows = n;
     }
 
     readl(): number {
-        return 0;
+        var n:number = 0;
+        if ((this.qRows & 0x80) != 0) {
+            n = (this.keypad.isKeyPressed(CosmosKeys.UP) ? 1 : 0) + 
+                (this.keypad.isKeyPressed(CosmosKeys.RIGHT) ? 2 : 0) + 
+                (this.keypad.isKeyPressed(CosmosKeys.LEFT) ? 4 : 0) + 
+                (this.keypad.isKeyPressed(CosmosKeys.DOWN) ? 8 : 0);
+        }
+        if ((this.qRows & 0x40) != 0) {
+            n = (this.keypad.isKeyPressed(CosmosKeys.START) ? 1 : 0) + 
+                (this.keypad.isKeyPressed(CosmosKeys.SKILL) ? 2 : 0) + 
+                (this.keypad.isKeyPressed(CosmosKeys.PLAYERS) ? 4 : 0);
+        }
+        if ((this.qRows & 0x20) != 0) {
+            n = this.keypad.isKeyPressed(CosmosKeys.FIRE) ? 1 : 0;
+        }
+        return n;
     }
 
     readin(): number {
