@@ -6,7 +6,6 @@
 ; **********************************************************************************************************
 ; **********************************************************************************************************
 
-
 ; **********************************************************************************************************
 ;
 ;									Start / Restart of Program
@@ -16,10 +15,8 @@
 Reset:
 	clra
 	lei 	2
-	jsrp 	ClearMemory 					; clear memory
+	jsr 	ClearMemory 					; clear memory
 	jsrp 	GetGameID 						; figure out which game we are playing.
-	aisc 	15 								; if zero, this is a a hack to miss out the 
-	jp 		InitialiseGames 				; selector code automatically (for development)
 
 ; **********************************************************************************************************
 ;
@@ -78,7 +75,7 @@ SELSkipCtrlKey:
 
 InitialiseGames:
 	jsr 	RunInitCode 					; run initialisation code
-	jsrp 	SwapPlayerData  				; on both halves of memory.
+	jsr 	SwapPlayerData  				; on both halves of memory.
 	jsr 	RunInitCode 					; run initialisation code
 
 	ldd 	PlayerCount 					; read the players
@@ -88,18 +85,20 @@ InitialiseGames:
 	smb 	0 								; kill player 2 as 1 player game.
 
 ; **********************************************************************************************************
+; **********************************************************************************************************
 ;
 ;		Come here when the turn is over.  Swap Players over if the alternate players kill bit is clear.
 ;		If Alternate Playe is dead, check to see if Current Player is dead as well ; if so restart.
 ;
 ; **********************************************************************************************************
+; **********************************************************************************************************
 
-TurnOver:
-	lbi 	5,InfoBits						; current players kill bit.
+GameTurnOver:
+	lbi 	5,InfoBits						; alternate players (2) kill bit set ?
 	skmbz 	0 								; skipped if still alive.
-	jmp 	Player2IsDead 
-	jsrp 	SwapPlayerData 					; swap player data round.
-	jmp 	RunGameCode 					; and run the game code
+	jp 		Player2IsDead 
+	jsr 	SwapPlayerData 					; swap player data round.
+	jp 		RunGameCode 					; and run the game code
 
 ; **********************************************************************************************************
 ;
@@ -143,7 +142,7 @@ RunInitCode:
 
 FN__ClearScreen:
 	lbi 	1,15 							; just clear 0-1
-FN__ClearMemory:
+ClearMemory:
 	lbi 	7,15 							; clear 0-7.
 CMLoop:	
 	clra 									; inner loop, clear page.

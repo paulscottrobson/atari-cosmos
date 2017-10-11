@@ -12,7 +12,7 @@
 ;
 ; **********************************************************************************************************
 
-	page 	28
+	page 	4
 											; screen mapping
 	byte 	$00 							; x bit patterns, from not displayed (0) 1-7
 	byte 	$40
@@ -219,7 +219,7 @@ SKLoop:
 ;
 ; **********************************************************************************************************
 
-FN__SwapPlayerData:
+SwapPlayerData:
 	lbi 	2,15 							; last byte of #2
 SWLoop:
 	ld 		0 								; fetch byte there
@@ -319,19 +319,6 @@ RANDXor:
 
 ; **********************************************************************************************************
 ;
-;									Initialisation done in every game
-;
-; **********************************************************************************************************
-
-CommonInitialise:
-	lbi 	0,Player 						; put player in bottom centre.
-	stii 	4
-	lbi 	1,Player
-	stii 	8+5
-	ret
-
-; **********************************************************************************************************
-;
 ;								  Increment the seven segment LED pair
 ;
 ;							Note: if counts past 99 will change 2,RightDigit-1
@@ -349,4 +336,90 @@ BumpLoop:
 	xds 	0 								; write it back, will be zero and decrement.
 	jp 		BumpLoop
 
-	
+; **********************************************************************************************************
+;
+;							Move pixel down, return skip on reached bottom.
+;
+; **********************************************************************************************************
+
+FN__PlayerDown:
+	lbi 	0,Player
+FN__MoveDown:
+	ld 		1 								; switch to Y
+	ld 		0 								; read Y
+	aisc 	3 								; will cause a skip if Y = 8+5, the bottom pixel row.
+	jp 		MDSkip
+MVFail:
+	ld 		1 								; switch back to page 0.
+	retsk 									; if skip execute the return skip.
+MDSkip:
+	ld 		0 								; re-read
+	aisc 	1 								; bump 
+MDExit:	
+	x 		1 								; write back, switch back
+	ret
+
+; **********************************************************************************************************
+;
+;							Move pixel up, return skip on reached top.
+;
+; **********************************************************************************************************
+
+FN__PlayerMissileUp:
+	lbi 	0,PlayerMissile
+FN__PlayerUp:
+	lbi 	0,Player
+FN__MoveUp:
+	ld  	1 								; switch to Y
+	ld 		0 								; read Y
+	aisc 	7 								; will skip for all values except 8.
+	jp 		MVFail 							; can't skip, reset to page 0 and exit-skip
+	aisc 	8 								; effectively subtract 1.
+	jp 		MDExit 							; write back, going to page 0.
+
+; **********************************************************************************************************
+;
+;						Move pixel right, return skip on reached right hand edge
+;
+; **********************************************************************************************************
+
+FN__PlayerRight:
+	lbi 	0,Player
+FN__MoveRight:
+	ld 		0 								; get X 1..7
+	aisc 	9								; will cause a skip if X = 7, e.g. can't move further right.	
+	jp 		MRSkip 							; skip over if moving right.
+	retsk 									; we skipped, so return and skip.
+MRSkip:
+	x 		0 								; write it back.
+	rmb 	3 								; force in range 1..7 - undoes the skip.
+	ret
+
+; **********************************************************************************************************
+;
+;						Move pixel left, return skip on reached left hand edge
+;
+; **********************************************************************************************************
+
+FN__PlayerLeft:
+	lbi 	0,Player
+FN__MoveLeft:
+	ld 		0 								; read it.
+	aisc 	14 								; will skip for every value except 1.
+	retsk 									; so if didn't skip, return and skip as it was 1.
+	aisc 	1 								; make it subtract 1.
+	x 		0 								; and exit
+	ret
+
+; **********************************************************************************************************
+;
+;									Initialisation done in every game
+;
+; **********************************************************************************************************
+
+CommonInitialise:
+	lbi 	0,Player 						; put player in bottom centre.
+	stii 	4
+	lbi 	1,Player
+	stii 	8+5
+	ret

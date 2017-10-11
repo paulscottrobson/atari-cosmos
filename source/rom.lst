@@ -1,303 +1,332 @@
-000 :    0       0017:  CLRA
-001 : 3362       0018:  LEI  2
-003 :   ba       0019:  JSRP  CLEARMEMORY
-004 :   b0       0020:  JSRP  GETGAMEID
-005 :   5f       0021:  AISC  15
-006 :   f1       0022:  JP   INITIALISEGAMES
-007 : 33b7       0031:  LBI  GAMESPEED
-009 :    0       0032:  CLRA
-00a :   55       0033:  AISC  5
-00b :    1       0034:  SKMBZ  0
-00c :   55       0035:  AISC  5
-00d : 23ad       0036:  XAD  2,LEFTDIGIT
-00f : 2338       0037:  LDD  PLAYERCOUNT
-011 :   51       0038:  AISC  1
-012 : 23ae       0039:  XAD  2,RIGHTDIGIT
-014 : 682a       0042:  JSR  SELSKIPCTRLKEY
-016 :   d8       0043:  JP   SELWAITKEY
-017 :   d4       0044:  JP   SELRELEASEKEY
-018 : 68ae       0046:  JSR  RANDOM
-01a : 682a       0047:  JSR  SELSKIPCTRLKEY
-01c :   d8       0048:  JP   SELWAITKEY
-01d :    1       0050:  SKMBZ  KFB_START
-01e :   f1       0051:  JP   INITIALISEGAMES
-01f :    3       0052:  SKMBZ  KFB_PLAYERS
-020 : 33b8       0053:  LBI  PLAYERCOUNT
-022 : 33b7       0054:  LBI  GAMESPEED
-024 :    0       0056:  CLRA
-025 :   51       0057:  AISC  1
-026 :    2       0058:  XOR
-027 :    6       0059:  X   0
-028 : 6007       0060:  JMP  SELLOOP
-02a :   b4       0065:  JSRP  REPAINT
-02b :   b2       0066:  JSRP  SCANKEYBOARD
-02c :   3a       0067:  LBI  KEYSCONTROL
-02d :    0       0068:  CLRA
-02e :   21       0069:  SKE
-02f :   49       0070:  RETSK
-030 :   48       0071:  RET
-031 : 684f       0080:  JSR  RUNINITCODE
-033 :   bc       0081:  JSRP  SWAPPLAYERDATA
-034 : 684f       0082:  JSR  RUNINITCODE
-036 : 2338       0084:  LDD  PLAYERCOUNT
-038 : 33d0       0085:  LBI  5,0
-03a :   4b       0086:  SMB  3
-03b :   5f       0087:  AISC  15
-03c :   4d       0088:  SMB  0
-03d : 33d0       0098:  LBI  5,INFOBITS
-03f :    1       0099:  SKMBZ  0
-040 : 6045       0100:  JMP  PLAYER2ISDEAD
-042 :   bc       0101:  JSRP  SWAPPLAYERDATA
-043 : 6049       0102:  JMP  RUNGAMECODE
-045 :   2f       0111:  LBI  2,0
-046 :    1       0112:  SKMBZ  0
-047 : 6000       0113:  JMP  RESET
-049 : 33b9       0122:  LBI  GAMEID
-04b :   4b       0123:  SMB  3
-04c :    0       0124:  CLRA
-04d :   56       0125:  AISC  6
-04e :   ff       0126:  JID
-04f :   b8       0129:  JSRP  CLEARSCREEN
-050 : 6fd5       0130:  JSR  COMMONINITIALISE
-052 : 33b9       0131:  LBI  GAMEID
-054 :   4b       0132:  SMB  3
-055 :    0       0133:  CLRA
-056 :   56       0134:  AISC  6
-057 :   22       0135:  SC
-058 :   ff       0136:  JID
-059 :   1e       0145:  LBI  1,15
-05a : 33ff       0147:  LBI  7,15
-05c :    0       0149:  CLRA
-05d :    7       0150:  XDS  0
-05e :   dc       0151:  JP   CMLOOP
-05f :   12       0152:  XABR
-060 :   5f       0153:  AISC  15
-061 :   e4       0154:  JP   CMEXIT
-062 :   12       0155:  XABR
-063 :   dc       0156:  JP   CMLOOP
-064 :   1c       0159:  LBI  1,LEFTDIGIT
-065 :   7e       0160:  STII  14
-066 :   7f       0161:  STII  15
-067 :   48       0162:  RET
-068 :   70       0172:  BYTE  $70
-069 :   72       0173:  BYTE  $72
-06a :   74       0174:  BYTE  $74
-06b :   76       0175:  BYTE  $76
-06c :   78       0176:  BYTE  $78
-06d :   7a       0177:  BYTE  $7A
-06e :   7c       0178:  BYTE  $7C
-06f :   7e       0179:  BYTE  $7E
-070 : 6400       0188:  JMP  DEMOGAME
-072 : 3338       0189:  HALT
-074 : 3338       0190:  HALT
-076 : 6400       0191:  JMP  DEMOGAME
-078 : 3338       0192:  HALT
-07a : 6400       0193:  JMP  DEMOGAME
-07c : 3338       0194:  HALT
-07e : 3338       0195:  HALT
+000 :    0       0016:  CLRA
+001 : 3362       0017:  LEI  2
+003 : 6859       0018:  JSR  CLEARMEMORY
+005 :   a6       0019:  JSRP  GETGAMEID
+006 : 33b7       0028:  LBI  GAMESPEED
+008 :    0       0029:  CLRA
+009 :   55       0030:  AISC  5
+00a :    1       0031:  SKMBZ  0
+00b :   55       0032:  AISC  5
+00c : 23ad       0033:  XAD  2,LEFTDIGIT
+00e : 2338       0034:  LDD  PLAYERCOUNT
+010 :   51       0035:  AISC  1
+011 : 23ae       0036:  XAD  2,RIGHTDIGIT
+013 : 6829       0039:  JSR  SELSKIPCTRLKEY
+015 :   d7       0040:  JP   SELWAITKEY
+016 :   d3       0041:  JP   SELRELEASEKEY
+017 : 68bc       0043:  JSR  RANDOM
+019 : 6829       0044:  JSR  SELSKIPCTRLKEY
+01b :   d7       0045:  JP   SELWAITKEY
+01c :    1       0047:  SKMBZ  KFB_START
+01d :   f0       0048:  JP   INITIALISEGAMES
+01e :    3       0049:  SKMBZ  KFB_PLAYERS
+01f : 33b8       0050:  LBI  PLAYERCOUNT
+021 : 33b7       0051:  LBI  GAMESPEED
+023 :    0       0053:  CLRA
+024 :   51       0054:  AISC  1
+025 :    2       0055:  XOR
+026 :    6       0056:  X   0
+027 : 6006       0057:  JMP  SELLOOP
+029 :   aa       0062:  JSRP  REPAINT
+02a :   a8       0063:  JSRP  SCANKEYBOARD
+02b :   3a       0064:  LBI  KEYSCONTROL
+02c :    0       0065:  CLRA
+02d :   21       0066:  SKE
+02e :   49       0067:  RETSK
+02f :   48       0068:  RET
+030 : 684e       0077:  JSR  RUNINITCODE
+032 : 6989       0078:  JSR  SWAPPLAYERDATA
+034 : 684e       0079:  JSR  RUNINITCODE
+036 : 2338       0081:  LDD  PLAYERCOUNT
+038 : 33d0       0082:  LBI  5,0
+03a :   4b       0083:  SMB  3
+03b :   5f       0084:  AISC  15
+03c :   4d       0085:  SMB  0
+03d : 33d0       0097:  LBI  5,INFOBITS
+03f :    1       0098:  SKMBZ  0
+040 :   c4       0099:  JP   PLAYER2ISDEAD
+041 : 6989       0100:  JSR  SWAPPLAYERDATA
+043 :   c8       0101:  JP   RUNGAMECODE
+044 :   2f       0110:  LBI  2,0
+045 :    1       0111:  SKMBZ  0
+046 : 6000       0112:  JMP  RESET
+048 : 33b9       0121:  LBI  GAMEID
+04a :   4b       0122:  SMB  3
+04b :    0       0123:  CLRA
+04c :   56       0124:  AISC  6
+04d :   ff       0125:  JID
+04e :   b8       0128:  JSRP  CLEARSCREEN
+04f : 6a00       0129:  JSR  COMMONINITIALISE
+051 : 33b9       0130:  LBI  GAMEID
+053 :   4b       0131:  SMB  3
+054 :    0       0132:  CLRA
+055 :   56       0133:  AISC  6
+056 :   22       0134:  SC
+057 :   ff       0135:  JID
+058 :   1e       0144:  LBI  1,15
+059 : 33ff       0146:  LBI  7,15
+05b :    0       0148:  CLRA
+05c :    7       0149:  XDS  0
+05d :   db       0150:  JP   CMLOOP
+05e :   12       0151:  XABR
+05f :   5f       0152:  AISC  15
+060 :   e3       0153:  JP   CMEXIT
+061 :   12       0154:  XABR
+062 :   db       0155:  JP   CMLOOP
+063 :   1c       0158:  LBI  1,LEFTDIGIT
+064 :   7e       0159:  STII  14
+065 :   7f       0160:  STII  15
+066 :   48       0161:  RET
+068 :   70       0171:  BYTE  $70
+069 :   72       0172:  BYTE  $72
+06a :   74       0173:  BYTE  $74
+06b :   76       0174:  BYTE  $76
+06c :   78       0175:  BYTE  $78
+06d :   7a       0176:  BYTE  $7A
+06e :   7c       0177:  BYTE  $7C
+06f :   7e       0178:  BYTE  $7E
+070 : 6400       0187:  JMP  DEMOGAME
+072 : 3338       0188:  HALT
+074 : 3338       0189:  HALT
+076 : 6400       0190:  JMP  DEMOGAME
+078 : 3338       0191:  HALT
+07a : 6400       0192:  JMP  DEMOGAME
+07c : 3338       0193:  HALT
+07e : 3338       0194:  HALT
+100 :    0       0017:  BYTE  $00
+101 :   40       0018:  BYTE  $40
+102 :   20       0019:  BYTE  $20
+103 :   10       0020:  BYTE  $10
+104 :    8       0021:  BYTE  $08
+105 :    4       0022:  BYTE  $04
+106 :    2       0023:  BYTE  $02
+107 :    1       0024:  BYTE  $01
+108 :    1       0026:  BYTE  $01
+109 :    2       0027:  BYTE  $02
+10a :    4       0028:  BYTE  $04
+10b :    8       0029:  BYTE  $08
+10c :   10       0030:  BYTE  $10
+10d :   20       0031:  BYTE  $20
+10e :   40       0032:  BYTE  $40
+10f :   80       0033:  BYTE  $80
+110 :   3f       0041:  BYTE  $3F
+111 :    6       0042:  BYTE  $06
+112 :   5b       0043:  BYTE  $5B
+113 :   4f       0044:  BYTE  $4F
+114 :   66       0045:  BYTE  $66
+115 :   6d       0046:  BYTE  $6D
+116 :   7d       0047:  BYTE  $7D
+117 :    7       0048:  BYTE  $07
+118 :   7f       0049:  BYTE  $7F
+119 :   67       0050:  BYTE  $67
+11a :   71       0051:  BYTE  $71
+120 :   80       0061:  BYTE  $80
+121 :   40       0062:  BYTE  $40
+122 :   20       0063:  BYTE  $20
+123 :   10       0064:  BYTE  $10
+124 :   1e       0093:  LBI  1,15
+125 :   15       0096:  LD   1
+126 : 3339       0098:  IT
+128 :   41       0099:  SKT
+129 :   44       0100:  NOP
+12a :   4e       0102:  CBA
+12b :   5f       0103:  AISC  15
+12c :   48       0104:  RET
+12d :   50       0107:  CAB
+12e : 23be       0108:  XAD  ROWTEMP
+130 :    0       0110:  CLRA
+131 :   bf       0111:  LQID
+132 :   13       0112:  SKMBZ  3
+133 :   e5       0113:  JP   RPDONEY
+134 :   15       0115:  LD   1
+135 :   4b       0116:  SMB  3
+136 :   35       0118:  LD   3
+137 :   52       0119:  AISC  2
+138 :   fc       0120:  JP   RPNOTSEVENSEGMENT
+139 :    0       0122:  CLRA
+13a :   51       0123:  AISC  1
+13b :   bf       0124:  LQID
+13c : 230f       0127:  LDD  HOLODISPLAY
+13e :   5f       0128:  AISC  15
+13f :   44       0129:  NOP
+140 :   1e       0131:  LBI  RPWORK1
+141 : 332c       0132:  CQMA
+143 :   4b       0134:  SMB  3
+144 :   20       0135:  SKC
+145 :   43       0136:  RMB  3
+146 : 333a       0138:  OMG
+148 :   50       0139:  CAB
+149 : 333e       0140:  OBD
+14b : 233e       0142:  LDD  ROWTEMP
+14d :   50       0143:  CAB
+14e : 612d       0144:  JMP  RPCONTINUE
+150 :    0       0153:  CLRA
+151 :   51       0154:  AISC  1
+152 :   50       0156:  CAB
+153 : 239f       0157:  XAD  RPWORK1
+155 : 333e       0158:  OBD
+157 : 3328       0159:  ININ
+159 :   3d       0160:  LBI  ROWTEMP
+15a :    6       0161:  X   0
+15b :    0       0162:  CLRA
+15c :    1       0163:  SKMBZ  0
+15d : 231f       0164:  LDD  RPWORK1
+15f : 33b9       0165:  LBI  GAMEID
+161 :    2       0166:  XOR
+162 :    6       0167:  X   0
+163 :   1e       0168:  LBI  RPWORK1
+164 :    5       0169:  LD   0
+165 :   30       0170:  ASC
+166 :   d2       0171:  JP   GGIDENTIFYLOOP
+167 : 33b9       0172:  LBI  GAMEID
+169 :    5       0173:  LD   0
+16a :   48       0174:  RET
+16b :    0       0183:  CLRA
+16c :   50       0184:  CAB
+16d : 333e       0185:  OBD
+16f : 3358       0186:  OGI  8
+171 : 230f       0187:  LDD  HOLODISPLAY
+173 :   5f       0188:  AISC  15
+174 : 3350       0189:  OGI  0
+176 :    0       0191:  CLRA
+177 :   3a       0192:  LBI  KEYBOARDBASE+1
+178 :    6       0193:  X   0
+179 :    0       0195:  CLRA
+17a :   52       0196:  AISC  2
+17b :   bf       0197:  LQID
+17c :    5       0199:  LD   0
+17d :    7       0200:  XDS  0
+17e : 332e       0202:  INL
+180 :   44       0203:  NOP
+181 :    4       0204:  XIS  0
+182 :    4       0206:  XIS  0
+183 :   51       0207:  AISC  1
+184 :    6       0208:  X   0
+185 :    3       0209:  SKMBZ  2
+186 :   48       0210:  RET
+187 : 6179       0211:  JMP  SKLOOP
+189 :   2e       0223:  LBI  2,15
+18a :    5       0225:  LD   0
+18b : 6997       0226:  JSR  SWTOGGLEBU
+18d :    6       0227:  X   0
+18e : 6997       0228:  JSR  SWTOGGLEBU
+190 :    7       0229:  XDS  0
+191 :   ca       0230:  JP   SWLOOP
+192 :   12       0231:  XABR
+193 :   5f       0232:  AISC  15
+194 :   48       0233:  RET
+195 :   12       0234:  XABR
+196 :   ca       0235:  JP   SWLOOP
+197 : 239f       0240:  XAD  RPWORK1
+199 :   12       0241:  XABR
+19a :   40       0242:  COMP
+19b :   12       0243:  XABR
+19c : 231f       0244:  LDD  RPWORK1
+19e :   48       0245:  RET
+19f :   a8       0256:  JSRP SCANKEYBOARD
+1a0 :   aa       0257:  JSRP REPAINT
+1a1 :   aa       0258:  JSRP REPAINT
+1a2 : 33b7       0259:  LBI  GAMESPEED
+1a4 :    1       0260:  SKMBZ  0
+1a5 :   aa       0261:  JSRP REPAINT
+1a6 : 33b4       0262:  LBI  TIMER+4
+1a8 :    5       0264:  LD   0
+1a9 :   13       0265:  SKMBZ  3
+1aa :   ec       0266:  JP   UPRESETTIMER
+1ab :   ee       0267:  JP   UPBUMPTIMER
+1ac :   4e       0269:  CBA
+1ad :   52       0270:  AISC  2
+1ae :   51       0272:  AISC  1
+1af :    7       0273:  XDS  0
+1b0 :   e8       0274:  JP   UPTIMERLOOP
+1b1 :   48       0275:  RET
+1b2 :   4e       0285:  CBA
+1b3 : 239f       0286:  XAD  RPWORK1
+1b5 :   12       0287:  XABR
+1b6 : 23be       0288:  XAD  ROWTEMP
+1b8 : 33b6       0290:  LBI  RANDOM2
+1ba :   32       0291:  RC
+1bb :    5       0292:  LD   0
+1bc :   30       0293:  ASC
+1bd :   44       0294:  NOP
+1be :    7       0295:  XDS  0
+1bf :    5       0296:  LD   0
+1c0 :   30       0297:  ASC
+1c1 :   cc       0298:  JP   RANDXOR
+1c2 :    6       0300:  X   0
+1c3 : 233e       0302:  LDD  ROWTEMP
+1c5 :   12       0303:  XABR
+1c6 : 231f       0304:  LDD  RPWORK1
+1c8 :   50       0305:  CAB
+1c9 : 2336       0306:  LDD  RANDOM2
+1cb :   48       0307:  RET
+1cc :    6       0310:  X   0
+1cd :    0       0311:  CLRA
+1ce :   51       0312:  AISC  1
+1cf :    2       0313:  XOR
+1d0 :    4       0314:  XIS  0
+1d1 :    0       0315:  CLRA
+1d2 :   5d       0316:  AISC  13
+1d3 :    2       0317:  XOR
+1d4 :   c2       0318:  JP   RANDCONTINUE
+1d5 :   2d       0328:  LBI  2,RIGHTDIGIT
+1d6 :    5       0330:  LD   0
+1d7 :   51       0331:  AISC  1
+1d8 :    6       0332:  X   0
+1d9 :    5       0333:  LD   0
+1da :   56       0334:  AISC  6
+1db :   48       0335:  RET
+1dc :    7       0336:  XDS  0
+1dd :   d6       0337:  JP   BUMPLOOP
+1de :    b       0346:  LBI  0,PLAYER
+1df :   15       0348:  LD   1
+1e0 :    5       0349:  LD   0
+1e1 :   53       0350:  AISC  3
+1e2 :   e5       0351:  JP   MDSKIP
+1e3 :   15       0353:  LD   1
+1e4 :   49       0354:  RETSK
+1e5 :    5       0356:  LD   0
+1e6 :   51       0357:  AISC  1
+1e7 :   16       0359:  X   1
+1e8 :   48       0360:  RET
+1e9 :    a       0369:  LBI  0,PLAYERMISSILE
+1ea :    b       0371:  LBI  0,PLAYER
+1eb :   15       0373:  LD   1
+1ec :    5       0374:  LD   0
+1ed :   57       0375:  AISC  7
+1ee :   e3       0376:  JP   MVFAIL
+1ef :   58       0377:  AISC  8
+1f0 :   e7       0378:  JP   MDEXIT
+1f1 :    b       0387:  LBI  0,PLAYER
+1f2 :    5       0389:  LD   0
+1f3 :   59       0390:  AISC  9
+1f4 :   f6       0391:  JP   MRSKIP
+1f5 :   49       0392:  RETSK
+1f6 :    6       0394:  X   0
+1f7 :   43       0395:  RMB  3
+1f8 :   48       0396:  RET
+1f9 :    b       0405:  LBI  0,PLAYER
+1fa :    5       0407:  LD   0
+1fb :   5e       0408:  AISC  14
+1fc :   49       0409:  RETSK
+1fd :   51       0410:  AISC  1
+1fe :    6       0411:  X   0
+1ff :   48       0412:  RET
+200 :    b       0421:  LBI  0,PLAYER
+201 :   74       0422:  STII  4
+202 :   1b       0423:  LBI  1,PLAYER
+203 :   7d       0424:  STII  8+5
+204 :   48       0425:  RET
 400 :   20       0004:  SKC
-401 :   c6       0005:  JP   GAME_CODE
+401 :   c9       0005:  JP   GAME_CODE
 402 : 3388       0007:  LBI  0,8
-404 :   72       0008:  STII  2
-405 :   48       0009:  RET
-406 : 3388       0012:  LBI  0,8
-408 :    5       0013:  LD   0
-409 :   51       0014:  AISC  1
-40a :    6       0015:  X   0
-40b :   43       0016:  RMB  3
-40c :   be       0017:  JSRP  BUMPCOUNTER
-40d :   b6       0020:  JSRP  UPDATE
-40e :   3b       0022:  LBI  KEYSFIRE
-40f :    1       0023:  SKMBZ  0
-410 : 603d       0024:  JMP  TURNOVER
-412 :   c6       0025:  JP   GAME_CODE
-700 :    0       0017:  BYTE  $00
-701 :   40       0018:  BYTE  $40
-702 :   20       0019:  BYTE  $20
-703 :   10       0020:  BYTE  $10
-704 :    8       0021:  BYTE  $08
-705 :    4       0022:  BYTE  $04
-706 :    2       0023:  BYTE  $02
-707 :    1       0024:  BYTE  $01
-708 :    1       0026:  BYTE  $01
-709 :    2       0027:  BYTE  $02
-70a :    4       0028:  BYTE  $04
-70b :    8       0029:  BYTE  $08
-70c :   10       0030:  BYTE  $10
-70d :   20       0031:  BYTE  $20
-70e :   40       0032:  BYTE  $40
-70f :   80       0033:  BYTE  $80
-710 :   3f       0041:  BYTE  $3F
-711 :    6       0042:  BYTE  $06
-712 :   5b       0043:  BYTE  $5B
-713 :   4f       0044:  BYTE  $4F
-714 :   66       0045:  BYTE  $66
-715 :   6d       0046:  BYTE  $6D
-716 :   7d       0047:  BYTE  $7D
-717 :    7       0048:  BYTE  $07
-718 :   7f       0049:  BYTE  $7F
-719 :   67       0050:  BYTE  $67
-71a :   71       0051:  BYTE  $71
-720 :   80       0061:  BYTE  $80
-721 :   40       0062:  BYTE  $40
-722 :   20       0063:  BYTE  $20
-723 :   10       0064:  BYTE  $10
-724 :   1e       0093:  LBI  1,15
-725 :   15       0096:  LD   1
-726 : 3339       0098:  IT
-728 :   41       0099:  SKT
-729 :   44       0100:  NOP
-72a :   4e       0102:  CBA
-72b :   5f       0103:  AISC  15
-72c :   48       0104:  RET
-72d :   50       0107:  CAB
-72e : 23be       0108:  XAD  ROWTEMP
-730 :    0       0110:  CLRA
-731 :   bf       0111:  LQID
-732 :   13       0112:  SKMBZ  3
-733 :   e5       0113:  JP   RPDONEY
-734 :   15       0115:  LD   1
-735 :   4b       0116:  SMB  3
-736 :   35       0118:  LD   3
-737 :   52       0119:  AISC  2
-738 :   fc       0120:  JP   RPNOTSEVENSEGMENT
-739 :    0       0122:  CLRA
-73a :   51       0123:  AISC  1
-73b :   bf       0124:  LQID
-73c : 230f       0127:  LDD  HOLODISPLAY
-73e :   5f       0128:  AISC  15
-73f :   44       0129:  NOP
-740 :   1e       0131:  LBI  RPWORK1
-741 : 332c       0132:  CQMA
-743 :   4b       0134:  SMB  3
-744 :   20       0135:  SKC
-745 :   43       0136:  RMB  3
-746 : 333a       0138:  OMG
-748 :   50       0139:  CAB
-749 : 333e       0140:  OBD
-74b : 233e       0142:  LDD  ROWTEMP
-74d :   50       0143:  CAB
-74e : 672d       0144:  JMP  RPCONTINUE
-750 :    0       0153:  CLRA
-751 :   51       0154:  AISC  1
-752 :   50       0156:  CAB
-753 : 239f       0157:  XAD  RPWORK1
-755 : 333e       0158:  OBD
-757 : 3328       0159:  ININ
-759 :   3d       0160:  LBI  ROWTEMP
-75a :    6       0161:  X   0
-75b :    0       0162:  CLRA
-75c :    1       0163:  SKMBZ  0
-75d : 231f       0164:  LDD  RPWORK1
-75f : 33b9       0165:  LBI  GAMEID
-761 :    2       0166:  XOR
-762 :    6       0167:  X   0
-763 :   1e       0168:  LBI  RPWORK1
-764 :    5       0169:  LD   0
-765 :   30       0170:  ASC
-766 :   d2       0171:  JP   GGIDENTIFYLOOP
-767 : 33b9       0172:  LBI  GAMEID
-769 :    5       0173:  LD   0
-76a :   48       0174:  RET
-76b :    0       0183:  CLRA
-76c :   50       0184:  CAB
-76d : 333e       0185:  OBD
-76f : 3358       0186:  OGI  8
-771 : 230f       0187:  LDD  HOLODISPLAY
-773 :   5f       0188:  AISC  15
-774 : 3350       0189:  OGI  0
-776 :    0       0191:  CLRA
-777 :   3a       0192:  LBI  KEYBOARDBASE+1
-778 :    6       0193:  X   0
-779 :    0       0195:  CLRA
-77a :   52       0196:  AISC  2
-77b :   bf       0197:  LQID
-77c :    5       0199:  LD   0
-77d :    7       0200:  XDS  0
-77e : 332e       0202:  INL
-780 :   44       0203:  NOP
-781 :    4       0204:  XIS  0
-782 :    4       0206:  XIS  0
-783 :   51       0207:  AISC  1
-784 :    6       0208:  X   0
-785 :    3       0209:  SKMBZ  2
-786 :   48       0210:  RET
-787 : 6779       0211:  JMP  SKLOOP
-789 :   2e       0223:  LBI  2,15
-78a :    5       0225:  LD   0
-78b : 6f97       0226:  JSR  SWTOGGLEBU
-78d :    6       0227:  X   0
-78e : 6f97       0228:  JSR  SWTOGGLEBU
-790 :    7       0229:  XDS  0
-791 :   ca       0230:  JP   SWLOOP
-792 :   12       0231:  XABR
-793 :   5f       0232:  AISC  15
-794 :   48       0233:  RET
-795 :   12       0234:  XABR
-796 :   ca       0235:  JP   SWLOOP
-797 : 239f       0240:  XAD  RPWORK1
-799 :   12       0241:  XABR
-79a :   40       0242:  COMP
-79b :   12       0243:  XABR
-79c : 231f       0244:  LDD  RPWORK1
-79e :   48       0245:  RET
-79f :   b2       0256:  JSRP SCANKEYBOARD
-7a0 :   b4       0257:  JSRP REPAINT
-7a1 :   b4       0258:  JSRP REPAINT
-7a2 : 33b7       0259:  LBI  GAMESPEED
-7a4 :    1       0260:  SKMBZ  0
-7a5 :   b4       0261:  JSRP REPAINT
-7a6 : 33b4       0262:  LBI  TIMER+4
-7a8 :    5       0264:  LD   0
-7a9 :   13       0265:  SKMBZ  3
-7aa :   ec       0266:  JP   UPRESETTIMER
-7ab :   ee       0267:  JP   UPBUMPTIMER
-7ac :   4e       0269:  CBA
-7ad :   52       0270:  AISC  2
-7ae :   51       0272:  AISC  1
-7af :    7       0273:  XDS  0
-7b0 :   e8       0274:  JP   UPTIMERLOOP
-7b1 :   48       0275:  RET
-7b2 :   4e       0285:  CBA
-7b3 : 239f       0286:  XAD  RPWORK1
-7b5 :   12       0287:  XABR
-7b6 : 23be       0288:  XAD  ROWTEMP
-7b8 : 33b6       0290:  LBI  RANDOM2
-7ba :   32       0291:  RC
-7bb :    5       0292:  LD   0
-7bc :   30       0293:  ASC
-7bd :   44       0294:  NOP
-7be :    7       0295:  XDS  0
-7bf :    5       0296:  LD   0
-7c0 :   30       0297:  ASC
-7c1 :   cc       0298:  JP   RANDXOR
-7c2 :    6       0300:  X   0
-7c3 : 233e       0302:  LDD  ROWTEMP
-7c5 :   12       0303:  XABR
-7c6 : 231f       0304:  LDD  RPWORK1
-7c8 :   50       0305:  CAB
-7c9 : 2336       0306:  LDD  RANDOM2
-7cb :   48       0307:  RET
-7cc :    6       0310:  X   0
-7cd :    0       0311:  CLRA
-7ce :   51       0312:  AISC  1
-7cf :    2       0313:  XOR
-7d0 :    4       0314:  XIS  0
-7d1 :    0       0315:  CLRA
-7d2 :   5d       0316:  AISC  13
-7d3 :    2       0317:  XOR
-7d4 :   c2       0318:  JP   RANDCONTINUE
-7d5 :    b       0327:  LBI  0,PLAYER
-7d6 :   74       0328:  STII  4
-7d7 :   1b       0329:  LBI  1,PLAYER
-7d8 :   7d       0330:  STII  8+5
-7d9 :   48       0331:  RET
-7da :   2d       0341:  LBI  2,RIGHTDIGIT
-7db :    5       0343:  LD   0
-7dc :   51       0344:  AISC  1
-7dd :    6       0345:  X   0
-7de :    5       0346:  LD   0
-7df :   56       0347:  AISC  6
-7e0 :   48       0348:  RET
-7e1 :    7       0349:  XDS  0
-7e2 :   db       0350:  JP   BUMPLOOP
+404 :   76       0008:  STII  6
+405 : 3398       0009:  LBI  1,8
+407 :   7c       0010:  STII  8+4
+408 :   48       0011:  RET
+409 :   b2       0014:  JSRP  UPDATE
+40a :   be       0015:  JSRP  BUMPCOUNTER
+40b : 3388       0016:  LBI  0,8
+40d :   a4       0017:  JSRP  MOVEUP
+40e : 6409       0018:  JMP  GAME_CODE
+410 : 3338       0019:  HALT

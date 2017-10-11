@@ -5,21 +5,16 @@ demogame:
 	jp 		game_code	
 game_init:
 	lbi 	0,8
-	stii 	2
+	stii 	6
+	lbi 	1,8
+	stii 	8+4
 	ret
 
 game_code:
-	lbi 	0,8
-	ld 		0
-	aisc 	1
-	x 		0
-	rmb 	3
-	jsrp 	BumpCounter
-	
-repaint:
 	jsrp 	Update
+	jsrp 	BumpCounter
+	lbi 	0,8
+	jsrp 	MoveUp
+	jmp 	game_code
+	halt
 
-	lbi 	KeysFire
-	skmbz 	0
-	jmp 	TurnOver
-	jp 		game_code
