@@ -12,7 +12,7 @@
 ;
 ; **********************************************************************************************************
 
-	page 	4
+	page 	24
 											; screen mapping
 	byte 	$00 							; x bit patterns, from not displayed (0) 1-7
 	byte 	$40
@@ -276,6 +276,108 @@ UPBumpTimer:
 
 ; **********************************************************************************************************
 ;
+;								Move Player Left/Right, skip if off edge.
+;
+; **********************************************************************************************************
+
+FN__MoveHPlayer:
+	lbi 	KeysDirection 					; check direction keys
+	skmbz 	KFB_LEFT
+	jmp 	FN__PlayerLeft
+	skmbz 	KFB_RIGHT
+	jp 		FN__PlayerRight
+	ret
+
+
+; **********************************************************************************************************
+;
+;						Move pixel right, return skip on reached right hand edge
+;
+; **********************************************************************************************************
+
+FN__PlayerRight:
+	lbi 	0,Player
+FN__MoveRight:
+	ld 		0 								; get X 1..7
+	aisc 	9								; will cause a skip if X = 7, e.g. can't move further right.	
+	jp 		MRSkip 							; skip over if moving right.
+	retsk 									; we skipped, so return and skip.
+MRSkip:
+	x 		0 								; write it back.
+	rmb 	3 								; force in range 1..7 - undoes the skip.
+	ret
+
+; **********************************************************************************************************
+;
+;						Move pixel left, return skip on reached left hand edge
+;
+; **********************************************************************************************************
+
+FN__PlayerLeft:
+	lbi 	0,Player
+FN__MoveLeft:
+	ld 		0 								; read it.
+	aisc 	14 								; will skip for every value except 1.
+	retsk 									; so if didn't skip, return and skip as it was 1.
+	aisc 	1 								; make it subtract 1.
+	x 		0 								; and exit
+	ret
+
+; **********************************************************************************************************
+;
+;								Move Player Left/Right, skip if off edge.
+;
+; **********************************************************************************************************
+
+FN__MoveVPlayer:
+	lbi 	KeysDirection 					; check direction keys
+	skmbz 	KFB_DOWN
+	jp 		FN__PlayerDown
+	skmbz 	KFB_UP
+	jp 		FN__PlayerUp
+	ret
+
+; **********************************************************************************************************
+;
+;							Move pixel down, return skip on reached bottom.
+;
+; **********************************************************************************************************
+
+FN__PlayerDown:
+	lbi 	0,Player
+FN__MoveDown:
+	ld 		1 								; switch to Y
+	ld 		0 								; read Y
+	aisc 	3 								; will cause a skip if Y = 8+5, the bottom pixel row.
+	jmp 	MDSkip
+MVFail:
+	ld 		1 								; switch back to page 0.
+	retsk 									; if skip execute the return skip.
+MDSkip:
+	ld 		0 								; re-read
+	aisc 	1 								; bump 
+MDExit:	
+	x 		1 								; write back, switch back
+	ret
+
+; **********************************************************************************************************
+;
+;							Move pixel up, return skip on reached top.
+;
+; **********************************************************************************************************
+
+FN__PlayerUp:
+	lbi 	0,Player
+FN__MoveUp:
+	ld  	1 								; switch to Y
+	ld 		0 								; read Y
+	aisc 	7 								; will skip for all values except 8.
+	jp 		MVFail 							; can't skip, reset to page 0 and exit-skip
+	aisc 	8 								; effectively subtract 1.
+	jp 		MDExit 							; write back, going to page 0.
+
+; **********************************************************************************************************
+;
 ;										Random Number Generator.
 ;
 ;									 Preserves B, all 7 bits of it
@@ -315,7 +417,7 @@ RANDXor:
 	clra
 	aisc 	13 								; fetch 13
 	xor 									; XOR with random 2
-	jp 		RANDContinue					; write back and exit.
+	jmp 	RANDContinue					; write back and exit.
 
 ; **********************************************************************************************************
 ;
@@ -338,78 +440,131 @@ BumpLoop:
 
 ; **********************************************************************************************************
 ;
-;							Move pixel down, return skip on reached bottom.
+;										Skip Return if Pixel not in use.
 ;
 ; **********************************************************************************************************
 
-FN__PlayerDown:
-	lbi 	0,Player
-FN__MoveDown:
-	ld 		1 								; switch to Y
-	ld 		0 								; read Y
-	aisc 	3 								; will cause a skip if Y = 8+5, the bottom pixel row.
-	jp 		MDSkip
-MVFail:
-	ld 		1 								; switch back to page 0.
-	retsk 									; if skip execute the return skip.
-MDSkip:
-	ld 		0 								; re-read
-	aisc 	1 								; bump 
-MDExit:	
-	x 		1 								; write back, switch back
+FN__CheckPixelInUse:
+	clra
+	ske 									; skip if zero , e.g. not in use.
+	ret
+	retsk
+
+; **********************************************************************************************************
+;
+;												Check firing
+;
+; **********************************************************************************************************
+
+FN__CheckFire:
+	lbi 	KeysFire 						; check if fire button pressed
+	skmbz 	KFB_FIRE
+	jp 		CFFire
+	ret 									; not pressed, return.
+CFFire:
+	lbi 	0,PlayerMissile 				; check if PM is free.
+	jsrp 	CheckPixelInUse 				; check not in use, skip if so.
+	ret
+	ldd 	0,Player 						; copy player position to P/M.
+	x 		1
+	ldd 	1,Player
+	x 		1
 	ret
 
 ; **********************************************************************************************************
 ;
-;							Move pixel up, return skip on reached top.
+;		Move player missile if it exists, kill it on going off. RetSK if collision check needed.
 ;
 ; **********************************************************************************************************
 
-FN__PlayerMissileUp:
-	lbi 	0,PlayerMissile
-FN__PlayerUp:
-	lbi 	0,Player
-FN__MoveUp:
-	ld  	1 								; switch to Y
-	ld 		0 								; read Y
-	aisc 	7 								; will skip for all values except 8.
-	jp 		MVFail 							; can't skip, reset to page 0 and exit-skip
-	aisc 	8 								; effectively subtract 1.
-	jp 		MDExit 							; write back, going to page 0.
+FN__MovePlayerMissile:
+	lbi 	0,PlayerMissile 				; point to P/M
+	jsrp 	CheckPixelInUse 				; skip if not in use
+	jp 		MPMMove 					
+	ret 
+MPMMove:
+	jsrp 	MoveUp 							; move up, skip if hits edge.
+	retsk 									; so collision check needed here, still in flight.
 
 ; **********************************************************************************************************
 ;
-;						Move pixel right, return skip on reached right hand edge
+;										Kill Player Missile
 ;
 ; **********************************************************************************************************
 
-FN__PlayerRight:
-	lbi 	0,Player
-FN__MoveRight:
-	ld 		0 								; get X 1..7
-	aisc 	9								; will cause a skip if X = 7, e.g. can't move further right.	
-	jp 		MRSkip 							; skip over if moving right.
-	retsk 									; we skipped, so return and skip.
-MRSkip:
-	x 		0 								; write it back.
-	rmb 	3 								; force in range 1..7 - undoes the skip.
+FN__KillPlayerMissile:
+	lbi 	0,PlayerMissile 				; if skipped hit edge, fall through to kill.
+	
+; **********************************************************************************************************
+;
+;										Kill Pixel at B
+;
+; **********************************************************************************************************
+
+FN__Kill:
+	clra 	 								; kill pixel at B
+	x 		0
 	ret
 
 ; **********************************************************************************************************
 ;
-;						Move pixel left, return skip on reached left hand edge
+;	 Check collision with object at B with all other objects, on collide skip with A/B = collision object
 ;
 ; **********************************************************************************************************
 
-FN__PlayerLeft:
-	lbi 	0,Player
-FN__MoveLeft:
-	ld 		0 								; read it.
-	aisc 	14 								; will skip for every value except 1.
-	retsk 									; so if didn't skip, return and skip as it was 1.
-	aisc 	1 								; make it subtract 1.
-	x 		0 								; and exit
-	ret
+FN__CheckCollision:
+	cba 									; save address of colliding object.
+	xad 	RPWork1 
+	lbi 	RowTemp 						; set the current testing one to 14, the last pixel
+	stii 	14
+CCLoop:
+	ldd 	RPWork1 						; get the object being tested into A.
+	lbi 	RowTemp 						; point B to the currently compared object.
+	ske  									; if equal then skip, this one can't be a collision.
+	jp 		CCCoordinates
+CCNext:
+	lbi 	RowTemp 						; point to row temp
+	ld 		0								; read it
+	aisc 	15 								; bump, skip for all values > 0
+	ret 									; if value was zero, return without skip.	
+	x 		0 								; write it back
+	jp 		CCLoop 							; and go round again.
+
+CCCoordinates:				
+	sc 										; set carry - this will be reset if no collision.
+	lbi 	0,0								; page 0 where the X coordinates are.
+
+	cab 									; on entry A = collide.ID, put in B
+	ld 		0 								; Read collide.X into A
+	xad 	RowTemp 						; Rowtemp contains collide.X, A contains RowTemp (current.ID)
+	cab 									; B contains current.ID
+	ldd 	RowTemp 						; read collide.X B is current.ID
+	ske 									; reset carry if not equal.
+	rc
+
+	cba 									; save current.ID back in RowTemp
+	xad 	RowTemp
+
+	ld 		1 								; switch to bank 1.
+	ld 		0 								; read current.Y into A.
+	xad 	RPWork1 						; now RPWork1 contains current.Y and A contains collide.ID
+	cab 									; B now points to Collide.Y
+	ldd		RPWork1 						; A is current.Y, B points to collide.y
+	ske 									; reset carry if not equal.
+	rc
+
+	cba 									; A is collide.Y
+	xad 	RPWork1 						; write back Collide.Y
+	ld 		1 								; switch back to bank 0
+	skc 									; if carry set, collision has occurred.
+	jmp 	CCNext
+
+	ldd 	RowTemp 						; get collision ID, in A + B
+	cab
+	retsk
+
+
+
 
 ; **********************************************************************************************************
 ;

@@ -43,8 +43,8 @@ class Hardware implements IHardware {
         if ((this.qRows & 0x80) != 0) {
             n = (this.keypad.isKeyPressed(CosmosKeys.UP) ? 1 : 0) + 
                 (this.keypad.isKeyPressed(CosmosKeys.RIGHT) ? 2 : 0) + 
-                (this.keypad.isKeyPressed(CosmosKeys.LEFT) ? 4 : 0) + 
-                (this.keypad.isKeyPressed(CosmosKeys.DOWN) ? 8 : 0);
+                (this.keypad.isKeyPressed(CosmosKeys.DOWN) ? 4 : 0) + 
+                (this.keypad.isKeyPressed(CosmosKeys.LEFT) ? 8 : 0);
         }
         if ((this.qRows & 0x40) != 0) {
             n = (this.keypad.isKeyPressed(CosmosKeys.START) ? 1 : 0) + 

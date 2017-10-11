@@ -3,18 +3,40 @@
 demogame:
 	skc 
 	jp 		game_code	
-game_init:
-	lbi 	0,8
+
+	lbi 	0,2
+	stii 	2
+	stii	3
+	stii 	4
+	stii 	5
 	stii 	6
-	lbi 	1,8
-	stii 	8+4
+	lbi 	1,3
+	stii 	9
+	lbi 	1,5
+	stii 	10
 	ret
 
 game_code:
 	jsrp 	Update
+	jsrp 	MoveHPlayer
+	nop
+	jsrp 	MoveVPlayer
+	nop
+
+	jsrp 	CheckFire
+	jsrp 	MovePlayerMissile
+	jp 		game_code
+
+	lbi 	0,PlayerMissile
+	jsrp 	CheckCollision
+	jp 		game_code
+
+	jsrp 	Kill
+	jsrp	KillPlayerMissile	
 	jsrp 	BumpCounter
-	lbi 	0,8
-	jsrp 	MoveUp
-	jmp 	game_code
+	jp 		game_code
+
 	halt
+
+
 
