@@ -193,8 +193,8 @@ CMExit:
 	jmp 	Asteroids 						; game 0 (game under development - no hologram on emulator)
 	jmp 	Asteroids						; game 1 (Asteroids)
 	halt 									; game 2
-	jmp 	demogame 						; game 3
+	halt 									; game 3
 	halt 									; game 4
-	jmp 	demoGame 						; game 5
+	halt 									; game 5
 	halt 									; game 6
 	halt 									; game 7

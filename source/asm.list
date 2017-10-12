@@ -1,5 +1,4 @@
 variables.asm
 main.asm
 system.asm
-games/demo.asm
 games/asteroids.asm
