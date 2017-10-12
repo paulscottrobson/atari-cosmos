@@ -18,6 +18,7 @@ PlayerMissile = 11
 Player = 12 								; by convention, player.
 LeftDigit = 13 								; by convention, left and right digit addresses.
 RightDigit = 14
+Lives = 15 									; number of lives left.
 ;
 ;		Page 3 is common used memory - timers, I/O etc that belong to both players.
 ;

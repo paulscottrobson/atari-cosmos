@@ -6,7 +6,7 @@ window.onload = function() {
 
 class CosmosApplication extends Phaser.Game {
 
-    private static gameID = 3;
+    private static gameID = 1;
 
     constructor() {
         // Call the super constructor.

@@ -53,6 +53,9 @@ class CosmosDisplay {
         }
     }
 
+    setHologram(n:number): void {
+        this.holoDisplay.setHologram(n);
+    }
     /**
      * Do end of frame on display
      * 

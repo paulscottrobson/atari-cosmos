@@ -35,7 +35,11 @@ SELLoop:
 	aisc 	1 								; make 0/1 1/2
 	xad 	2,RightDigit
 
-;	jp 		InitialiseGames 				; uncomment this to run automatically S/1.
+; **********************************************************************************************************
+;												HACK
+; **********************************************************************************************************
+
+	;jp 		InitialiseGames 				; uncomment this to run automatically S/1.
 
 SELReleaseKey:
 	jsr 	SELSkipCtrlKey
@@ -120,6 +124,7 @@ Player2IsDead:
 ; **********************************************************************************************************
 
 RunGameCode:
+	jsrp 	CommonNewTurn 					; clear the screen
 	lbi 	GameID 							; point to GameID
 	smb 	3 								; set bit 3 so we can use offset 40.
 	clra
@@ -127,8 +132,7 @@ RunGameCode:
 	jid 									; jump.
 
 RunInitCode:
-	jsrp 	ClearScreen 					; clear the screen
-	jsr 	CommonInitialise 
+	jsrp 	CommonInitialise 				
 	lbi 	GameID 							; this is the same as RunSetupCode except it is called 
 	smb 	3 								; with carry set, and you are supposed to return from it !
 	clra
@@ -186,8 +190,8 @@ CMExit:
 ; **********************************************************************************************************
 
 	offset 	48  			
-	jmp 	demogame 						; game 0 (game under development - no hologram on emulator)
-	halt 									; game 1
+	jmp 	Asteroids 						; game 0 (game under development - no hologram on emulator)
+	jmp 	Asteroids						; game 1 (Asteroids)
 	halt 									; game 2
 	jmp 	demogame 						; game 3
 	halt 									; game 4

@@ -79,6 +79,7 @@ class Hardware implements IHardware {
                 }
             }
         }
+        this.display.setHologram((xCol & 0x80) != 0 ? 2 : 1);
     }
 
     endOfFrame(): void {

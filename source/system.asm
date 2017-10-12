@@ -247,7 +247,7 @@ SWToggleBU:
 
 ; **********************************************************************************************************
 ;
-;				Timing System - calls repaint twice for fast, three times for slow
+;					Timing System - calls repaint once for fast, twice for slow
 ;
 ;							Note: Must be called at level 0 (LQID)
 ;
@@ -256,10 +256,12 @@ SWToggleBU:
 FN__Update:
 	jsrp	ScanKeyboard 					; scan keyboard
 	jsrp	Repaint 						; repaint
-	jsrp	Repaint 						; repaint
 	lbi 	GameSpeed 						; point to the game speed 
-	skmbz 	0 								; if bit 0 clear (slow) skip this adjustment
+	skmbz 	0 								; if bit 0 clear (slow) do this adjustment
+	jp 		UPFast
+UPSlow:
 	jsrp	Repaint 						; repaint
+UPFast:
 	lbi 	Timer+4 						; point to the timers.
 UPTimerLoop:
 	ld 		0 								; get timer value
@@ -572,6 +574,9 @@ CCCoordinates:
 ;
 ; **********************************************************************************************************
 
+FN__ShortDelay:
+	clra
+	aisc 	2
 FN__Delay:
 	comp 									; negate as counting up	
 	lbi  	Timer 							; write here
@@ -612,14 +617,55 @@ FN__Hologram2:
 
 ; **********************************************************************************************************
 ;
-;									Initialisation done in every game
+;									Jump here when a life is lost.
 ;
 ; **********************************************************************************************************
 
-CommonInitialise:
+LifeLost:
+	lbi 	2,Lives 						; read lives
+	ld 		0 
+	aisc 	15 								; subtract 1
+	jmp 	KillPlayer 
+	x 		0
+	jmp 	GameTurnOver
+
+; **********************************************************************************************************
+;
+;							Jump here to immediately kill the current player
+;
+; **********************************************************************************************************
+
+KillPlayer:
+	lbi 	2,InfoBits 						; set infobits 1.
+	smb 	0
+	jmp 	GameTurnOver
+
+
+; **********************************************************************************************************
+;
+;									Initialisation done in every turn
+;
+; **********************************************************************************************************
+
+FN__CommonNewTurn:
+	jsrp 	ClearScreen
 	lbi 	0,Player 						; put player in bottom centre.
 	stii 	4
 	lbi 	1,Player
 	stii 	8+5
+	ret
+
+; **********************************************************************************************************
+;
+;									Initialisation done in every game
+;
+; **********************************************************************************************************
+
+FN__CommonInitialise:
+	lbi 	2,LeftDigit 					; reset score.
+	stii 	0
+	stii 	0
+	lbi 	2,Lives 						; reset lives
+	stii 	2								; 2 is 3 because it fails when lives was 0.
 	ret
 
