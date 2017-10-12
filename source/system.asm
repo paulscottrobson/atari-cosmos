@@ -12,7 +12,8 @@
 ;
 ; **********************************************************************************************************
 
-	page 	24
+	page 	4
+
 											; screen mapping
 	byte 	$00 							; x bit patterns, from not displayed (0) 1-7
 	byte 	$40
@@ -57,7 +58,6 @@
 ; **********************************************************************************************************
 
 	offset 	32
-											; keyboard mapping
 	byte 	$80 							; bit 0 Up/1 bit 1 Left/2 bit2 Down/3 bit3 Right/4
 	byte 	$40 							; bit 0 Start bit1 Skill bit2 Players
 	byte 	$20 							; bit 0 Fire
@@ -108,6 +108,7 @@ RPContinue:
 	xad 	RowTemp 						; save it in RowTemp
 
 	clra 									; A:M now points to the table in the first 16 bytes.
+;	aisc 	MappingTable/16&15
 	lqid 									; read the 8 bit pattern into Q.
 	skmbz 	3 								; if M(B) is in range 0-7 it is 'X', so skip.
 	jp 		RPDoneY 						; otherwise we have done Y, so complete.
@@ -193,7 +194,7 @@ FN__ScanKeyboard:
 	x 		0 								; save current index in this "next" slot
 SKLoop:
 	clra
-	aisc 	2 								; this access the keyboard lines table.
+	aisc 	2
 	lqid 									; copy bit pattern into Q
 
 	ld 		0 								; go to previous slot preserving the value in this one.
@@ -423,7 +424,6 @@ RANDXor:
 ;
 ;								  Increment the seven segment LED pair
 ;
-;							Note: if counts past 99 will change 2,RightDigit-1
 ; **********************************************************************************************************
 
 FN__BumpCounter:
@@ -436,6 +436,9 @@ BumpLoop:
 	aisc 	6								; skip if bumping left
 	ret
 	xds 	0 								; write it back, will be zero and decrement.
+	cba 		
+	aisc 	16-LeftDigit 					; will skip for left/right digit
+	ret
 	jp 		BumpLoop
 
 ; **********************************************************************************************************
@@ -563,8 +566,49 @@ CCCoordinates:
 	cab
 	retsk
 
+; **********************************************************************************************************
+;
+;								Timed Delay of approximately A+1 seconds
+;
+; **********************************************************************************************************
 
+FN__Delay:
+	comp 									; negate as counting up	
+	lbi  	Timer 							; write here
+	xis 	0 								; write it bump to timer + 1
+	clra 									; starts at zero.
+DLYLoop:
+	x 		0 								; write value back
+	jsrp 	Repaint 						; update screen
+	lbi 	Timer+1 						; count from here
+DLYPrevious:
+	ld 		0 								; load and bump
+	aisc 	1
+	jmp 	DLYLoop 						; no skip, write back via x 0
+	xds 	0 								; previous counter
+	jp 		DLYPrevious
+	ret
 
+; **********************************************************************************************************
+;
+;									Set hologram 1 or 2 or Player (Pn = n)
+;
+; **********************************************************************************************************
+
+FN__Hologram1:
+	lbi 	HoloDisplay 					; hologram#1
+	stii 	0
+	ret
+
+FN__PlayerHologram:
+	lbi 	2,InfoBits 						; if bit 3 of infobits set it is player 1
+	skmbz 	3 								; skip of player 2.
+	jp 		FN__Hologram1
+
+FN__Hologram2:
+	lbi 	HoloDisplay 					; hologram#2
+	stii 	8
+	ret
 
 ; **********************************************************************************************************
 ;
@@ -578,3 +622,4 @@ CommonInitialise:
 	lbi 	1,Player
 	stii 	8+5
 	ret
+

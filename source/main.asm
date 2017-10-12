@@ -35,6 +35,8 @@ SELLoop:
 	aisc 	1 								; make 0/1 1/2
 	xad 	2,RightDigit
 
+;	jp 		InitialiseGames 				; uncomment this to run automatically S/1.
+
 SELReleaseKey:
 	jsr 	SELSkipCtrlKey
 	jp 		SELWaitKey

@@ -478,7 +478,7 @@ code = """
 """.split("\n")[1:]
 
 asm = Assemble(open("rom.lst","w"))
-files = [x.strip() for x in open("asm.list").readlines() if x.strip() != "" and x[0] != '#']
+files = [x.strip() for x in open("asm.list").readlines() if x.strip() != "" and x[0] != ';']
 try:
 	for f in files:
 		asm.assembleFile(f)

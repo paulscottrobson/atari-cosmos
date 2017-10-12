@@ -1,4 +1,4 @@
 variables.asm
 main.asm
-demo.asm
 system.asm
+games/demo.asm

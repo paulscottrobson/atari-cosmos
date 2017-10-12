@@ -1,8 +1,9 @@
-	page 	16
+	page
 
 demogame:
 	skc 
-	jp 		game_code	
+	jp 		game_start
+
 
 	lbi 	0,2
 	stii 	2
@@ -15,6 +16,10 @@ demogame:
 	lbi 	1,5
 	stii 	10
 	ret
+
+game_start:
+	jsrp 	PlayerHologram
+
 
 game_code:
 	jsrp 	Update
