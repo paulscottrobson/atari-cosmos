@@ -27,7 +27,7 @@ class Hologram:
 						xd = x - self.cellSize/2
 						yd = y - self.cellSize/2
 						dist = math.sqrt(xd*xd+yd*yd) / (self.cellSize/2)
-						red = min(255,305-dist*200)
+						red = int(min(255,305-dist*200))
 						pix = pDraw[x+x1,y+y1]
 						if pix[3] > 80:
 							if dist < 1:
@@ -39,24 +39,6 @@ class Hologram:
 						pix2 = pImage[x+x1,y+y1]
 						if pix2[3] < 80:
 							pImage[x+x1,y+y1] = (0,0,0,255)
-
-#				#self.LED.putpixel((x,y),0xFF000000+dist)
-#
-#		self.lit = Image.new("RGBA",(self.cellSize*7,self.cellSize*6),(0,0,0,0))
-#		for x in range(0,7):
-#			for y in range(0,6):
-#				self.lit.paste(self.LED,(x*self.cellSize,y*self.cellSize))
-#
-#		self.comp = Image.alpha_composite(self.scaleImage,self.lit)
-#
-#		pComp = self.comp.load()
-#		pScale = self.scaleImage.load()
-#		for x in range(0,self.cellSize*7):
-#			for y in range(0,self.cellSize*6):
-#				image = pScale[x,y]
-#				if image[3] < 13:
-#					pScale[x,y] = (0,0,0,255)
-#				image = pComp[x,y]
 
 		self.result = Image.new("RGBA",(self.cellSize*7,self.cellSize*12),(0,0,0,0))
 		self.result.paste(self.litImage,(0,0))

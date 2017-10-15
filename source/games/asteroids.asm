@@ -73,6 +73,3 @@ Launch:										; launch a new asteroid
 	x 		1
 	rmb 	3 								; make 0.n 0-7
 	jp 		ASLoop 							; go round again.
-
-
-

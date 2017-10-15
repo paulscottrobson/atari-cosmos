@@ -8,6 +8,14 @@
 
 import sys,os,re 
 
+if sys.version_info < (3,):
+    def b(x):
+        return x
+else:
+    import codecs
+    def b(x):
+        return codecs.latin_1_encode(x)[0]
+
 # *************************************************************************************************************
 #
 #													Error classes
@@ -160,7 +168,7 @@ class ROMMemory:
 		print("Used {0} bytes of ROM ({1}%)".format(len(used),len(used)*100/2048))
 		romNum = [0 if x is None else x for x in self.memory]
 		rom = "".join(chr(x) for x in romNum)
-		open(name,"wb").write(rom)
+		open(name,"wb").write(b(rom))
 		if self.listStream is not None:
 			k = [x for x in self.listing.keys()]			
 			k.sort()
@@ -268,6 +276,8 @@ class OpcodeDictionary:
 			else:
 				if int(addr/64) != int(operand/64):
 					raise AssemblerException("JP to different page")
+				if addr%64 >= 62:
+					raise AssemblerException("JP on page border")
 				return 0xC0 + (operand & 0x3F)
 
 		assert False,"Unknown type or general opcode"

@@ -513,15 +513,39 @@ FN__Kill:
 
 ; **********************************************************************************************************
 ;
+;									Set hologram 1 or 2 or Player (Pn = n)
+;
+; **********************************************************************************************************
+
+FN__Hologram1:
+	lbi 	HoloDisplay 					; hologram#1
+	stii 	0
+	ret
+
+FN__PlayerHologram:
+	lbi 	2,InfoBits 						; if bit 3 of infobits set it is player 1
+	skmbz 	3 								; skip of player 2.
+	jp 		FN__Hologram1
+
+FN__Hologram2:
+	lbi 	HoloDisplay 					; hologram#2
+	stii 	8
+	ret
+
+
+; **********************************************************************************************************
+;
 ;	 Check collision with object at B with all other objects, on collide skip with A/B = collision object
 ;
 ; **********************************************************************************************************
 
 FN__CheckCollision:
+	clra
+	aisc 	14
+FN__CheckCollisionUpto:
+	xad 	RowTemp
 	cba 									; save address of colliding object.
 	xad 	RPWork1 
-	lbi 	RowTemp 						; set the current testing one to 14, the last pixel
-	stii 	14
 CCLoop:
 	ldd 	RPWork1 						; get the object being tested into A.
 	lbi 	RowTemp 						; point B to the currently compared object.
@@ -533,7 +557,7 @@ CCNext:
 	aisc 	15 								; bump, skip for all values > 0
 	ret 									; if value was zero, return without skip.	
 	x 		0 								; write it back
-	jp 		CCLoop 							; and go round again.
+	jmp 	CCLoop 							; and go round again.
 
 CCCoordinates:				
 	sc 										; set carry - this will be reset if no collision.
@@ -592,27 +616,6 @@ DLYPrevious:
 	jmp 	DLYLoop 						; no skip, write back via x 0
 	xds 	0 								; previous counter
 	jp 		DLYPrevious
-	ret
-
-; **********************************************************************************************************
-;
-;									Set hologram 1 or 2 or Player (Pn = n)
-;
-; **********************************************************************************************************
-
-FN__Hologram1:
-	lbi 	HoloDisplay 					; hologram#1
-	stii 	0
-	ret
-
-FN__PlayerHologram:
-	lbi 	2,InfoBits 						; if bit 3 of infobits set it is player 1
-	skmbz 	3 								; skip of player 2.
-	jp 		FN__Hologram1
-
-FN__Hologram2:
-	lbi 	HoloDisplay 					; hologram#2
-	stii 	8
 	ret
 
 ; **********************************************************************************************************
