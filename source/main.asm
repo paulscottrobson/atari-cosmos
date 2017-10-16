@@ -190,9 +190,9 @@ CMExit:
 ; **********************************************************************************************************
 
 	offset 	48  			
-	jmp 	Asteroids 						; game 0 (game under development - no hologram on emulator)
+	jmp 	SpaceInvaders					; game 0 (game under development - no hologram on emulator)
 	jmp 	Asteroids						; game 1 (Asteroids)
-	halt 									; game 2
+	jmp 	SpaceInvaders					; game 2 (Space Invaders)
 	halt 									; game 3
 	halt 									; game 4
 	halt 									; game 5

@@ -69,3 +69,7 @@ c = Combiner("game00_1.png","game00_2.png","comb00.png")
 h = Hologram("1/src01_1.png","game01_1.png")
 h = Hologram("1/src01_2.png","game01_2.png")
 c = Combiner("game01_1.png","game01_2.png","comb01.png")
+
+h = Hologram("2/src02_1.png","game02_1.png")
+h = Hologram("2/src02_2.png","game02_2.png")
+c = Combiner("game02_1.png","game02_2.png","comb02.png")

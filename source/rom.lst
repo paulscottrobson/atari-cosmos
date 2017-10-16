@@ -85,9 +85,9 @@
 06d :   7a       0182:  BYTE  $7A
 06e :   7c       0183:  BYTE  $7C
 06f :   7e       0184:  BYTE  $7E
-070 : 62c0       0193:  JMP  ASTEROIDS
+070 : 6300       0193:  JMP  SPACEINVADERS
 072 : 62c0       0194:  JMP  ASTEROIDS
-074 : 3338       0195:  HALT
+074 : 6300       0195:  JMP  SPACEINVADERS
 076 : 3338       0196:  HALT
 078 : 3338       0197:  HALT
 07a : 3338       0198:  HALT
@@ -479,3 +479,42 @@
 2ea :   16       0073:  X   1
 2eb :   43       0074:  RMB  3
 2ec :   c4       0075:  JP   ASLOOP
+300 :   20       0019:  SKC
+301 :   c3       0020:  JP   INNEWLEVEL
+302 :   48       0021:  RET
+303 :   be       0024:  JSRP  CLEARSCREEN
+304 :   84       0025:  JSRP  COMMONNEWTURN
+305 : 3387       0027:  LBI  0,7
+307 :   4e       0028:  CBA
+308 : 23b9       0029:  XAD  INCOUNT
+30a :   4e       0031:  CBA
+30b :    6       0032:  X   0
+30c :    3       0033:  SKMBZ  2
+30d :   d1       0034:  JP   INNOTROW2
+30e :   15       0035:  LD   1
+30f :   4d       0036:  SMB  0
+310 :   15       0037:  LD   1
+311 :   42       0039:  RMB  2
+312 :    5       0040:  LD   0
+313 :   52       0041:  AISC  2
+314 :    7       0042:  XDS  0
+315 :   ca       0043:  JP   INRESETINVADERSLOOP
+316 :   b6       0046:  JSRP  UPDATE
+317 :   b4       0047:  JSRP  MOVEHPLAYER
+318 :   9a       0050:  JSRP  CHECKFIRE
+319 :   98       0051:  JSRP  MOVEPLAYERMISSILE
+31a :   d6       0052:  JP   INLOOP
+31b :    0       0054:  CLRA
+31c :   57       0055:  AISC  7
+31d :    a       0056:  LBI  0,PLAYERMISSILE
+31e :   8a       0057:  JSRP  CHECKCOLLISIONUPTO
+31f :   d6       0058:  JP   INLOOP
+320 :   94       0059:  JSRP KILL
+321 :   96       0060:  JSRP  KILLPLAYERMISSILE
+322 :   9e       0061:  JSRP  BUMPCOUNTER
+323 : 33b9       0063:  LBI  INCOUNT
+325 :    5       0064:  LD   0
+326 :   5f       0065:  AISC  15
+327 :   c3       0066:  JP   INNEWLEVEL
+328 : 23b9       0067:  XAD  INCOUNT
+32a :   d6       0068:  JP   INLOOP
