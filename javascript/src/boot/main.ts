@@ -34,7 +34,8 @@ class CosmosApplication extends Phaser.Game {
      * @memberof CosmosApplication
      */
     public static getGameID(): number {
-        return CosmosApplication.gameID;
+        var s:string = this.getURLName("game","0");
+        return parseInt(s,10);
     }
 
     /**

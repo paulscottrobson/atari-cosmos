@@ -58,6 +58,7 @@ class Hardware implements IHardware {
     }
 
     readin(): number {
+        console.log(CosmosApplication.getGameID());
         var n:number = ((this.dColumns & CosmosApplication.getGameID()) != 0) ? 1 : 0 ;
         return n;
     }
