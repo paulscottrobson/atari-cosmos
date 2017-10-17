@@ -27,4 +27,5 @@ void  HWIEndFrame(void);
 BYTE8 HWIGetHologramID(void);
 BYTE8 HWIReadGameID(void);
 void HWISetGameID(BYTE8 id);
+void HWISetSFX(BYTE8 sfxID);
 #endif

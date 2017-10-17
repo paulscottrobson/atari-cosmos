@@ -137,8 +137,8 @@ class ROMMemory:
 	def findPage2Address(self):
 		addr = 0xBE
 		while self.memory[addr] is not None or self.memory[addr+1] is not None:
-			addr = addr - 2
-			if addr < 0:
+			addr = addr - 1
+			if addr < 0x80:
 				return None
 		return addr
 
@@ -462,16 +462,30 @@ class Assemble:
 
 	def allocatePage2(self):
 		idents = [x for x in self.identifiers.keys() if x[:4] == "FN__"]
+		page3Pointer = 0xC0
 		for id in idents:
 			fnaddress = self.identifiers[id]
 			address = self.memory.findPage2Address()
 			if address is None:
 				raise AssemblerException("Out of page 2 memory for FN__")
-			self.memory.setPointer(address)
-			self.memory._writeByte(0x60+int(fnaddress/256))
-			self.memory._writeByte(fnaddress % 256)
-			#print("{0} {1:x} {2:x}".format(id,fnaddress,address))
-			self.identifiers[id[4:]] = address
+
+			if address < 0x90:
+				self.memory.setPointer(address+1)
+				self.memory._writeByte(page3Pointer) 	# e.g. jp to page 3
+				self.memory.setPointer(page3Pointer) 	# put a jump in page 3
+				self.memory._writeByte(0x60+int(fnaddress/256))
+				self.memory._writeByte(fnaddress % 256)
+				#print("{0} {1:x} {2:x}".format(id,fnaddress,address+1))
+				self.identifiers[id[4:]] = address+1
+				page3Pointer += 2
+
+
+			else:
+				self.memory.setPointer(address)
+				self.memory._writeByte(0x60+int(fnaddress/256))
+				self.memory._writeByte(fnaddress % 256)
+				#print("{0} {1:x} {2:x}".format(id,fnaddress,address))
+				self.identifiers[id[4:]] = address
 
 	def assembleFile(self,name):
 		try:

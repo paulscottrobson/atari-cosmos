@@ -31,7 +31,7 @@ class Hologram:
 						pix = pDraw[x+x1,y+y1]
 						if pix[3] > 80:
 							if dist < 1:
-								pDraw[x+x1,y+y1] = (max(red,pix[0]),int(pix[1]/1.5),int(pix[2]/1.5),255)
+								pDraw[x+x1,y+y1] = (max(red,pix[0]),int(pix[1]/2),int(pix[2]/2),255)
 						else:
 							pDraw[x1+x,y1+y] = (0,0,0,255)
 							if dist < 1:

@@ -395,6 +395,11 @@ void Beeper::generateSamples(Sint16 *stream, int length)
             }
             return;
        	}
+       	if (freq < 0) {
+       		while (i < length) {
+       			stream[i++] = (rand() & 1) ? AMPLITUDE : -AMPLITUDE;
+       		}
+       	}
        	int samplesToDo = length;
         while (i < samplesToDo) {
             stream[i] = AMPLITUDE * ((((int)v*2/FREQUENCY) % 2) ? -1 : 1);

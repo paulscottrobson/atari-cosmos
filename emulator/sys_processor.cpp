@@ -35,7 +35,7 @@ static BYTE8 firstReset = 1;
 #define INREAD() 	(D & GAMEID()) ? 1 : 0;
 
 #define	LREAD() 	HWIReadKeypad(Q)
-#define	SIOWRITE(n)	{}
+#define	SIOWRITE(n)	HWISetSFX(n)
 #define	UPDATED(b)	HWIWriteColumns((G << 4)|D)
 #define	UPDATEG(b)	HWIWriteColumns((G << 4)|D)
 #define	UPDATEQ(b) 	HWISetSelectedRows(b)

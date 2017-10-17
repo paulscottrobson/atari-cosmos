@@ -17,6 +17,8 @@
 ;	2,11 is next-time-down if non-zero.
 ; 	2,12 is a timer up counter as movement speed varies.
 
+INMBTempX = 2,7
+INMBTempY = 2,8
 INCount = 2,9
 INDirection = 2,10
 INNextDown = 2,11
@@ -184,8 +186,57 @@ INNoMove:									; write back, return and skip
 	retsk
 
 ;
-;	TODO: Fire at player.
+;	Fire at player. It's hard enough with 1 :)
 ;
 INFireInvaders:
+	lbi 	0,8
+
+INFire1:
+	jsrp 	CheckPixelInUse 				; skip if not in use.
+	jmp 	INFireMoveDown
+
+	cba 									; save B in temporary register
+	xad		INMBTempY
+INFindInvader: 								; find live invader to shoot.
+	jsrp 	Random 							; pick random # 
+	xabr 									; trick to AND 7
+	xabr
+	cab 									; put in B
+	ld 		0 								; read X
+	aisc 	15 								; skip if in use e.g. non-zero	
+	jp 		INFindInvader
+
+	ld 		1 								; re-read X and Y and save them.
+	xad 	INMBTempX
+	ld 		1 								
+	xad 	INMBTempY 						; this also fetches the blank slot into B.
+	cab
+	ldd 	INMBTempX 						; copy pixel positions
+	x 		1
+	ldd 	INMBTempY
+	x 		1
+INNextFire:
 	ret
-			
+
+INFireMoveDown:
+	ldd 	Timer+2 						; check a timer.
+	aisc 	8 								; will skip if time out.
+	jp 		INNextFire
+
+	jsrp 	MoveDown 						; move missile down, skips if off bottom.
+	jp 		INCheckCollision
+	jsrp 	Kill 							; kill the missile.
+	jp 		INNextFire 						; do next missile.
+
+INCheckCollision:
+	ld 		1 								; read Y position.
+	ld 		1
+	aisc 	3 								; skip if it is 5
+	jp 		INNextFire 						; < 5 go back.
+
+	ldd 	0,Player 						; read player position
+	ske 									; skip if equal e.g. collided
+	jp 		INNextFire 						; nope, go down again.
+
+	jmp 	ShowHolo2LifeLost 				; show holo 2, life lost (can save a byte here if needed)
+	

@@ -25,6 +25,10 @@ static BYTE8 columnSelect,rowSelect;
 static BYTE8 holoID = 0;
 // 	Game ID
 static BYTE8 currentGameID = 0;
+//  Beeper
+static Beeper beeper;
+//  Frames to sound off
+static BYTE8 soundOff;
 
 #define LEDCOUNTER(x,y) ledCount[(x)+7*(y)]
 
@@ -38,6 +42,7 @@ void HWIReset(void) {
 	for (BYTE8 i = 0;i < 8;i++) currentRows[i] = 0;
 	for (BYTE8 i = 0;i < 8*7;i++) ledCount[i] = 0;
 	columnSelect = rowSelect = holoID = 0;
+	soundOff = 1;
 }
 
 // *******************************************************************************************************************************
@@ -123,6 +128,10 @@ void HWITimerOverflow(void) {
 // *******************************************************************************************************************************
 
 void HWIEndFrame() {
+	if (soundOff > 0) {
+		soundOff--;
+		if (soundOff == 0) GFXSetFrequency(0);
+	}
 	for (BYTE8 row = 0;row < 8;row++) {
 		if (currentRows[row] != 0) {
 			for (BYTE8 col = 0;col < 7;col++) {
@@ -147,4 +156,20 @@ void HWISetGameID(BYTE8 id) {
 
 BYTE8 HWIReadGameID(void) {
 	return currentGameID;
+}
+
+// *******************************************************************************************************************************
+//											Set sound effect (XAS)
+// *******************************************************************************************************************************
+
+void HWISetSFX(BYTE8 sfxID) {
+	// printf("Sound %d player\n",sfxID);
+	// 9 shortwht 10 longwht 11 shortlow 12 longlow 13 shorthigh 14 longhigh 15 gameover
+	int f = (sfxID - 9)/2 * 200 + 110;
+	soundOff = (sfxID & 1) ? 4:25;
+	if (sfxID == 15) {
+		f = 110;soundOff = 60;
+	}
+	if (f == 110) f = -1;
+	GFXSetFrequency(f);
 }

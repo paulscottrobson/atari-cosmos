@@ -498,107 +498,143 @@
 2f0 :   16       0083:  X   1
 2f1 :   43       0084:  RMB  3
 2f2 :   c4       0085:  JP   ASLOOP
-300 :   20       0028:  SKC
-301 :   c3       0029:  JP   INNEWLEVEL
-302 :   48       0030:  RET
-303 :   8b       0035:  JSRP  CLEARSCREEN
-304 :   83       0036:  JSRP  COMMONNEWTURN
-305 : 3387       0038:  LBI  0,7
-307 :   4e       0039:  CBA
-308 : 23a9       0040:  XAD  INCOUNT
-30a :   4e       0042:  CBA
-30b :    6       0043:  X   0
-30c :    3       0044:  SKMBZ  2
-30d :   d1       0045:  JP   INNOTROW2
-30e :   15       0046:  LD   1
-30f :   4d       0047:  SMB  0
-310 :   15       0048:  LD   1
-311 :   42       0050:  RMB  2
-312 :    5       0051:  LD   0
-313 :   52       0052:  AISC  2
-314 :    7       0053:  XDS  0
-315 :   ca       0054:  JP   INRESETINVADERSLOOP
-316 :   2a       0055:  LBI  INNEXTDOWN
-317 :   70       0056:  STII  0
-318 :   b8       0061:  JSRP  UPDATE
-319 : 6b6c       0062:  JSR  INCHECKSPEED
-31b : 6b33       0063:  JSR  INMOVEINVADERS
-31d : 6b79       0064:  JSR  INFIREINVADERS
-31f :   b6       0065:  JSRP  MOVEHPLAYER
-320 :   9c       0068:  JSRP  CHECKFIRE
-321 :   9a       0069:  JSRP  MOVEPLAYERMISSILE
-322 :   d8       0070:  JP   INLOOP
-323 :    0       0072:  CLRA
-324 :   57       0073:  AISC  7
-325 :    a       0074:  LBI  0,PLAYERMISSILE
-326 :   8e       0075:  JSRP  CHECKCOLLISIONUPTO
-327 :   d8       0076:  JP   INLOOP
-328 :   96       0078:  JSRP KILL
-329 :   98       0079:  JSRP  KILLPLAYERMISSILE
-32a :   a0       0080:  JSRP  BUMPCOUNTER
-32b : 33a9       0082:  LBI  INCOUNT
-32d :    5       0083:  LD   0
-32e :   5f       0084:  AISC  15
-32f :   c3       0085:  JP   INNEWLEVEL
-330 : 23a9       0086:  XAD  INCOUNT
-332 :   d8       0087:  JP   INLOOP
-333 :   88       0092:  JSRP SFXLOWSHORTBEEP
-334 :   2a       0093:  LBI  INNEXTDOWN
-335 :    0       0094:  CLRA
-336 :   21       0095:  SKE
-337 : 6355       0096:  JMP  INMOVEDOWN
-339 : 3387       0101:  LBI  0,7
-33b :   9e       0103:  JSRP  CHECKPIXELINUSE
-33c : 6343       0104:  JMP  INMOVEINVADER
-33e :    5       0106:  LD   0
-33f :    7       0107:  XDS  0
-340 : 633b       0108:  JMP  INMOVENORMALLOOP
-342 :   48       0109:  RET
-343 : 232a       0114:  LDD  INDIRECTION
-345 :   5f       0115:  AISC  15
-346 :   44       0116:  NOP
-347 :   31       0117:  ADD
-348 :    6       0118:  X   0
-349 :    5       0119:  LD   0
-34a :   5e       0120:  AISC  14
-34b :   cf       0121:  JP   INREACHEDEDGE
-34c :   5b       0122:  AISC  11
-34d : 633e       0123:  JMP  INMOVENORMAL2
-34f :    0       0128:  CLRA
-350 :   51       0129:  AISC  1
-351 : 23ab       0130:  XAD  INNEXTDOWN
-353 : 633e       0131:  JMP  INMOVENORMAL2
-355 :    6       0136:  X   0
-356 :   29       0138:  LBI  INDIRECTION
-357 :    0       0139:  CLRA
-358 :   52       0140:  AISC  2
-359 :    2       0141:  XOR
-35a :    6       0142:  X   0
-35b : 3387       0146:  LBI  0,7
-35d :   9e       0148:  JSRP  CHECKPIXELINUSE
-35e :   e3       0149:  JP   INMOVEINVADERDOWN
-35f :    5       0151:  LD   0
-360 :    7       0152:  XDS  0
-361 :   dd       0153:  JP   INMOVEDOWNLOOP
-362 :   48       0154:  RET
-363 :   15       0159:  LD   1
-364 :    5       0160:  LD   0
-365 :   51       0161:  AISC  1
-366 :    6       0162:  X   0
-367 :   15       0163:  LD   1
-368 :   53       0164:  AISC  3
-369 :   df       0165:  JP   INMOVEDOWN2
-36a : 6081       0166:  JMP  SHOWHOLO2LIFELOST
-36c :   2b       0171:  LBI  INTIMER
-36d :    5       0172:  LD   0
-36e :   51       0173:  AISC  1
-36f :   f7       0174:  JP   INNOMOVE
-370 : 2329       0176:  LDD  INCOUNT
-372 :   40       0177:  COMP
-373 :   5e       0178:  AISC  14
-374 :   44       0179:  NOP
-375 :    6       0180:  X   0
-376 :   48       0181:  RET
-377 :    6       0183:  X   0
-378 :   49       0184:  RETSK
-379 :   48       0190:  RET
+300 :   20       0030:  SKC
+301 :   c3       0031:  JP   INNEWLEVEL
+302 :   48       0032:  RET
+303 :   8b       0037:  JSRP  CLEARSCREEN
+304 :   83       0038:  JSRP  COMMONNEWTURN
+305 : 3387       0040:  LBI  0,7
+307 :   4e       0041:  CBA
+308 : 23a9       0042:  XAD  INCOUNT
+30a :   4e       0044:  CBA
+30b :    6       0045:  X   0
+30c :    3       0046:  SKMBZ  2
+30d :   d1       0047:  JP   INNOTROW2
+30e :   15       0048:  LD   1
+30f :   4d       0049:  SMB  0
+310 :   15       0050:  LD   1
+311 :   42       0052:  RMB  2
+312 :    5       0053:  LD   0
+313 :   52       0054:  AISC  2
+314 :    7       0055:  XDS  0
+315 :   ca       0056:  JP   INRESETINVADERSLOOP
+316 :   2a       0057:  LBI  INNEXTDOWN
+317 :   70       0058:  STII  0
+318 :   b8       0063:  JSRP  UPDATE
+319 : 6b6c       0064:  JSR  INCHECKSPEED
+31b : 6b33       0065:  JSR  INMOVEINVADERS
+31d : 6b79       0066:  JSR  INFIREINVADERS
+31f :   b6       0067:  JSRP  MOVEHPLAYER
+320 :   9c       0070:  JSRP  CHECKFIRE
+321 :   9a       0071:  JSRP  MOVEPLAYERMISSILE
+322 :   d8       0072:  JP   INLOOP
+323 :    0       0074:  CLRA
+324 :   57       0075:  AISC  7
+325 :    a       0076:  LBI  0,PLAYERMISSILE
+326 :   8e       0077:  JSRP  CHECKCOLLISIONUPTO
+327 :   d8       0078:  JP   INLOOP
+328 :   96       0080:  JSRP KILL
+329 :   98       0081:  JSRP  KILLPLAYERMISSILE
+32a :   a0       0082:  JSRP  BUMPCOUNTER
+32b : 33a9       0084:  LBI  INCOUNT
+32d :    5       0085:  LD   0
+32e :   5f       0086:  AISC  15
+32f :   c3       0087:  JP   INNEWLEVEL
+330 : 23a9       0088:  XAD  INCOUNT
+332 :   d8       0089:  JP   INLOOP
+333 :   88       0094:  JSRP SFXLOWSHORTBEEP
+334 :   2a       0095:  LBI  INNEXTDOWN
+335 :    0       0096:  CLRA
+336 :   21       0097:  SKE
+337 : 6355       0098:  JMP  INMOVEDOWN
+339 : 3387       0103:  LBI  0,7
+33b :   9e       0105:  JSRP  CHECKPIXELINUSE
+33c : 6343       0106:  JMP  INMOVEINVADER
+33e :    5       0108:  LD   0
+33f :    7       0109:  XDS  0
+340 : 633b       0110:  JMP  INMOVENORMALLOOP
+342 :   48       0111:  RET
+343 : 232a       0116:  LDD  INDIRECTION
+345 :   5f       0117:  AISC  15
+346 :   44       0118:  NOP
+347 :   31       0119:  ADD
+348 :    6       0120:  X   0
+349 :    5       0121:  LD   0
+34a :   5e       0122:  AISC  14
+34b :   cf       0123:  JP   INREACHEDEDGE
+34c :   5b       0124:  AISC  11
+34d : 633e       0125:  JMP  INMOVENORMAL2
+34f :    0       0130:  CLRA
+350 :   51       0131:  AISC  1
+351 : 23ab       0132:  XAD  INNEXTDOWN
+353 : 633e       0133:  JMP  INMOVENORMAL2
+355 :    6       0138:  X   0
+356 :   29       0140:  LBI  INDIRECTION
+357 :    0       0141:  CLRA
+358 :   52       0142:  AISC  2
+359 :    2       0143:  XOR
+35a :    6       0144:  X   0
+35b : 3387       0148:  LBI  0,7
+35d :   9e       0150:  JSRP  CHECKPIXELINUSE
+35e :   e3       0151:  JP   INMOVEINVADERDOWN
+35f :    5       0153:  LD   0
+360 :    7       0154:  XDS  0
+361 :   dd       0155:  JP   INMOVEDOWNLOOP
+362 :   48       0156:  RET
+363 :   15       0161:  LD   1
+364 :    5       0162:  LD   0
+365 :   51       0163:  AISC  1
+366 :    6       0164:  X   0
+367 :   15       0165:  LD   1
+368 :   53       0166:  AISC  3
+369 :   df       0167:  JP   INMOVEDOWN2
+36a : 6081       0168:  JMP  SHOWHOLO2LIFELOST
+36c :   2b       0173:  LBI  INTIMER
+36d :    5       0174:  LD   0
+36e :   51       0175:  AISC  1
+36f :   f7       0176:  JP   INNOMOVE
+370 : 2329       0178:  LDD  INCOUNT
+372 :   40       0179:  COMP
+373 :   5e       0180:  AISC  14
+374 :   44       0181:  NOP
+375 :    6       0182:  X   0
+376 :   48       0183:  RET
+377 :    6       0185:  X   0
+378 :   49       0186:  RETSK
+379 : 3388       0192:  LBI  0,8
+37b :   9e       0195:  JSRP  CHECKPIXELINUSE
+37c : 6396       0196:  JMP  INFIREMOVEDOWN
+37e :   4e       0198:  CBA
+37f : 23a8       0199:  XAD  INMBTEMPY
+381 :   a2       0201:  JSRP  RANDOM
+382 :   12       0202:  XABR
+383 :   12       0203:  XABR
+384 :   50       0204:  CAB
+385 :    5       0205:  LD   0
+386 :   5f       0206:  AISC  15
+387 :   c1       0207:  JP   INFINDINVADER
+388 :   15       0209:  LD   1
+389 : 23a7       0210:  XAD  INMBTEMPX
+38b :   15       0211:  LD   1
+38c : 23a8       0212:  XAD  INMBTEMPY
+38e :   50       0213:  CAB
+38f : 2327       0214:  LDD  INMBTEMPX
+391 :   16       0215:  X   1
+392 : 2328       0216:  LDD  INMBTEMPY
+394 :   16       0217:  X   1
+395 :   48       0219:  RET
+396 : 2332       0222:  LDD  TIMER+2
+398 :   58       0223:  AISC  8
+399 :   d5       0224:  JP   INNEXTFIRE
+39a :   a8       0226:  JSRP  MOVEDOWN
+39b :   de       0227:  JP   INCHECKCOLLISION
+39c :   96       0228:  JSRP  KILL
+39d :   d5       0229:  JP   INNEXTFIRE
+39e :   15       0232:  LD   1
+39f :   15       0233:  LD   1
+3a0 :   53       0234:  AISC  3
+3a1 :   d5       0235:  JP   INNEXTFIRE
+3a2 : 230c       0237:  LDD  0,PLAYER
+3a4 :   21       0238:  SKE
+3a5 :   d5       0239:  JP   INNEXTFIRE
+3a6 : 6081       0241:  JMP  SHOWHOLO2LIFELOST
