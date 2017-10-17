@@ -6,6 +6,74 @@
 ; **********************************************************************************************************
 ; **********************************************************************************************************
 
+	page 	3
+	offset 	32
+; **********************************************************************************************************
+;
+;									  Sound effects functions
+;
+; **********************************************************************************************************
+
+FN__SFXShortFire:
+	lbi 	0,9
+FN__SFXLongFire:
+	lbi 	0,10
+FN__SFXLowShortBeep:
+	lbi 	0,11
+FN__SFXLowLongBeep:
+	lbi 	0,12
+FN__SFXHighShortBeep:
+	lbi 	0,13
+FN__SFXHighLongBeep:
+	lbi 	0,14
+FN__SFXGameOver:
+	lbi 	0,15
+	cba
+	xas
+	ret
+
+; **********************************************************************************************************
+;
+;									Jump here when a life is lost.
+;
+; **********************************************************************************************************
+
+LifeLost:
+	lbi 	2,Lives 						; read lives
+	ld 		0 
+	aisc 	15 								; subtract 1
+	jmp 	KillPlayer 
+	x 		0
+	jmp 	GameTurnOver
+
+; **********************************************************************************************************
+;
+;							Jump here to immediately kill the current player
+;
+; **********************************************************************************************************
+
+KillPlayer:
+	lbi 	2,InfoBits 						; set infobits 1.
+	smb 	0
+	jmp 	GameTurnOver
+
+
+
+; **********************************************************************************************************
+;
+;									Initialisation done in every turn
+;
+; **********************************************************************************************************
+
+FN__CommonNewTurn:
+	jsrp 	ClearScreen
+	lbi 	0,Player 						; put player in bottom centre.
+	stii 	4
+	lbi 	1,Player
+	stii 	8+5
+	ret
+
+
 ; **********************************************************************************************************
 ;
 ;								Mapping from coordinates to screen bits
@@ -616,108 +684,5 @@ DLYPrevious:
 	jmp 	DLYLoop 						; no skip, write back via x 0
 	xds 	0 								; previous counter
 	jp 		DLYPrevious
-	ret
-
-; **********************************************************************************************************
-;
-;									Jump here when a life is lost.
-;
-; **********************************************************************************************************
-
-LifeLost:
-	lbi 	2,Lives 						; read lives
-	ld 		0 
-	aisc 	15 								; subtract 1
-	jmp 	KillPlayer 
-	x 		0
-	jmp 	GameTurnOver
-
-; **********************************************************************************************************
-;
-;							Jump here to immediately kill the current player
-;
-; **********************************************************************************************************
-
-KillPlayer:
-	lbi 	2,InfoBits 						; set infobits 1.
-	smb 	0
-	jmp 	GameTurnOver
-
-; **********************************************************************************************************
-;
-;										Clear Memory / Clear Screen
-;
-; **********************************************************************************************************
-
-FN__ClearScreen:
-	lbi 	1,15 							; just clear 0-1
-ClearMemory:
-	lbi 	7,15 							; clear 0-7.
-CMLoop:	
-	clra 									; inner loop, clear page.
-	xds 	0
-	jp 		CMLoop
-	xabr									; do previous page
-	aisc 	15
-	jp 		CMExit
-	xabr
-	jp 		CMLoop
-;
-CMExit:
-	lbi 	1,LeftDigit						; set the Left/Right LED
-	stii 	14
-	stii 	15
-	ret
-
-; **********************************************************************************************************
-;
-;									  Sound effects functions
-;
-; **********************************************************************************************************
-
-FN__SFXShortFire:
-	lbi 	0,9
-FN__SFXLongFire:
-	lbi 	0,10
-FN__SFXLowShortBeep:
-	lbi 	0,11
-FN__SFXLowLongBeep:
-	lbi 	0,12
-FN__SFXHighShortBeep:
-	lbi 	0,13
-FN__SFXHighLongBeep:
-	lbi 	0,14
-FN__SFXGameOver:
-	lbi 	0,15
-	cba
-	xas
-	ret
-
-; **********************************************************************************************************
-;
-;									Initialisation done in every turn
-;
-; **********************************************************************************************************
-
-FN__CommonNewTurn:
-	jsrp 	ClearScreen
-	lbi 	0,Player 						; put player in bottom centre.
-	stii 	4
-	lbi 	1,Player
-	stii 	8+5
-	ret
-
-; **********************************************************************************************************
-;
-;									Initialisation done in every game
-;
-; **********************************************************************************************************
-
-FN__CommonInitialise:
-	lbi 	2,LeftDigit 					; reset score.
-	stii 	0
-	stii 	0
-	lbi 	2,Lives 						; reset lives
-	stii 	2								; 2 is 3 because it fails when lives was 0.
 	ret
 

@@ -134,6 +134,32 @@ RunGameCode:
 
 ; **********************************************************************************************************
 ;
+;										Clear Memory / Clear Screen
+;
+; **********************************************************************************************************
+
+FN__ClearScreen:
+	lbi 	1,15 							; just clear 0-1
+ClearMemory:
+	lbi 	7,15 							; clear 0-7.
+CMLoop:	
+	clra 									; inner loop, clear page.
+	xds 	0
+	jp 		CMLoop
+	xabr									; do previous page
+	aisc 	15
+	jp 		CMExit
+	xabr
+	jp 		CMLoop
+;
+CMExit:
+	lbi 	1,LeftDigit						; set the Left/Right LED
+	stii 	14
+	stii 	15
+	ret
+
+; **********************************************************************************************************
+;
 ;												Game Vectors
 ;
 ; **********************************************************************************************************
@@ -166,3 +192,18 @@ VectorBase:
 	byte 	VectorBase+12 &255
 	byte 	VectorBase+14 &255
 	byte 	VectorBase+16 &255
+
+; **********************************************************************************************************
+;
+;									Initialisation done in every game
+;
+; **********************************************************************************************************
+
+FN__CommonInitialise:
+	lbi 	2,LeftDigit 					; reset score.
+	stii 	0
+	stii 	0
+	lbi 	2,Lives 						; reset lives
+	stii 	2								; 2 is 3 because it fails when lives was 0.
+	ret
+

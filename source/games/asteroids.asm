@@ -9,9 +9,6 @@
 	page
 
 Asteroids:
-	skc  									; skip on CS (initialise)
-	jp 		ASPlay
-	ret										; no initialisation code.
 
 ASPlay:
 	jsrp	Hologram1

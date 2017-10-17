@@ -27,9 +27,6 @@ INTimer = 2,12
 	page
 
 SpaceInvaders:
-	skc  									; skip on CS (initialise)
-	jp 		INNewLevel
-	ret										; no initialisation code.
 ;
 ;	Start a new level
 ;
@@ -204,7 +201,7 @@ INFindInvader: 								; find live invader to shoot.
 	cab 									; put in B
 	ld 		0 								; read X
 	aisc 	15 								; skip if in use e.g. non-zero	
-	jp 		INFindInvader
+	jmp		INFindInvader
 
 	ld 		1 								; re-read X and Y and save them.
 	xad 	INMBTempX

@@ -18,10 +18,6 @@ OUOppMissile = 9
 	page
 
 Outlaw:
-	skc  									; skip on CS (initialise)
-	jp 		OUNewFight
-	ret										; no initialisation code.
-
 
 OUNewFight:
 	jsrp	ClearScreen	
