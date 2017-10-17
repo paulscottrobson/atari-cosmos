@@ -66,7 +66,7 @@
 057 : 6300       0150:  JMP  SPACEINVADERS
 059 : 62c0       0151:  JMP  ASTEROIDS
 05b : 6300       0152:  JMP  SPACEINVADERS
-05d : 3338       0153:  HALT
+05d : 63c0       0153:  JMP  OUTLAW
 05f : 3338       0154:  HALT
 061 : 3338       0155:  HALT
 063 : 3338       0156:  HALT
@@ -638,3 +638,107 @@
 3a4 :   21       0238:  SKE
 3a5 :   d5       0239:  JP   INNEXTFIRE
 3a6 : 6081       0241:  JMP  SHOWHOLO2LIFELOST
+3c0 :   20       0021:  SKC
+3c1 :   c3       0022:  JP   OUNEWFIGHT
+3c2 :   48       0023:  RET
+3c3 :   8b       0027:  JSRP CLEARSCREEN
+3c4 :    9       0028:  LBI  0,10
+3c5 :   71       0029:  STII  1
+3c6 :   70       0030:  STII  0
+3c7 :   77       0031:  STII  7
+3c8 :   19       0032:  LBI  1,10
+3c9 :   79       0033:  STII  8+1
+3ca :   70       0034:  STII  0
+3cb :   7c       0035:  STII  8+4
+3cc :   b8       0039:  JSRP  UPDATE
+3cd :   ac       0040:  JSRP  MOVEVPLAYER
+3ce :   44       0041:  NOP
+3cf :   9c       0042:  JSRP  CHECKFIRE
+3d0 : 6bea       0043:  JSR  OUMOVEOPPONENT
+3d2 :    a       0045:  LBI  0,11
+3d3 : 6c0c       0046:  JSR  OUCHECKHITCACTUS
+3d5 :   9e       0047:  JSRP  CHECKPIXELINUSE
+3d6 : 6bdb       0048:  JSR  OUMOVEPLAYERMISSILE
+3d8 : 6c1a       0049:  JSR  OUOPPONENTMISSILE
+3da :   cc       0050:  JP   OUMAINLOOP
+3db :   ae       0055:  JSRP  MOVELEFT
+3dc :   df       0056:  JP   OUPMCHECKCOLLIDE
+3dd :   96       0057:  JSRP  KILL
+3de :   48       0058:  RET
+3df :   15       0061:  LD   1
+3e0 :   40       0062:  COMP
+3e1 :   52       0063:  AISC  2
+3e2 :   48       0064:  RET
+3e3 : 231a       0065:  LDD  1,OUOPPONENT
+3e5 :   21       0066:  SKE
+3e6 :   48       0067:  RET
+3e7 :   a0       0068:  JSRP  BUMPCOUNTER
+3e8 :   89       0069:  JSRP  SFXLONGFIRE
+3e9 :   48       0070:  RET
+3ea : 33b1       0075:  LBI  TIMER+1
+3ec :   13       0076:  SKMBZ   3
+3ed :   ef       0077:  JP   OUISMOVETIME
+3ee :   48       0078:  RET
+3ef :   a2       0080:  JSRP  RANDOM
+3f0 :   5d       0081:  AISC  13
+3f1 : 6c06       0082:  JSR  OUFLIPDIRECTION
+3f3 : 6bfa       0083:  JSR  OUBASICMOVE
+3f5 :   13       0084:  SKMBZ  3
+3f6 : 6401       0085:  JMP  OUMOVEOPPCHECK2
+3f8 : 6c06       0088:  JSR  OUFLIPDIRECTION
+3fa :   29       0090:  LBI  2,OUOPPONENT
+3fb :   35       0091:  LD   3
+3fc :   5f       0092:  AISC  15
+3fd :   44       0093:  NOP
+3fe :   31       0094:  ADD
+3ff :    6       0095:  X   0
+400 :   48       0096:  RET
+401 :    5       0101:  LD   0
+402 :   52       0102:  AISC  2
+403 :   48       0103:  RET
+404 : 63f8       0104:  JMP  OUOUTOFBOUNDS
+406 :   29       0109:  LBI  2,OUOPPONENT
+407 :    0       0110:  CLRA
+408 :   52       0111:  AISC  2
+409 :    2       0112:  XOR
+40a :    6       0113:  X   0
+40b :   48       0114:  RET
+40c :    0       0119:  CLRA
+40d :   54       0120:  AISC  4
+40e :   21       0121:  SKE
+40f :   48       0122:  RET
+410 :   15       0123:  LD   1
+411 :   15       0124:  LD   1
+412 :   56       0125:  AISC  6
+413 :   48       0126:  RET
+414 :   40       0127:  COMP
+415 :   52       0128:  AISC  2
+416 :   48       0129:  RET
+417 :   96       0130:  JSRP  KILL
+418 :   88       0131:  JSRP  SFXLOWSHORTBEEP
+419 :   48       0132:  RET
+41a : 3389       0137:  LBI  0,OUOPPMISSILE
+41c : 6c0c       0138:  JSR  OUCHECKHITCACTUS
+41e : 689e       0140:  JSR  CHECKPIXELINUSE
+420 :   ed       0141:  JP   OUMOVEOPPMISSILE
+421 : 68a2       0143:  JSR  RANDOM
+423 :   55       0144:  AISC  5
+424 :   48       0145:  RET
+425 :   71       0147:  STII  1
+426 : 231a       0148:  LDD  1,OUOPPONENT
+428 : 2399       0149:  XAD  1,OUOPPMISSILE
+42a : 6888       0150:  JSR  SFXLOWSHORTBEEP
+42c :   48       0151:  RET
+42d :   b2       0156:  JSRP  MOVERIGHT
+42e :   f1       0157:  JP   OUOPPCOLLISION
+42f :   96       0158:  JSRP  KILL
+430 :   48       0159:  RET
+431 :    0       0164:  CLRA
+432 :   57       0165:  AISC  7
+433 :   21       0166:  SKE
+434 :   48       0167:  RET
+435 :   15       0168:  LD   1
+436 : 231c       0169:  LDD  1,PLAYER
+438 :   21       0170:  SKE
+439 :   48       0171:  RET
+43a : 6081       0172:  JMP  SHOWHOLO2LIFELOST

@@ -468,7 +468,7 @@ FN__CheckFire:
 	ret 									; not pressed, return.
 CFFire:
 	lbi 	0,PlayerMissile 				; check if PM is free.
-	jsrp 	CheckPixelInUse 				; check not in use, skip if so.
+	jsrp 	CheckPixelInUse 				; check not in use, skip if not in use.
 	ret
 	ldd 	0,Player 						; copy player position to P/M.
 	x 		1

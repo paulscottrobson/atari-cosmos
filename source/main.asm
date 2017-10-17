@@ -150,13 +150,12 @@ VectorBase:
 	jmp 	SpaceInvaders					; game 0 (game under development - no hologram on emulator)
 	jmp 	Asteroids						; game 1 (Asteroids)
 	jmp 	SpaceInvaders					; game 2 (Space Invaders)
-	halt 									; game 3
+	jmp 	Outlaw							; game 3 (Outlaw)
 	halt 									; game 4
 	halt 									; game 5
 	halt 									; game 6
 	halt 									; game 7
 	halt 									; game 8
-	halt 									; game 9
 
 ; **********************************************************************************************************
 ;
@@ -175,4 +174,3 @@ VectorBase:
 	byte 	VectorBase+12 &255
 	byte 	VectorBase+14 &255
 	byte 	VectorBase+16 &255
-	byte 	VectorBase+18 &255

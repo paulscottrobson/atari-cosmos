@@ -3,3 +3,4 @@ main.asm
 system.asm
 games/asteroids.asm
 games/invaders.asm
+games/outlaw.asm
