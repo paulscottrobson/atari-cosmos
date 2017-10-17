@@ -82,9 +82,9 @@ SELSkipCtrlKey:
 ; **********************************************************************************************************
 
 InitialiseGames:
-	jsr 	RunInitCode 					; run initialisation code
+	jsrp 	CommonInitialise 				
 	jsr 	SwapPlayerData  				; on both halves of memory.
-	jsr 	RunInitCode 					; run initialisation code
+	jsrp 	CommonInitialise 				
 
 	ldd 	PlayerCount 					; read the players
 	lbi 	5,0 							; point to P2 information bits
@@ -131,14 +131,6 @@ RunGameCode:
 	clra
 	aisc 	7 								; set up JQID.
 	jid 									; jump.
-
-RunInitCode:
-	jsrp 	CommonInitialise 				
-	lbi 	GameID 							; this is the same as RunSetupCode except it is called 
-	clra
-	aisc 	7
-	sc
-	jid
 
 ; **********************************************************************************************************
 ;
