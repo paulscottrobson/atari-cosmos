@@ -15,10 +15,12 @@
 ; 	2,9 is the space invader count-1
 ;	2,10 is direction (left = 0, right = 2)
 ;	2,11 is next-time-down if non-zero.
+; 	2,12 is a timer up counter as movement speed varies.
 
 INCount = 2,9
 INDirection = 2,10
 INNextDown = 2,11
+INTimer = 2,12
 
 	page
 
@@ -50,6 +52,8 @@ INNotRow2:
 	aisc 	2
 	xds 	0
 	jp 		INResetInvadersLoop
+	lbi 	INNextDown 						; reset the next down flag
+	stii 	0	
 ;
 ;	Main update loop.
 ;
@@ -85,6 +89,7 @@ INLoop:
 ;	Invaders movement.
 ;
 INMoveInvaders:
+	jsrp	SFXLowShortBeep
 	lbi 	INNextDown 						; point to next down flag.
 	clra 									; skip if equal
 	ske 
@@ -96,11 +101,11 @@ INNormalMove:
 	lbi 	0,7 							; move all invaders
 INMoveNormalLoop:
 	jsrp 	CheckPixelInUse 				; skip if pixel not in use.
-	jp 		INMoveInvader 					; go move it.
+	jmp 	INMoveInvader 					; go move it.
 INMoveNormal2:	
 	ld 		0 								; loop to next invader.
 	xds 	0
-	jp 		INMoveNormalLoop
+	jmp 	INMoveNormalLoop
 	ret
 ;
 ;	Move invader left or right - set the flag if it hits an edge (optimise using functions ?)
@@ -160,10 +165,23 @@ INMoveInvaderDown:
 	jp 		INMoveDown2						; no go back.
 	jmp 	ShowHolo2LifeLost 				; show holo 2, life lost (can save a byte here if needed)
 ;
-;	TODO: Speed check, skips if not moving this go. It's a bit fast flat out !
+;	We have our own timer, speed varies.
 ;
 INCheckSpeed:
+	lbi 	INTimer 						; point to timer.
+	ld 		0 								; read it
+	aisc 	1 								; which counts up, 
+	jp 		INNoMove 						; no move this time as no carry.
+
+	ldd		INCount 						; get count of invaders 1-8
+	comp 									; now 1-8 is 14-7
+	aisc 	14 								; now 1-8 is 12-5
+	nop
+	x 		0
 	ret
+INNoMove:									; write back, return and skip
+	x 		0 
+	retsk
 
 ;
 ;	TODO: Fire at player.

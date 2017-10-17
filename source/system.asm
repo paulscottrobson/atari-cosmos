@@ -474,7 +474,7 @@ CFFire:
 	x 		1
 	ldd 	1,Player
 	x 		1
-	ret
+	jmp 	SFXHighShortBeep 				; make SFX
 
 ; **********************************************************************************************************
 ;
@@ -667,6 +667,30 @@ CMExit:
 	lbi 	1,LeftDigit						; set the Left/Right LED
 	stii 	14
 	stii 	15
+	ret
+
+; **********************************************************************************************************
+;
+;									  Sound effects functions
+;
+; **********************************************************************************************************
+
+FN__SFXShortFire:
+	lbi 	0,9
+FN__SFXLongFire:
+	lbi 	0,10
+FN__SFXLowShortBeep:
+	lbi 	0,11
+FN__SFXLowLongBeep:
+	lbi 	0,12
+FN__SFXHighShortBeep:
+	lbi 	0,13
+FN__SFXHighLongBeep:
+	lbi 	0,14
+FN__SFXGameOver:
+	lbi 	0,15
+	cba
+	xas
 	ret
 
 ; **********************************************************************************************************
