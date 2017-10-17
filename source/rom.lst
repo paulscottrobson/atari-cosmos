@@ -71,11 +71,11 @@
 05a :   7e       0157:  STII  14
 05b :   7f       0158:  STII  15
 05c :   48       0159:  RET
-05d : 62c0       0168:  JMP  SPACEINVADERS
+05d : 6400       0168:  JMP  ROADRUNNER
 05f : 6280       0169:  JMP  ASTEROIDS
 061 : 62c0       0170:  JMP  SPACEINVADERS
 063 : 6380       0171:  JMP  OUTLAW
-065 : 3338       0172:  HALT
+065 : 6400       0172:  JMP  ROADRUNNER
 067 : 3338       0173:  HALT
 069 : 3338       0174:  HALT
 06b : 3338       0175:  HALT
@@ -725,3 +725,59 @@
 3f5 :   21       0166:  SKE
 3f6 :   48       0167:  RET
 3f7 : 6081       0168:  JMP  SHOWHOLO2LIFELOST
+400 :   be       0017:  JSRP  CLEARSCREEN
+401 :    b       0018:  LBI  0,PLAYER
+402 :   77       0019:  STII  7
+403 :   1b       0020:  LBI  1,PLAYER
+404 :   7a       0021:  STII  8+2
+405 :   a4       0026:  JSRP  UPDATE
+406 :   98       0027:  JSRP  MOVEVPLAYER
+407 :   44       0028:  NOP
+408 : 3386       0033:  LBI  0,RRLASTKILLOBJECT
+40a :   25       0035:  LD   2
+40b :   26       0036:  X   2
+40c :    7       0037:  XDS  0
+40d :   ca       0038:  JP   RRSWAPLOOP
+40e : 33b1       0040:  LBI  TIMER+1
+410 :   13       0041:  SKMBZ  3
+411 :   d3       0042:  JP   RRMOVEALL
+412 :   c5       0043:  JP   RRMAINLOOP
+413 :    9       0048:  LBI  0,RRLASTOBJECT
+414 :   25       0050:  LD   2
+415 :   31       0051:  ADD
+416 :   5f       0052:  AISC  15
+417 :   f1       0053:  JP   RRCREATEOBJECT
+418 :    5       0055:  LD   0
+419 :   5f       0056:  AISC  15
+41a :   25       0057:  LD   2
+41b :    5       0059:  LD   0
+41c :   51       0060:  AISC  1
+41d :    6       0061:  X   0
+41e :    0       0062:  CLRA
+41f :   13       0063:  SKMBZ  3
+420 :    6       0064:  X   0
+421 :    0       0066:  CLRA
+422 :   52       0067:  AISC  2
+423 :   12       0068:  XABR
+424 :    5       0071:  LD   0
+425 :   27       0072:  XDS  2
+426 :   d4       0073:  JP   RRMOVEOBJECTS
+427 :    b       0075:  LBI  0,PLAYER
+428 :   85       0076:  JSRP  CHECKCOLLISION
+429 : 6405       0077:  JMP  RRMAINLOOP
+42b :   59       0078:  AISC  15-RRLASTKILLOBJECT
+42c : 6081       0079:  JMP  SHOWHOLO2LIFELOST
+42e :   8e       0080:  JSRP  BUMPCOUNTER
+42f :   b2       0081:  JSRP  SFXHIGHSHORTBEEP
+430 :   c5       0082:  JP   RRMAINLOOP
+431 : 688f       0088:  JSR  RANDOM
+433 :   56       0089:  AISC  6
+434 :   e4       0090:  JP   RRNEXT
+435 :   26       0094:  X   2
+436 :    0       0095:  CLRA
+437 :   51       0096:  AISC  1
+438 :   26       0097:  X   2
+439 :    0       0098:  CLRA
+43a :   36       0099:  X   3
+43b :   36       0100:  X   3
+43c :   e4       0101:  JP   RRNEXT
