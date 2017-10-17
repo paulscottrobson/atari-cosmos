@@ -28,6 +28,11 @@ ASLoop:
 	jsrp 	CheckCollision
 	jp 		ASLoop 							; if not, loop back.
 
+;
+;	Note : this entry point is used by several apps - it displays holo 2 for a short while then
+;	loses a life.
+;
+FN__ShowHolo2LifeLost
 	jsrp	ClearScreen 					; clear screen.
 	jsrp 	Hologram2 						; hologram 2
 	jsr 	ShortDelay						; short delay

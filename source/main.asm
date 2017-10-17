@@ -17,6 +17,8 @@ Reset:
 	lei 	2
 	jsr 	ClearMemory 					; clear memory
 	jsrp 	GetGameID 						; figure out which game we are playing.
+	aisc 	15 								; running game # 0
+	jp 		InitialiseGames 				; skip over selection code.
 
 ; **********************************************************************************************************
 ;
@@ -126,62 +128,17 @@ Player2IsDead:
 RunGameCode:
 	jsrp 	CommonNewTurn 					; clear the screen
 	lbi 	GameID 							; point to GameID
-	smb 	3 								; set bit 3 so we can use offset 40.
 	clra
-	aisc 	6 								; set up JQID.
+	aisc 	7 								; set up JQID.
 	jid 									; jump.
 
 RunInitCode:
 	jsrp 	CommonInitialise 				
 	lbi 	GameID 							; this is the same as RunSetupCode except it is called 
-	smb 	3 								; with carry set, and you are supposed to return from it !
 	clra
-	aisc 	6
+	aisc 	7
 	sc
 	jid
-
-; **********************************************************************************************************
-;
-;										Clear Memory / Clear Screen
-;
-; **********************************************************************************************************
-
-FN__ClearScreen:
-	lbi 	1,15 							; just clear 0-1
-ClearMemory:
-	lbi 	7,15 							; clear 0-7.
-CMLoop:	
-	clra 									; inner loop, clear page.
-	xds 	0
-	jp 		CMLoop
-	xabr									; do previous page
-	aisc 	15
-	jp 		CMExit
-	xabr
-	jp 		CMLoop
-;
-CMExit:
-	lbi 	1,LeftDigit						; set the Left/Right LED
-	stii 	14
-	stii 	15
-	ret
-
-; **********************************************************************************************************
-;
-;											PC LSB values for JQID
-;
-; **********************************************************************************************************
-
-	page 	1
-	offset 	40
-	byte 	$70 							; JID indices.
-	byte 	$72
-	byte 	$74
-	byte 	$76
-	byte 	$78
-	byte 	$7A
-	byte 	$7C
-	byte 	$7E
 
 ; **********************************************************************************************************
 ;
@@ -189,7 +146,7 @@ CMExit:
 ;
 ; **********************************************************************************************************
 
-	offset 	48  			
+VectorBase:
 	jmp 	SpaceInvaders					; game 0 (game under development - no hologram on emulator)
 	jmp 	Asteroids						; game 1 (Asteroids)
 	jmp 	SpaceInvaders					; game 2 (Space Invaders)
@@ -198,3 +155,24 @@ CMExit:
 	halt 									; game 5
 	halt 									; game 6
 	halt 									; game 7
+	halt 									; game 8
+	halt 									; game 9
+
+; **********************************************************************************************************
+;
+;											PC LSB values for JQID
+;
+; **********************************************************************************************************
+
+	page 	1
+	offset 	48
+	byte 	VectorBase+0 &255 				; JQID Jump Table
+	byte 	VectorBase+2 &255
+	byte 	VectorBase+4 &255
+	byte 	VectorBase+6 &255
+	byte 	VectorBase+8 &255
+	byte 	VectorBase+10 &255
+	byte 	VectorBase+12 &255
+	byte 	VectorBase+14 &255
+	byte 	VectorBase+16 &255
+	byte 	VectorBase+18 &255

@@ -643,6 +643,31 @@ KillPlayer:
 	smb 	0
 	jmp 	GameTurnOver
 
+; **********************************************************************************************************
+;
+;										Clear Memory / Clear Screen
+;
+; **********************************************************************************************************
+
+FN__ClearScreen:
+	lbi 	1,15 							; just clear 0-1
+ClearMemory:
+	lbi 	7,15 							; clear 0-7.
+CMLoop:	
+	clra 									; inner loop, clear page.
+	xds 	0
+	jp 		CMLoop
+	xabr									; do previous page
+	aisc 	15
+	jp 		CMExit
+	xabr
+	jp 		CMLoop
+;
+CMExit:
+	lbi 	1,LeftDigit						; set the Left/Right LED
+	stii 	14
+	stii 	15
+	ret
 
 ; **********************************************************************************************************
 ;

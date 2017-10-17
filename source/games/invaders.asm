@@ -158,12 +158,7 @@ INMoveInvaderDown:
 	ld 		1 								; reload, switch back to 0
 	aisc 	3 								; reached the bottom (8+5+3)
 	jp 		INMoveDown2						; no go back.
-
-;
-;	TODO: Life Lost here. Life lost displaying Holo#2 into System ?
-;
-	halt
-
+	jmp 	ShowHolo2LifeLost 				; show holo 2, life lost (can save a byte here if needed)
 ;
 ;	TODO: Speed check, skips if not moving this go. It's a bit fast flat out !
 ;
