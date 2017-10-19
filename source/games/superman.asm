@@ -5,22 +5,28 @@
 ;
 ; **********************************************************************************************************
 ; **********************************************************************************************************
-;
-;		dragon.0 dragon.1 are the positions on screen (dragon0.0 == offscreen)
-;  		dragon.2 bit 0 is left (1)/right (0)
-; 		dragon.2 bit 1 is up moving.
-;		dragon.2 bit 2 set if in jail
-;
-; 		2,12 # of dragon being carried (or $F if none)
-; 		2,11 counter timer
 
-SUDragonCount = 6 							; # of dragons in game.
-
+;	Active or inactive Dragons
+;	==========================
+;
+;	0.n 	X position
+; 	1.n 	Y position
+; 	2.n 	bit 0,1,2 		vertical move +1 (0 ,1 or 2)
+;			bit 3 			direction of movement (0 = left, 1 = right)
+;
+;	n = 4,5,6,7,8 			LEDs for the 5 cells. When the 5th would be lit, game over.
+;
+;	2.11 	Number of dragons in jail.
+;	2.12 	Non-zero if player carrying a dragon.
+;
 	page
 
+SUDragonCount = 0 							; the highest dragon address e.g. #dragons-1 (0-3)
+
 Superman:
-	lbi 	2,12
-	stii 	15 								; not carrying a dragon.
+	lbi 	2,11
+	stii 	0 								; no dragons in jail.
+	stii 	0 								; not carrying a dragon.
 	stii 	9								; this game we count down, it's as fast as possible.
 	stii 	9
 	lbi 	1,Player 						; reposition player
@@ -34,21 +40,6 @@ SULoop:
 	nop
 	jsrp 	MoveVPlayer 
 	nop
-;
-;	Check if we have won - are the cells all full.
-;
-	lbi 	2,SUDragonCount 				; count the number of dragons in jail
-	clra 	
-SUCountJailed:
-	skmbz 	2 								; skip if dragon in jail bit clear
-	aisc 	1
-	x 		0
-	xds 	0
-	jp 		SUCountJailed 					; this count should be 0-5
-	comp 									; count is now 15-10
-	aisc 	5 								; all values up to 5 will skip
-	jmp 	ShowHolo2LifeLost 				; this game termination here.
-
 ;
 ;	Down counter
 ;	
@@ -64,29 +55,12 @@ SUCountJailed:
 	aisc 	15 								; skip if underflow
 	jsr 	SUCounterMSB					; jsr to do the MSB here
 	x 		0
-
 SUDragonCode:
 
-	lbi 	0,SUDragonCount 				; work through the dragons
-SUDragonLoop:
-
-	; TODO:if alive, check escape if in dungeon, move up.
-
-	jsrp 	CheckPixelInUse 				; skip if not in use
-	jsr 	SUMoveDragon
-	jsrp 	CheckPixelInUse 				; skip if not in use
-	jp 		SUNoCreate
-	jsr 	SUCreateDragon 					; possibly create a dragon
-SUNoCreate:
-
-	; TODO:dragon caught by player ?
-	; TODO:dragon dropped in empty cell by player ?
-
-	ld 		0 								; do next dragon
-	xds 	0
-	jp 		SUDragonLoop
-	jmp 	SULoop
-
+	; each dragon
+	;	if dead, and chance, launch *or* escape if possible.
+	; 	if alive, flip vertically if needed, move horizontally, kill if off.
+	jp 		SULoop
 ;
 ;	Handle the counter MSB
 ;
@@ -106,66 +80,39 @@ SUGameOver:
 	stii 	0
 	jmp 	ShowHolo2LifeLost 				; this game termination here.
 ;
-;	Possibly create dragon at 0,B
+;	Add a dragon to the cells, go to win code if collected 5.
 ;
-SUCreateDragon:	
-	jsrp 	Random 							; random#
-	aisc  	4 								; creates 0,1,2,3 and skip
-	ret
-	aisc 	1+8 							; fix up the Y value	
-
-	x 		0 								; save in X
-	clra
+SUAddDragonToCell:
+	lbi 	2,11 							; number of dragons
+	ld 		0 								; bump it
 	aisc 	1
-	x 		1 								; set X to 1, restore and switch to Y
-	x 		3 								; save in Y and switch to 2
-	clra 									; set this to zero
-	x  		0
+	x 		0 
 
-	jsrp 	Random 							; chance of moving up
-	aisc 	11 								; mostly skip
-	smb 	1 								; set the up moving bit.
-	ld 		2 								; switch back to zero page (X)
+	ld 		2 								; re-read it, switch to X.
+	aisc 	3 								; n dragons jailed, light n+3 LED.
+	cab 									; B contains the LED
+	aisc 	14 								; the X value to write there
+	nop
+	x 		1 								; write and switch to 1.
+	stii 	8+5 							; bottom row
 
-	jsrp 	Random 							; 50/50 chance we do the right side
-	aisc 	8
+	ldd 	2,11 							; read the total
+	aisc 	11 								; values 0,1,2,3,4 do not skip
 	ret
-	smb 	2 								; set X = 7
-	smb 	1
-	ld 		2 								; switch to page 2
-	smb 	0 								; direction is left.
-	ld 		2 								; back to page 0
-	ret
+	jmp 	ShowHolo2LifeLost 				; when got all 5 you have won.
 ;
-;	Move dragon at 0,B
+;	Remove dragon from cells.
 ;
-SUMoveDragon:
-	ld 		2								; point to flag page 2
-	skmbz 	0 								; if zero move right
-	jp 		SUMDLeft
-
-	ld 		2 								; move right code
-	jsrp 	MoveRight
-	jp 		__SUMDMoveUpQ
-
-__SUMDKillExit:
-	jmp 	Kill
-
-SUMDLeft:
-	ld 		2 								; move left code
-	jsrp 	MoveLeft
-	jp 		__SUMDMoveUpQ
-	jp 		__SUMDKillExit
-
-__SUMDMoveUpQ:
-	ld 		2 								; to page 2
-	skmbz 	1 								; if up bit is clear
-	jp 		__SUMDMoveUp
-	ld 		2
+SURemoveDragonFromCell:
+	lbi 	2,11 							; number of dragons.
+	ld 		0 								; bump it
+	aisc 	15
+	nop
+	x 		0
+	ld 		2 								; get it go to page 0
+	aisc 	4
+	cab
+	clra 									; and kill it
+	x 		0
 	ret
 
-__SUMDMoveUp:
-	ld 		2 								; back to page 0
-	jsrp 	MoveUp
-	ret
-	jp 		__SUMDKillExit
