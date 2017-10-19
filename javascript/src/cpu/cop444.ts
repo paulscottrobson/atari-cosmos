@@ -63,7 +63,7 @@ class COP444 extends COP444Opcodes {
             opcode = this.fetch()|0x200;
         }
         if (this.pc >= 0x80 && this.pc <= 0xFF) {
-            if (opcode >= 0x80 && opcode != 0xFF) {
+            if (opcode >= 0x80 && opcode < 0xFF) {
                 this.pc = opcode;
                 opcode = 0x44;
             }

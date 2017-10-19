@@ -372,7 +372,7 @@ FN__PlayerRight:
 FN__MoveRight:
 	ld 		0 								; get X 1..7
 	aisc 	9								; will cause a skip if X = 7, e.g. can't move further right.	
-	jp 		MRSkip 							; skip over if moving right.
+	jmp 	MRSkip 							; skip over if moving right.
 	retsk 									; we skipped, so return and skip.
 MRSkip:
 	x 		0 								; write it back.

@@ -89,7 +89,7 @@ BYTE8 CPUExecuteInstruction(void) {
 	}
 
 	if (PC >= 0x80 && PC <= 0xFF) { 												// JP in pages 2 and 3.
-		if (opcode >= 0x80 && opcode != 0xFF) {										// is a special case (Not JID)
+		if (opcode >= 0x80 && opcode < 0xFF) {										// is a special case (Not JID)
 			PC = opcode;
 			opcode = 0x44;															// This is NOP.
 		}

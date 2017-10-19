@@ -267,7 +267,7 @@ class OpcodeDictionary:
 
 		# JP must be same page except pages 2 + 3.
 		if opcodeBase == 0xC0:
-			if (addr & 0x3F) == 0x3F:
+			if (operand & 0x3F) == 0x3F:
 				raise AssemblerException("Cannot jump to last byte of page")
 			if addr >= 0x80 and addr < 0x100:
 				if operand < 0x80 or operand >= 0x100:
@@ -276,7 +276,7 @@ class OpcodeDictionary:
 			else:
 				if int(addr/64) != int(operand/64):
 					raise AssemblerException("JP to different page")
-				if addr%64 >= 62:
+				if operand%64 >= 62:
 					raise AssemblerException("JP on page border")
 				return 0xC0 + (operand & 0x3F)
 
