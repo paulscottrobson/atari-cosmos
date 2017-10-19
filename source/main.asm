@@ -165,12 +165,12 @@ CMExit:
 ; **********************************************************************************************************
 
 VectorBase:
-	jmp 	RoadRunner						; game 0 (game under development - no hologram on emulator)
+	jmp 	Destroyer						; game 0 (game under development - no hologram on emulator)
 	jmp 	Asteroids						; game 1 (Asteroids)
 	jmp 	SpaceInvaders					; game 2 (Space Invaders)
 	jmp 	Outlaw							; game 3 (Outlaw)
 	jmp 	RoadRunner						; game 4 (Road Runner)
-	halt 									; game 5
+	jmp 	Destroyer						; game 5 (Destroyer)
 	halt 									; game 6
 	halt 									; game 7
 	halt 									; game 8

@@ -7,9 +7,9 @@
 ; **********************************************************************************************************
 
 ; 	9 opponent missile 
-; 	10 opponent (1,2)
+; 	10 opponent (7,2)
 ;	11 player missile
-; 	12 player (7,3)
+; 	12 player (1,3)
 ; 	2,10 	Opponent direction (0 up 2 down)
 
 OUOpponent = 10
@@ -22,9 +22,9 @@ Outlaw:
 OUNewFight:
 	jsrp	ClearScreen	
 	lbi 	0,10  							; reset player
-	stii 	1
-	stii 	0
 	stii 	7
+	stii 	0
+	stii 	1
 	lbi 	1,10
 	stii 	8+1
 	stii 	0
@@ -48,15 +48,14 @@ OUMainLoop:
 ;	Player/Missile movement code.
 ;
 OUMovePlayerMissile:
-	jsrp 	MoveLeft 						; move PM left, skip if hits edge
+	jsrp 	MoveRight 						; move PM left, skip if hits edge
 	jp 		OUPMCheckCollide
 	jsrp 	Kill
 	ret
 
 OUPMCheckCollide:
 	ld 		1 								; load PM.X and switch to Y
-	comp 									; A will be 14 if Y was 1
-	aisc 	2 								; so we will skip then.
+	aisc 	9 								; If 7 will be 16 so we will skip then.
 	ret
 	ldd 	1,OUOpponent 					; c/f opponent Y position.
 	ske 						
@@ -140,7 +139,7 @@ OUOpponentMissile:
 	aisc 	5
 	ret
 
-	stii 	1 								; write X = 1
+	stii 	7 								; write X = 7
 	ldd 	1,OUOpponent 					; copy Y from opponent.Y
 	xad 	1,OUOppMissile
 	jsr 	SFXLowShortBeep
@@ -149,7 +148,7 @@ OUOpponentMissile:
 ;	Exists, move right
 ;
 OUMoveOppMissile:
-	jsrp 	MoveRight 						; move right, skip if off edge
+	jsrp 	MoveLeft 						; move right, skip if off edge
 	jp 		OUOppCollision 			
 	jsrp 	Kill
 	ret
@@ -158,7 +157,7 @@ OUMoveOppMissile:
 ;
 OUOppCollision:
 	clra 									; check not reached right side.
-	aisc 	7
+	aisc 	1
 	ske 
 	ret
 	ld 		1 								; switch to 1/Y
