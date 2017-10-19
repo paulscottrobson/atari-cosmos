@@ -26,12 +26,13 @@ class Hologram:
 					for y in range(0,self.cellSize):
 						xd = x - self.cellSize/2
 						yd = y - self.cellSize/2
-						dist = math.sqrt(xd*xd+yd*yd) / (self.cellSize/2)
-						red = int(min(255,305-dist*200))
+						dist = math.sqrt(xd*xd+yd*yd) / (self.cellSize/2)*1.1
+						red = int(min(255,285-dist*200))
 						pix = pDraw[x+x1,y+y1]
 						if pix[3] > 80:
 							if dist < 1:
-								pDraw[x+x1,y+y1] = (max(red,pix[0]),int(pix[1]/2),int(pix[2]/2),255)
+								s = 2.5
+								pDraw[x+x1,y+y1] = (max(red,pix[0]),int(pix[1]/s),int(pix[2]/s),255)
 						else:
 							pDraw[x1+x,y1+y] = (0,0,0,255)
 							if dist < 1:
@@ -82,3 +83,7 @@ c = Combiner("game04_1.png","game04_2.png","comb04.png")
 h = Hologram("5/src05_1.png","game05_1.png")
 h = Hologram("5/src05_2.png","game05_2.png")
 c = Combiner("game05_1.png","game05_2.png","comb05.png")
+
+h = Hologram("6/src06_1.png","game06_1.png")
+h = Hologram("6/src06_2.png","game06_2.png")
+c = Combiner("game06_1.png","game06_2.png","comb06.png")

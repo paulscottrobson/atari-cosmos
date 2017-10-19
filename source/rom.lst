@@ -71,7 +71,7 @@
 05a :   7e       0157:  STII  14
 05b :   7f       0158:  STII  15
 05c :   48       0159:  RET
-05d : 6440       0168:  JMP  DESTROYER
+05d : 6280       0168:  JMP  ASTEROIDS
 05f : 6280       0169:  JMP  ASTEROIDS
 061 : 62c0       0170:  JMP  SPACEINVADERS
 063 : 6380       0171:  JMP  OUTLAW
@@ -114,12 +114,12 @@
 0f3 :   2f       0057:  LBI  2,INFOBITS
 0f4 :   4d       0058:  SMB  0
 0f5 : 603d       0059:  JMP  GAMETURNOVER
-0f7 :   89       0070:  JSRP  CLEARSCREEN
-0f8 :    b       0071:  LBI  0,PLAYER
-0f9 :   74       0072:  STII  4
-0fa :   1b       0073:  LBI  1,PLAYER
-0fb :   7d       0074:  STII  8+5
-0fc :   48       0075:  RET
+0f7 : 6889       0070:  JSR  CLEARSCREEN
+0f9 :    b       0071:  LBI  0,PLAYER
+0fa :   74       0072:  STII  4
+0fb :   1b       0073:  LBI  1,PLAYER
+0fc :   7d       0074:  STII  8+5
+0fd :   48       0075:  RET
 100 :    0       0087:  BYTE  $00
 101 :   40       0088:  BYTE  $40
 102 :   20       0089:  BYTE  $20

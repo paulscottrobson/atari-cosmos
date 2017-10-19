@@ -126,7 +126,7 @@ Player2IsDead:
 ; **********************************************************************************************************
 
 RunGameCode:
-	jsrp 	CommonNewTurn 					; clear the screen
+	jsrp 	CommonNewTurn 					; clear the screen etc.
 	lbi 	GameID 							; point to GameID
 	clra
 	aisc 	7 								; set up JQID.
@@ -165,7 +165,7 @@ CMExit:
 ; **********************************************************************************************************
 
 VectorBase:
-	jmp 	Destroyer						; game 0 (game under development - no hologram on emulator)
+	jmp 	Asteroids						; game 0 (game under development - no hologram on emulator)
 	jmp 	Asteroids						; game 1 (Asteroids)
 	jmp 	SpaceInvaders					; game 2 (Space Invaders)
 	jmp 	Outlaw							; game 3 (Outlaw)

@@ -67,7 +67,7 @@ KillPlayer:
 ; **********************************************************************************************************
 
 FN__CommonNewTurn:
-	jsrp 	ClearScreen
+	jsr 	ClearScreen
 	lbi 	0,Player 						; put player in bottom centre.
 	stii 	4
 	lbi 	1,Player
