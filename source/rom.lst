@@ -71,13 +71,13 @@
 05a :   7e       0157:  STII  14
 05b :   7f       0158:  STII  15
 05c :   48       0159:  RET
-05d : 6280       0168:  JMP  ASTEROIDS
+05d : 6500       0168:  JMP  SUPERMAN
 05f : 6280       0169:  JMP  ASTEROIDS
 061 : 62c0       0170:  JMP  SPACEINVADERS
 063 : 6380       0171:  JMP  OUTLAW
 065 : 6400       0172:  JMP  ROADRUNNER
 067 : 6440       0173:  JMP  DESTROYER
-069 : 3338       0174:  HALT
+069 : 6500       0174:  JMP  SUPERMAN
 06b : 3338       0175:  HALT
 06d : 3338       0176:  HALT
 070 :   5d       0186:  BYTE  VECTORBASE+0 &255
@@ -945,3 +945,44 @@
 4fb :   9e       0243:  JSRP  BUMPCOUNTER
 4fc :   9e       0244:  JSRP  BUMPCOUNTER
 4fd : 60ba       0245:  JMP  SFXLONGFIRE
+500 :   2b       0022:  LBI  2,12
+501 :   7f       0023:  STII  15
+502 :   79       0024:  STII  9
+503 :   79       0025:  STII  9
+504 :   85       0030:  JSRP  UPDATE
+505 :   8a       0031:  JSRP  MOVEHPLAYER
+506 :   44       0032:  NOP
+507 :   a6       0033:  JSRP  MOVEVPLAYER
+508 :   44       0034:  NOP
+509 : 3389       0038:  LBI  0,SUDRAGONCOUNT
+50b :    0       0039:  CLRA
+50c :    3       0041:  SKMBZ  2
+50d :   51       0042:  AISC  1
+50e :    6       0043:  X   0
+50f :    7       0044:  XDS  0
+510 :   cc       0045:  JP   SUCOUNTJAILED
+511 :   40       0046:  COMP
+512 :   55       0047:  AISC  5
+513 : 6096       0048:  JMP  SHOWHOLO2LIFELOST
+515 :   2a       0053:  LBI  2,11
+516 :    5       0054:  LD   0
+517 :   51       0055:  AISC  1
+518 :   44       0056:  NOP
+519 :    6       0057:  X   0
+51a :   20       0058:  SKC
+51b :   e2       0059:  JP   SUDRAGONCODE
+51c :   2d       0060:  LBI  2,14
+51d :    5       0061:  LD   0
+51e :   5f       0062:  AISC  15
+51f : 6d24       0063:  JSR  SUCOUNTERMSB
+521 :    6       0064:  X   0
+522 : 6504       0076:  JMP  SULOOP
+524 :   4a       0082:  ADT
+525 :    7       0083:  XDS  0
+526 :    5       0085:  LD   0
+527 :   5f       0086:  AISC  15
+528 :   ea       0087:  JP   SUGAMEOVER
+529 :   48       0088:  RET
+52a :   70       0093:  STII  0
+52b :   70       0094:  STII  0
+52c : 6096       0095:  JMP  SHOWHOLO2LIFELOST
