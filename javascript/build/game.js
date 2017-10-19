@@ -103,7 +103,7 @@ var PreloadState = (function (_super) {
             var fontName = _a[_i];
             this.game.load.bitmapFont(fontName, "assets/fonts/" + fontName + ".png", "assets/fonts/" + fontName + ".fnt");
         }
-        for (var _b = 0, _c = []; _b < _c.length; _b++) {
+        for (var _b = 0, _c = Hardware.SOUNDNAMES; _b < _c.length; _b++) {
             var audioName = _c[_b];
             this.game.load.audio(audioName, ["assets/sounds/" + audioName + ".mp3",
                 "assets/sounds/" + audioName + ".ogg"]);
@@ -2007,12 +2007,16 @@ var Hardware = (function () {
     function Hardware(game) {
         this.display = new CosmosDisplay(game);
         this.keypad = new Keypad(game);
+        this.soundHandles = [];
+        for (var n = 0; n < 7; n++) {
+            this.soundHandles[n + 9] = game.add.audio(Hardware.SOUNDNAMES[n]);
+        }
         this.reset();
     }
     Hardware.prototype.destroy = function () {
         this.display.destroy();
         this.keypad.destroy();
-        this.display = this.keypad = null;
+        this.soundHandles = this.display = this.keypad = null;
     };
     Hardware.prototype.reset = function () {
         this.gColumns = this.dColumns = this.qRows = 0;
@@ -2046,11 +2050,12 @@ var Hardware = (function () {
         return n;
     };
     Hardware.prototype.readin = function () {
-        console.log(CosmosApplication.getGameID());
         var n = ((this.dColumns & CosmosApplication.getGameID()) != 0) ? 1 : 0;
         return n;
     };
     Hardware.prototype.siowrite = function (n) {
+        console.log(n);
+        this.soundHandles[n].play();
     };
     Hardware.prototype.timerOverflow = function () {
         var xCol = this.gColumns * 16 + this.dColumns;
@@ -2069,6 +2074,7 @@ var Hardware = (function () {
     Hardware.prototype.endOfFrame = function () {
         this.display.endOfFrame();
     };
+    Hardware.SOUNDNAMES = ["shortwhite", "longwhite", "shortlow", "longlow", "shorthigh", "longhigh", "gameover"];
     return Hardware;
 }());
 var DummyHardware = (function () {

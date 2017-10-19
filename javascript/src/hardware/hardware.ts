@@ -7,17 +7,25 @@ class Hardware implements IHardware {
     private gColumns:number;
     private dColumns:number;
     private qRows:number;
+    private soundHandles:Phaser.Sound[];
 
     constructor(game:Phaser.Game) {
         this.display = new CosmosDisplay(game);
         this.keypad = new Keypad(game);
-        this.reset();
+        this.soundHandles = [];
+        for (var n:number = 0;n < 7;n++) {
+            this.soundHandles[n+9] = game.add.audio(Hardware.SOUNDNAMES[n]);
+        }
+        this.reset();    
     }
 
+    public static SOUNDNAMES:string[] = 
+        ["shortwhite","longwhite","shortlow","longlow","shorthigh","longhigh","gameover"];
+    
     destroy(): void {
         this.display.destroy();
         this.keypad.destroy();
-        this.display = this.keypad = null;
+        this.soundHandles = this.display = this.keypad = null;
     }
 
     reset(): void { 
@@ -58,12 +66,14 @@ class Hardware implements IHardware {
     }
 
     readin(): number {
-        console.log(CosmosApplication.getGameID());
+        //console.log(CosmosApplication.getGameID());
         var n:number = ((this.dColumns & CosmosApplication.getGameID()) != 0) ? 1 : 0 ;
         return n;
     }
 
     siowrite(n: number): void {
+        console.log(n);
+        this.soundHandles[n].play();
     }
 
     timerOverflow(): void {

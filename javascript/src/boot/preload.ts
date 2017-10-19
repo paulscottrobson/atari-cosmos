@@ -38,7 +38,7 @@ class PreloadState extends Phaser.State {
                                                "assets/fonts/"+fontName+".fnt");
         }
         // Load audio 
-        for (var audioName of []) {
+        for (var audioName of Hardware.SOUNDNAMES) {
             this.game.load.audio(audioName,["assets/sounds/"+audioName+".mp3",
                                             "assets/sounds/"+audioName+".ogg"]);
         }
