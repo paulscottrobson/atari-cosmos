@@ -11,14 +11,17 @@
 ;
 ;	0.n 	X position
 ; 	1.n 	Y position
-; 	2.n 	bit 0,1,2 		vertical move +1 (0 ,1 or 2)
-;			bit 3 			direction of movement (0 = left, 1 = right)
+;	2.n 	bit 0 			Set for straight up
+;	2.n 	bit 1 			Set for left moving, clear for right moving
+;
 ;
 ;	n = 4,5,6,7,8 			LEDs for the 5 cells. When the 5th would be lit, game over.
 ;
 ;	2.11 	Number of dragons in jail.
 ;	2.12 	Non-zero if player carrying a dragon.
-;
+; 	2.10 	Temp for B
+; 	2.9 	Divide by 16 counter
+
 	page
 
 SUDragonCount = 0 							; the highest dragon address e.g. #dragons-1 (0-3)
@@ -43,7 +46,7 @@ SULoop:
 ;
 ;	Down counter
 ;	
-	lbi 	2,11 							; timer counter at 2,11 divides frame rate by 16.
+	lbi 	2,9 							; timer counter at 2,9 divides frame rate by 16.
 	ld 		0 								; counter is too quick otherwise :)
 	aisc 	1
 	nop
@@ -56,10 +59,30 @@ SULoop:
 	jsr 	SUCounterMSB					; jsr to do the MSB here
 	x 		0
 SUDragonCode:
+	lbi 	0,SUDragonCount
+SUDragonLoop:
+	cba
+	xad 	2,10 							; save in 2,10 for recovery
+	jsrp 	CheckPixelInUse					; skip if unused.
+	jp 		SUDragonAlive
 
-	; each dragon
-	;	if dead, and chance, launch *or* escape if possible.
-	; 	if alive, flip vertically if needed, move horizontally, kill if off.
+	jsrp 	Random 							; lowish chance of creation.
+	aisc 	3
+	jsr 	SUCreateDragon 					; create a new dragon.
+	jp 		SUDragonNext
+
+SUDragonAlive:
+	jsrp 	Random 							; slow it down slightly.
+	aisc 	4
+	jsr 	SUMoveDragon 					; move dragon, will skip if off screen
+	jp 		SUDragonNext
+	jsrp 	Kill 							; off edge, kill it.
+
+SUDragonNext:
+	ld 		0  								; go round the loop.
+	xds 	0
+	jp 		SUDragonLoop
+	jsr 	SUCheckPickupDropped			; check if picked up dragon/dropped dragon depending.
 	jp 		SULoop
 ;
 ;	Handle the counter MSB
@@ -115,4 +138,108 @@ SURemoveDragonFromCell:
 	clra 									; and kill it
 	x 		0
 	ret
+;
+;	Create a new dragon
+;
+SUCreateDragon:
+	jsrp 	Random 							; chance of escaping ?
+	aisc 	12 								; normally its a fly past
+	jp 		__SUEscaper 					; sometimes its an escaper, if escaper exists.
 
+	clra									; set X = 1
+	aisc 	1
+	x 		1
+__SUCDGetY: 								; get a Y value
+	jsrp 	Random 	
+	aisc 	4						
+	jp 		__SUCDGetY	
+	aisc 	8 								; set bit 3
+	x   	3 								; save and go to 2
+	clra 
+	x 		2 								; clear bit 0 (=right)
+
+	jsr 	Random							; 50/50 chance of other side.	
+	aisc 	8
+	ret
+
+	ld 		2 								; back to 2
+	smb 	1	 							; set bit 0 (= left)
+	ld 		2 								; back to 0
+	smb 	1 								; convert 1 to 7
+	smb 	2
+	ret
+;
+;	Escaping dragon.
+;
+__SUEscaper:
+	ldd 	2,11 							; no of dragons
+	aisc 	15 								; skip if non zero
+	ret
+	aisc 	2 								; gives escaping position
+	x 		1 								; put in X, switch to Y
+	clra
+	aisc 	8+4 							; set Y
+	x 		3 								; switch to 2
+	clra
+	aisc 	1 
+	x 		2 								; set control to 1
+	jsr 	SURemoveDragonFromCell			; remove dragon
+	jsrp 	SFXHighShortBeep 				; make sound
+	jmp 	__SUReloadBAndReturn
+;
+;	Move dragon, skips if off screen on return
+;
+SUMoveDragon:
+	ld 		2 								; switch to 2
+	skmbz 	0 								; check bit 0 (up)
+	jp 		__SUMoveUp
+	skmbz 	1 								; check bit 1 (left)
+	jp 		__SUMoveLeft
+	ld 		2 								; neither, do right.
+	jmp 	MoveRight	
+__SUMoveUp:
+	jsr 	Random 							; move up is slower
+	aisc 	6
+	ret
+	ld 		2	
+	jmp 	MoveUp
+__SUMoveLeft:
+	ld 		2
+	jmp 	MoveLeft
+;
+;	Check if picked up/dropped dragon
+;
+SUCheckPickupDropped:
+	ldd 	2,12 							; non-zero if carrying
+	aisc 	15 								; skips if carrying
+	jp 		__SUCheckPickup 				; check if pickup
+
+	lbi 	1,Player 
+	clra 									; should go to ground to release
+	aisc 	8+5
+	ske
+	jp 		__SUReloadBAndReturn
+
+	jsrp 	SFXShortFire 					; grabbed one.
+	jsr 	SUAddDragonToCell 				; add to cell
+	clra 									; clear the carrying flag
+	xad 	2,12
+	jmp 	__SUReloadBAndReturn 			; and return loading B
+
+
+__SUCheckPickup:	
+	clra 									; start collision test from here.
+	aisc 	SUDragonCount
+	lbi 	0,Player 						; hit player
+	jsrp 	CheckCollisionUpTo 				; check if collidede
+	jp 		__SUReloadBAndReturn 			; fail, reload B and return
+
+	jsrp 	Kill 							; kill that dragon pixel
+	jsrp 	SFXLowShortBeep 				; caught it.
+	lbi 	2,12 							; set carrying flag
+	smb 	0
+__SUReloadBAndReturn:
+	lbi 	2,10
+	ld 		2
+	cab
+	ret

@@ -230,7 +230,10 @@ class OpcodeDictionary:
 			return opInfo.base 
 		if opcodeType == 2: 						# lowest 4 bits
 			self.checkRange(operand,0,15)
-			return opcodeBase + operand
+			if opcodeBase == 0x50 and operand == 0:	# AISC 0 generates NOP
+				return 0x44
+			else:
+				return opcodeBase + operand
 		if opcodeType == 3:							# 10 bit rom address 
 			self.checkRange(operand,0,2047)
 			return opcodeBase + operand
