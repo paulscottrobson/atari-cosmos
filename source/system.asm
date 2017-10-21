@@ -7,31 +7,8 @@
 ; **********************************************************************************************************
 
 	page 	3
-	offset 	32
+	offset 	36
 
-; **********************************************************************************************************
-;
-;									  Sound effects functions
-;
-; **********************************************************************************************************
-
-FN__SFXShortFire:
-	lbi 	0,9
-FN__SFXLongFire:
-	lbi 	0,10
-FN__SFXLowShortBeep:
-	lbi 	0,11
-FN__SFXLowLongBeep:
-	lbi 	0,12
-FN__SFXHighShortBeep:
-	lbi 	0,13
-FN__SFXHighLongBeep:
-	lbi 	0,14
-FN__SFXGameOver:
-	lbi 	0,15
-	cba
-	xas
-	ret
 
 ; **********************************************************************************************************
 ;
@@ -219,7 +196,7 @@ RPNotSevenSegment:
 ;
 ; **********************************************************************************************************
 
-FN__GetGameID:
+GetGameID:
 	clra 									; start with 1
 	aisc 	1
 GGIdentifyLoop:
@@ -593,13 +570,13 @@ FN__Hologram1:
 FN__PlayerHologram:
 	lbi 	2,InfoBits 						; if bit 3 of infobits set it is player 1
 	skmbz 	3 								; skip of player 2.
+	jp 		FN__Hologram2
 	jp 		FN__Hologram1
 
 FN__Hologram2:
 	lbi 	HoloDisplay 					; hologram#2
 	stii 	8
 	ret
-
 
 ; **********************************************************************************************************
 ;
@@ -686,3 +663,52 @@ DLYPrevious:
 	jp 		DLYPrevious
 	ret
 
+; **********************************************************************************************************
+;
+;									  Sound effects functions
+;
+; **********************************************************************************************************
+
+FN__SFXShortFire:
+	lbi 	0,9
+FN__SFXLongFire:
+	lbi 	0,10
+FN__SFXLowShortBeep:
+	lbi 	0,11
+FN__SFXLowLongBeep:
+	lbi 	0,12
+FN__SFXHighShortBeep:
+	lbi 	0,13
+FN__SFXHighLongBeep:
+	lbi 	0,14
+FN__SFXGameOver:
+	lbi 	0,15
+	cba
+	xas
+	ret
+
+; **********************************************************************************************************
+;
+;										Clear Memory / Clear Screen
+;
+; **********************************************************************************************************
+
+FN__ClearScreen:
+	lbi 	1,15 							; just clear 0-1
+ClearMemory:
+	lbi 	7,15 							; clear 0-7.
+CMLoop:	
+	clra 									; inner loop, clear page.
+	xds 	0
+	jp 		CMLoop
+	xabr									; do previous page
+	aisc 	15
+	jp 		CMExit
+	xabr
+	jp 		CMLoop
+;
+CMExit:
+	lbi 	1,LeftDigit						; set the Left/Right LED
+	stii 	14
+	stii 	15
+	ret

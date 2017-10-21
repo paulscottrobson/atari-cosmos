@@ -16,7 +16,7 @@ Reset:
 	clra
 	lei 	2
 	jsr 	ClearMemory 					; clear memory
-	jsrp 	GetGameID 						; figure out which game we are playing.
+	jsr 	GetGameID 						; figure out which game we are playing.
 	aisc 	15 								; running game # 0
 	jp 		InitialiseGames 				; skip over selection code.
 
@@ -86,12 +86,13 @@ InitialiseGames:
 	jsr 	SwapPlayerData  				; on both halves of memory.
 	jsrp 	CommonInitialise 				
 
+	lbi 	5,0
+	smb 	3 								; set bit 3, which identifies player #1.
 	ldd 	PlayerCount 					; read the players
-	lbi 	5,0 							; point to P2 information bits
-	smb 	3 								; set bit 3, which identifies player 2.
 	aisc 	15 								; will skip if 2 player game.
 	smb 	0 								; kill player 2 as 1 player game.
-
+	jmp 	RunGameCode
+	
 ; **********************************************************************************************************
 ; **********************************************************************************************************
 ;
@@ -132,31 +133,6 @@ RunGameCode:
 	aisc 	7 								; set up JQID.
 	jid 									; jump.
 
-; **********************************************************************************************************
-;
-;										Clear Memory / Clear Screen
-;
-; **********************************************************************************************************
-
-FN__ClearScreen:
-	lbi 	1,15 							; just clear 0-1
-ClearMemory:
-	lbi 	7,15 							; clear 0-7.
-CMLoop:	
-	clra 									; inner loop, clear page.
-	xds 	0
-	jp 		CMLoop
-	xabr									; do previous page
-	aisc 	15
-	jp 		CMExit
-	xabr
-	jp 		CMLoop
-;
-CMExit:
-	lbi 	1,LeftDigit						; set the Left/Right LED
-	stii 	14
-	stii 	15
-	ret
 
 ; **********************************************************************************************************
 ;
@@ -165,15 +141,15 @@ CMExit:
 ; **********************************************************************************************************
 
 VectorBase:
-	jmp 	Superman						; game 0 (game under development - no hologram on emulator)
+	jmp 	Football						; game 0 (game under development - no hologram on emulator)
 	jmp 	Asteroids						; game 1 (Asteroids)
 	jmp 	SpaceInvaders					; game 2 (Space Invaders)
 	jmp 	Outlaw							; game 3 (Outlaw)
 	jmp 	RoadRunner						; game 4 (Road Runner)
 	jmp 	Destroyer						; game 5 (Destroyer)
 	jmp 	Superman 						; game 6 (Superman)
-	halt 									; game 7
-	halt 									; game 8
+	jmp 	Football						; game 7 (Football)
+	jmp 	Basketball						; game 8 (Basketball)
 
 ; **********************************************************************************************************
 ;

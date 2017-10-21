@@ -472,7 +472,7 @@ class Assemble:
 			if address is None:
 				raise AssemblerException("Out of page 2 memory for FN__")
 
-			if address < 0x90:
+			if address < 0x92:
 				self.memory.setPointer(address+1)
 				self.memory._writeByte(page3Pointer) 	# e.g. jp to page 3
 				self.memory.setPointer(page3Pointer) 	# put a jump in page 3

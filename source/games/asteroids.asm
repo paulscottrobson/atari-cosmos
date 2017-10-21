@@ -23,15 +23,16 @@ ASLoop:
 
 	lbi 	0,Player 						; check if player has collide with anything (only asteroids to collide with)
 	jsrp 	CheckCollision
-	jp 		ASLoop 							; if not, loop back.
+	jp 		ASLoop 							; if not, loop back.	
 	jmp 	ShowHolo2LifeLost
 ;
 ;	Note : this entry point is used by several apps - it displays holo 2 for a short while then
 ;	loses a life.
 ;
-FN__ShowHolo2LifeLost
-	jsrp	ClearScreen 					; clear screen.
+FN__ShowHolo2LifeLost:
 	jsrp 	Hologram2 						; hologram 2
+FN__ShowHolo1LifeLost:
+	jsrp	ClearScreen 					; clear screen.
 	jsrp 	SFXGameOver
 	jsr 	ShortDelay						; short delay
 	jmp 	LifeLost						; life lost, switch players.
