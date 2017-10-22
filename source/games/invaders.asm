@@ -216,8 +216,9 @@ INNextFire:
 	ret
 
 INFireMoveDown:
-	ldd 	Timer+2 						; check a timer.
-	aisc 	8 								; will skip if time out.
+	ldd 	Timer4							; check a timer.
+	comp 									; now 15 if timer zero
+	aisc 	1								; only skips when timer zero.
 	jp 		INNextFire
 
 	jsrp 	MoveDown 						; move missile down, skips if off bottom.

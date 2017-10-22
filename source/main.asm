@@ -133,7 +133,6 @@ RunGameCode:
 	aisc 	7 								; set up JQID.
 	jid 									; jump.
 
-
 ; **********************************************************************************************************
 ;
 ;												Game Vectors
@@ -182,4 +181,3 @@ FN__CommonInitialise:
 	lbi 	2,Lives 						; reset lives
 	stii 	2								; 2 is 3 because it fails when lives was 0.
 	ret
-

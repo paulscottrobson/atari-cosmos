@@ -67,9 +67,9 @@ OUPMCheckCollide:
 ;	Move opponent
 ;
 OUMoveOpponent:
-	lbi 	Timer+1							; look at timer.
-	skmbz  	3 								; skip if not timed out
-	jp 		OUIsMoveTime
+	lbi 	Timer4							; look at timer.
+	clra									; skip if timed out 
+	ske
 	ret
 OUIsMoveTime:
 	jsrp 	Random 							; random number 0-15

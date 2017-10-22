@@ -7,48 +7,32 @@
 ; **********************************************************************************************************
 
 	page 	3
-	offset 	36
-
-
-; **********************************************************************************************************
-;
-;									Jump here when a life is lost.
-;
-; **********************************************************************************************************
-
-LifeLost:
-	lbi 	2,Lives 						; read lives
-	ld 		0 
-	aisc 	15 								; subtract 1
-	jmp 	KillPlayer 
-	x 		0
-	jmp 	GameTurnOver
+	offset 	48
 
 ; **********************************************************************************************************
 ;
-;							Jump here to immediately kill the current player
+;										Clear Memory / Clear Screen
 ;
 ; **********************************************************************************************************
 
-KillPlayer:
-	lbi 	2,InfoBits 						; set infobits 1.
-	smb 	0
-	jmp 	GameTurnOver
-
-
-
-; **********************************************************************************************************
+FN__ClearScreen:
+	lbi 	1,15 							; just clear 0-1
+ClearMemory:
+	lbi 	7,15 							; clear 0-7.
+CMLoop:	
+	clra 									; inner loop, clear page.
+	xds 	0
+	jp 		CMLoop
+	xabr									; do previous page
+	aisc 	15
+	jp 		CMExit
+	xabr
+	jp 		CMLoop
 ;
-;									Initialisation done in every turn
-;
-; **********************************************************************************************************
-
-FN__CommonNewTurn:
-	jsr 	ClearScreen
-	lbi 	0,Player 						; put player in bottom centre.
-	stii 	4
-	lbi 	1,Player
-	stii 	8+5
+CMExit:
+	lbi 	1,LeftDigit						; set the Left/Right LED
+	stii 	14
+	stii 	15
 	ret
 
 
@@ -307,19 +291,11 @@ FN__Update:
 UPSlow:
 	jsrp	Repaint 						; repaint
 UPFast:
-	lbi 	Timer+4 						; point to the timers.
-UPTimerLoop:
-	ld 		0 								; get timer value
-	skmbz 	3 								; if is currently overflowing
-	jp 		UPResetTimer
-	jp 		UPBumpTimer
-UPResetTimer:
-	cba 									; start the timer at B+2
-	aisc 	2
-UPBumpTimer:	
-	aisc 	1 								; bump timer (won't skip)
-	xds 	0 								; write back
-	jp 		UPTimerLoop
+	lbi 	Timer4 							; bump timer4, ticks at 1/4 of time rate.
+	ld 		0 	
+	aisc 	4
+	nop
+	x 		0
 	ret
 
 ; **********************************************************************************************************
@@ -595,7 +571,7 @@ CCLoop:
 	ldd 	RPWork1 						; get the object being tested into A.
 	lbi 	RowTemp 						; point B to the currently compared object.
 	ske  									; if equal then skip, this one can't be a collision.
-	jp 		CCCoordinates
+	jmp 	CCCoordinates
 CCNext:
 	lbi 	RowTemp 						; point to row temp
 	ld 		0								; read it
@@ -648,13 +624,13 @@ FN__ShortDelay:
 	aisc 	2
 FN__Delay:
 	comp 									; negate as counting up	
-	lbi  	Timer 							; write here
+	lbi  	Timer4 							; write here
 	xis 	0 								; write it bump to timer + 1
 	clra 									; starts at zero.
 DLYLoop:
 	x 		0 								; write value back
 	jsrp 	Repaint 						; update screen
-	lbi 	Timer+1 						; count from here
+	lbi 	Timer4+1 						; count from here
 DLYPrevious:
 	ld 		0 								; load and bump
 	aisc 	1
@@ -689,26 +665,39 @@ FN__SFXGameOver:
 
 ; **********************************************************************************************************
 ;
-;										Clear Memory / Clear Screen
+;									Jump here when a life is lost.
 ;
 ; **********************************************************************************************************
 
-FN__ClearScreen:
-	lbi 	1,15 							; just clear 0-1
-ClearMemory:
-	lbi 	7,15 							; clear 0-7.
-CMLoop:	
-	clra 									; inner loop, clear page.
-	xds 	0
-	jp 		CMLoop
-	xabr									; do previous page
-	aisc 	15
-	jp 		CMExit
-	xabr
-	jp 		CMLoop
+LifeLost:
+	lbi 	2,Lives 						; read lives
+	ld 		0 
+	aisc 	15 								; subtract 1
+	jmp 	KillPlayer 
+	x 		0
+	jmp 	GameTurnOver
+
+; **********************************************************************************************************
 ;
-CMExit:
-	lbi 	1,LeftDigit						; set the Left/Right LED
-	stii 	14
-	stii 	15
+;							Jump here to immediately kill the current player
+;
+; **********************************************************************************************************
+
+KillPlayer:
+	lbi 	2,InfoBits 						; set infobits 1.
+	smb 	0
+	jmp 	GameTurnOver
+
+; **********************************************************************************************************
+;
+;									Initialisation done in every turn
+;
+; **********************************************************************************************************
+
+FN__CommonNewTurn:
+	jsr 	ClearScreen
+	lbi 	0,Player 						; put player in bottom centre.
+	stii 	4
+	lbi 	1,Player
+	stii 	8+5
 	ret

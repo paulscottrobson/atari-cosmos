@@ -17,14 +17,18 @@ ASLoop:
 	jsrp 	MoveHPlayer 					; move player, horizontally only.
 	nop
 
-	lbi 	Timer+1 						; time to move everything ?
-	skmbz 	3
-	jp 		ASMoveAll 						; if so, move everything
-
 	lbi 	0,Player 						; check if player has collide with anything (only asteroids to collide with)
 	jsrp 	CheckCollision
+	jp 		ASNoCollision	
+	jp 		FN__ShowHolo2LifeLost
+
+ASNoCollision:
+	lbi 	Timer4 							; time to move everything ?
+	clra
+	ske
 	jp 		ASLoop 							; if not, loop back.	
-	jmp 	ShowHolo2LifeLost
+	jp 		ASMoveAll 						; if so, move everything
+
 ;
 ;	Note : this entry point is used by several apps - it displays holo 2 for a short while then
 ;	loses a life.

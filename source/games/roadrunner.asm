@@ -37,8 +37,10 @@ RRSwapLoop:
 	xds 	0
 	jp 		RRSwapLoop	
 
-	lbi		Timer+1												; Check timer
-	skmbz 	3
+	lbi		Timer4												; Check timer
+	clra
+	ske
+	jp 		RRMainLoop
 	jp 		RRMoveAll
 	jp 		RRMainLoop
 ;

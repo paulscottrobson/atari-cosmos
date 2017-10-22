@@ -48,13 +48,12 @@ DSDestroyerLoop:
 	jsr 	DSKillYEquals1 						; if Y is 1 kill it
 DSNoFireCheck:
 
-
-	lbi		Timer+1
-	skmbz 	3
-	jp 		DSMoveMissiles
+	lbi		Timer4
+	clra
+	ske
 	jp 		DSDestroyerLoop
-DSMoveMissiles:
 
+DSMoveMissiles:
 	jsr 	DSCheckMissilesCollided
 	lbi 	0,PlayerMissile
 	jsr 	DSMoveMissile						; adjust missile position vertically, skip if alive
@@ -243,3 +242,4 @@ __DSIncCounterCheck:
 	jsrp 	BumpCounter
 	jsrp 	BumpCounter
 	jmp 	SFXLongFire
+	

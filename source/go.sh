@@ -4,4 +4,4 @@ cd ../source
 python ../assembler/copasm.py 
 tail -n 5 rom.lst 
 cp rom.ts ../javascript/src/generated
-../emulator/cosmos 7
+../emulator/cosmos 0

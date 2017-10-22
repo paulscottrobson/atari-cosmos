@@ -20,11 +20,10 @@ LeftDigit = 13 								; by convention, left and right digit addresses.
 RightDigit = 14
 Lives = 15 									; number of lives left.
 ;
-;		Page 3 is common used memory - timers, I/O etc that belong to both players.
+;		Page 3 is common used memory - timer, I/O etc that belong to both players.
 ;
-Timer = 3,0 								; 7 timers which control speed. These are increment every update
-											; and are timed out when bit 3 is set, but divide the update rate
-											; by 5 (3,0) to 2 (3,4).
+Timer4 = 3,0 								; divide by four timer. Counts by 4 each update
+											; Timer4+1 used in delay
 
 Random1 = 3,5 								; Random values
 Random2 = Random1+1

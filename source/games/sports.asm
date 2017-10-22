@@ -10,7 +10,7 @@
 
 Football:
 Basketball:
-	jsrp 	PlayerHologram
+	jsrp 	PlayerHologram 						; select hologram by player.
 ;
 ;	Set up players
 ;
@@ -62,17 +62,29 @@ SPNotOffEdge:
 	aisc 	7 									; Y+1 up skips
 	jsrp 	ShowHolo1LifeLost 	 				; gone off the field.
 
+	jsr 	SUHorizontalMove 					; horizontal moves.
+	jsr 	SUCheckCollisions 					; check any collisions.
 
-	jp 		SPLoop
+	lbi 	KeysFire 							; check fire key
+	skmbz 	KFB_Fire
+	jsr 	SUBasketThrow 						; if pressed do basketball throw.
 
-	page
+	lbi 	0,7 								; move all defenders
+SPDefenderLoop:
+	jsr 	SUMoveDefender
+	ld 		0
+	xds 	0
+	jp 		SPDefenderLoop
+
+	jsr 	SUCheckCollisions 					; check any collisions.
+	jmp 	SPLoop
 ;
-;	Causes a skip on return if the game is Baseball.
+;	Causes a skip on return if the game is Basketball.
 ;
 FN__SPSkipIfBasketball:
 	ldd 	GameID
 	aisc 	8 									; causes a carry if basketball
-	ret
+	retsk
 	retsk
 ;
 ;	Swap x coordinates around if Player 2.
@@ -100,3 +112,75 @@ __SUFlipOne:
 	aisc 	9 									; now 7-1 value
 	nop
 	jp 		__SUFDUpdate
+;
+;	Horizontal move, special code because of the flipping.
+;
+SUHorizontalMove:
+	clra 										; set A = 1
+	aisc 	1
+	lbi 	KeysDirection 						; point to keys
+	skmbz 	KFB_LEFT 							; skip if left not pressed
+	jp 		__SUHMGotXI
+	aisc 	14 									; set A = 15
+	skmbz 	KFB_RIGHT
+	jp 		__SUHMGotXI
+	ret
+__SUHMGotXI: 									; X offset in A
+	lbi 	2,0 								; look at player informatin bit
+	skmbz 	3 									; by default it's backwards, for P1
+	jp 		__SUHMReverse 						; make it the right way round.
+	comp 										; negate A (~A + 1)
+	aisc 	1
+	nop
+__SUHMReverse:
+	lbi 	0,Player 							; point to player.X
+	add 										; add to player.X
+	x 		0 									; write back
+	rmb 	3 									; 1 -> 0 and 7 -> 0 via 8 
+
+	ld 		0 									; read X
+	aisc 	15 									; skip if non-zero
+	jsrp 	ShowHolo1LifeLost  					; if was zero, gone off the boundary.
+
+	jsrp 	SPSkipIfBasketBall 					; skip if basketball
+	jp 		__SUHMCheckTD 						; if true, check touchdown.
+	ret
+__SUHMCheckTD:
+	ld 		0 									; fetch X
+	aisc 	9 									; only 7 skips, e.g. reached TD zone.
+	ret
+
+	jsrp 	SPAddTwo 							; add 6 points
+	jsrp 	SPAddTwo
+	jsrp 	SPAddTwo
+	jsrp 	ShowHolo1LifeLost
+;
+;	Add two to score
+;
+FN__SPAddTwo
+	jsrp 	BumpCounter
+	jmp 	BumpCounter
+
+;
+;	Check if player has hit any defender.
+;
+SUCheckCollisions:
+	ret 										; this becomes NOP when not testing.
+	lbi 	0,Player 							; check player vs defender collision
+	jsrp 	CheckCollision
+	ret
+	jsrp 	ShowHolo1LifeLost 					; collision occurred
+
+;
+;	Throw at basket
+;
+SUBasketThrow:
+	jsrp 	SPSkipIfBasketBall 					; must be basket ball game.....
+	ret
+	halt
+
+;
+;	Move Defender B.
+;
+SUMoveDefender:
+	ret
