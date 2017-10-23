@@ -6,6 +6,9 @@
 ; **********************************************************************************************************
 ; **********************************************************************************************************
 
+;
+;	2,0 	horizontal distance from basket.
+;
 	page
 
 Football:
@@ -162,6 +165,108 @@ FN__SPAddTwo
 	jmp 	BumpCounter
 
 ;
+;	Throw at basket
+;
+SUBasketThrow:
+	jsrp 	SPSkipIfBasketBall 					; must be basket ball game.....
+	ret
+;
+;	Calc horizontal offset
+;
+	ldd 	0,Player 							; player horizontal position
+	comp 										; one's complement.
+	lbi 	2,0 								; point at horizontal distance
+	x 		0 									; save it
+	rmb 	3 									; clear bit 3 7->8->0 1->14->6 etc.
+	ld 		0 									; read it
+	aisc 	15 									; cannot score from the back row - distance zero.
+	ret
+;
+;	Compare vpos to basket
+;	
+	lbi 	1,Player 							; point to player Y
+	clra 										; A = 8+3
+	aisc 	8+3
+	ske 										; if Y = 3 straight on to basket, throw is okay.
+	jp 		__SUBTThrowAtAngleCheck
+	jp 		__SUBTThrowOkay
+;
+;	Not straight, check 45 degree angle
+;
+__SUBTThrowAtAngleCheck:
+	sc
+	casc 										; subtract centre line from player Y									; if carry set it is positive.
+	jp 		__SUBTNegate
+	jp 		__SUBTCheckAngle 					; if so, go check the angle.
+__SUBTNegate:
+	comp 										; otherwise negate the offset
+	aisc 	1
+	nop
+__SUBTCheckAngle:
+	lbi 	2,0 								; X distance
+	ske 										; skip if X distance = |Y| distance
+	jsrp 	ShowHolo1LifeLost 					; missed, end game.
+;
+;	Throw is valid, if it doesn't hit a defender on the way.
+;
+__SUBTThrowOkay: 								; now we know it hit the basket.
+	lbi 	0,Player 							; copy Player position to P/M
+	ld 		1
+	xad 	0,PlayerMissile
+	ld 		0
+	xad 	1,PlayerMissile
+;
+;	Animate throw of ball, player out of control
+;
+__SUBTAnimateThrowLoop:
+	lbi 	0,PlayerMissile 					; gone off the right side ?
+	skmbz 	3 
+	jp 		__SUBTScore 						; yes, hit basket.
+
+	ld 		0 									; advance X by 1, point to 1 (Y)
+	aisc 	1
+	x 		1
+	clra 										; check if down centre line
+	aisc 	8+3
+	ske
+	jp 		__SUBTAngledThrow
+	jp 		__SUBTRepaint
+;
+;	off centre so work out if moves up or down
+;
+__SUBTAngledThrow:
+	sc 											; subtract
+	casc  										; carry clear to increment, set to decrement.
+	nop 
+	clra 										; A = 15
+	comp
+	skc 										; skip if carry set.
+	aisc 	2 									; A = 1
+	nop 										; ignore skips
+	add 										; add to player.Y
+	x 		0 	
+;
+;	Repaint and check ball hasn't hit a defender
+;	
+__SUBTRepaint:
+
+	jsrp 	Repaint 							; display updated screen
+	jsrp 	Repaint
+	lbi 	0,PlayerMissile 					; has the p/m hit a defender
+	jsrp 	CheckCollision
+	jp 		__SUBTAnimateThrowLoop
+	jsrp 	ShowHolo1LifeLost 					; if so, no score.
+;
+;	Score 2 or 3 if distance > 3
+;
+__SUBTScore:
+	jsrp 	SPAddTwo 							; two points
+	ldd 	2,0 								; load shot distance
+	aisc 	13 									; 3 or more will skip
+	jsrp 	ShowHolo1LifeLost 					; show life lost.	
+	jsrp 	BumpCounter
+	jsrp 	ShowHolo1LifeLost
+;
 ;	Check if player has hit any defender.
 ;
 SUCheckCollisions:
@@ -172,15 +277,13 @@ SUCheckCollisions:
 	jsrp 	ShowHolo1LifeLost 					; collision occurred
 
 ;
-;	Throw at basket
-;
-SUBasketThrow:
-	jsrp 	SPSkipIfBasketBall 					; must be basket ball game.....
-	ret
-	halt
-
-;
 ;	Move Defender B.
 ;
 SUMoveDefender:
 	ret
+
+;
+;	TODO: Move Defenders.
+; 	TODO: Consider vertical lock on pitch ?
+;	TODO: Change lives up from 3 to (say) 6,7 attempts
+;
