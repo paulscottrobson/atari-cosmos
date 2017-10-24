@@ -17,7 +17,7 @@
    id="svg8"
    inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
    sodipodi:docname="src07.svg"
-   inkscape:export-filename="/home/paulr/Projects/atari-cosmos/holograms/7/src07.svg.png"
+   inkscape:export-filename="/home/paulr/Projects/atari-cosmos/holograms/7/src07_1.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96">
   <defs
@@ -30,7 +30,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.7122321"
-     inkscape:cx="137.53975"
+     inkscape:cx="38.838178"
      inkscape:cy="770.25187"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -40,7 +40,7 @@
      inkscape:window-x="0"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
-     inkscape:snap-grids="false">
+     inkscape:snap-grids="true">
     <inkscape:grid
        type="xygrid"
        id="grid10" />
@@ -453,5 +453,29 @@
        x="61.278843"
        y="60.885204"
        ry="1.5080244e-05" />
+    <g
+       id="g3755"
+       transform="matrix(0.69230766,0,0,0.33333333,-19.538463,59.047953)"
+       style="stroke:#000000;stroke-width:2.08166599;stroke-opacity:1">
+      <g
+         id="g3760"
+         transform="matrix(0,2.076923,-0.4814815,0,248.29438,248.44387)">
+        <path
+           style="fill:none;stroke:#000000;stroke-width:2.08166599;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m -63.499999,70.78125 c 0,9.260417 0,9.260417 0,9.260417 h 17.197916"
+           id="path3746"
+           inkscape:connector-curvature="0" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:2.08166599;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="m -46.302083,70.78125 v 9.260417"
+           id="path3748"
+           inkscape:connector-curvature="0" />
+        <path
+           style="fill:none;stroke:#000000;stroke-width:2.08166599;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+           d="M -54.967187,86.65625 V 80.041667"
+           id="path3750"
+           inkscape:connector-curvature="0" />
+      </g>
+    </g>
   </g>
 </svg>
