@@ -8,11 +8,24 @@
 
 ;
 ;	2,0 	horizontal distance from basket.
-;
+;	2,6 	bit 3 set if initialisation changed.
+;	2,9 	movement timer.
 	page
 
 Football:
 Basketball:
+;
+;	Uprate lives (score attempts) to 6
+;
+	lbi 	2,6 								; point to first-initialise flag.
+	ld 		0 									; skip if first initialise is non-zero.
+	aisc 	15 							
+	cba 										; on carry, first set A = 6 from B address (tut tut)
+	skc
+	xad 	2,15 								; write to lives
+	smb  	3 									; set first-initialise flag so it doesn't happen again.
+
+SPStart:
 	jsrp 	PlayerHologram 						; select hologram by player.
 ;
 ;	Set up players
@@ -49,21 +62,23 @@ SPSetMainDefense:
 	jsrp 	Random 								; 50/50 chance
 	aisc 	8
 	smb 	2 									; 8+1 to 8+5
+; **********************************************************************************************************
 ;
 ;	Main loop
 ;
+; **********************************************************************************************************
 SPLoop: 
 	jsr 	SUFlipDisplay
 	jsrp 	Update 								; update display
 	jsr 	SUFlipDisplay
 
 	jsrp 	MoveVPlayer 						; move vertically
-	jp 		SPNotOffEdge 						; is okay.
-	jsrp 	ShowHolo1LifeLost 	 				; skipped, gone off the field.
+	nop
 SPNotOffEdge:
-	ldd 	1,Player 							; read player.Y
-	aisc 	7 									; Y+1 up skips
-	jsrp 	ShowHolo1LifeLost 	 				; gone off the field.
+	lbi 	1,Player 							; read player.Y
+	ld 		0
+	aisc 	7 									; Carry set on skip if > 8. 
+	stii 	9 									; write 8+1 as Y position
 
 	jsr 	SUHorizontalMove 					; horizontal moves.
 	jsr 	SUCheckCollisions 					; check any collisions.
@@ -72,26 +87,29 @@ SPNotOffEdge:
 	skmbz 	KFB_Fire
 	jsr 	SUBasketThrow 						; if pressed do basketball throw.
 
-	lbi 	0,7 								; move all defenders
-SPDefenderLoop:
-	jsr 	SUMoveDefender
+	lbi 	2,9 								; update movement timer (/16)
 	ld 		0
-	xds 	0
-	jp 		SPDefenderLoop
-
+	aisc 	15
+	jsr 	SUMoveDefenders
+	xad		2,9
 	jsr 	SUCheckCollisions 					; check any collisions.
 	jmp 	SPLoop
+
+; **********************************************************************************************************
 ;
 ;	Causes a skip on return if the game is Basketball.
 ;
+; **********************************************************************************************************
 FN__SPSkipIfBasketball:
 	ldd 	GameID
 	aisc 	8 									; causes a carry if basketball
+	ret 										; this should be RET normally, retsk to test basketball
 	retsk
-	retsk
+; **********************************************************************************************************
 ;
 ;	Swap x coordinates around if Player 2.
 ;
+; **********************************************************************************************************
 SUFlipDisplay:
 	lbi 	2,0 								; look at status bit.
 	skmbz 	3 									
@@ -115,9 +133,11 @@ __SUFlipOne:
 	aisc 	9 									; now 7-1 value
 	nop
 	jp 		__SUFDUpdate
+; **********************************************************************************************************
 ;
 ;	Horizontal move, special code because of the flipping.
 ;
+; **********************************************************************************************************
 SUHorizontalMove:
 	clra 										; set A = 1
 	aisc 	1
@@ -146,7 +166,7 @@ __SUHMReverse:
 	jsrp 	ShowHolo1LifeLost  					; if was zero, gone off the boundary.
 
 	jsrp 	SPSkipIfBasketBall 					; skip if basketball
-	jp 		__SUHMCheckTD 						; if true, check touchdown.
+	jmp 	__SUHMCheckTD 						; if true, check touchdown.
 	ret
 __SUHMCheckTD:
 	ld 		0 									; fetch X
@@ -157,16 +177,20 @@ __SUHMCheckTD:
 	jsrp 	SPAddTwo
 	jsrp 	SPAddTwo
 	jsrp 	ShowHolo1LifeLost
+; **********************************************************************************************************
 ;
 ;	Add two to score
 ;
+; **********************************************************************************************************
 FN__SPAddTwo
 	jsrp 	BumpCounter
 	jmp 	BumpCounter
 
+; **********************************************************************************************************
 ;
 ;	Throw at basket
 ;
+; **********************************************************************************************************
 SUBasketThrow:
 	jsrp 	SPSkipIfBasketBall 					; must be basket ball game.....
 	ret
@@ -221,7 +245,7 @@ __SUBTThrowOkay: 								; now we know it hit the basket.
 __SUBTAnimateThrowLoop:
 	lbi 	0,PlayerMissile 					; gone off the right side ?
 	skmbz 	3 
-	jp 		__SUBTScore 						; yes, hit basket.
+	jmp 	__SUBTScore 						; yes, hit basket.
 
 	ld 		0 									; advance X by 1, point to 1 (Y)
 	aisc 	1
@@ -230,7 +254,7 @@ __SUBTAnimateThrowLoop:
 	aisc 	8+3
 	ske
 	jp 		__SUBTAngledThrow
-	jp 		__SUBTRepaint
+	jmp 	__SUBTRepaint
 ;
 ;	off centre so work out if moves up or down
 ;
@@ -254,7 +278,7 @@ __SUBTRepaint:
 	jsrp 	Repaint
 	lbi 	0,PlayerMissile 					; has the p/m hit a defender
 	jsrp 	CheckCollision
-	jp 		__SUBTAnimateThrowLoop
+	jmp 	__SUBTAnimateThrowLoop
 	jsrp 	ShowHolo1LifeLost 					; if so, no score.
 ;
 ;	Score 2 or 3 if distance > 3
@@ -266,9 +290,11 @@ __SUBTScore:
 	jsrp 	ShowHolo1LifeLost 					; show life lost.	
 	jsrp 	BumpCounter
 	jsrp 	ShowHolo1LifeLost
+; **********************************************************************************************************
 ;
 ;	Check if player has hit any defender.
 ;
+; **********************************************************************************************************
 SUCheckCollisions:
 	ret 										; this becomes NOP when not testing.
 	lbi 	0,Player 							; check player vs defender collision
@@ -276,14 +302,27 @@ SUCheckCollisions:
 	ret
 	jsrp 	ShowHolo1LifeLost 					; collision occurred
 
+; **********************************************************************************************************
 ;
-;	Move Defender B.
+;	Move all Defenders.
 ;
-SUMoveDefender:
-	ret
+; **********************************************************************************************************
 
-;
-;	TODO: Move Defenders.
-; 	TODO: Consider vertical lock on pitch ?
-;	TODO: Change lives up from 3 to (say) 6,7 attempts
-;
+SUMoveDefenders:
+	jsrp 	SFXHighShortBeep 					; beep as moved.
+	lbi 	0,7 								; move all defenders
+__SUMDLoop:
+
+	ld 		0
+	aisc 	15
+	clra
+	x 		0
+
+
+	ld 		0 									; loop around
+	xds 	0
+	jp 		__SUMDLoop
+
+	clra 										; return with A = $F because of X 0 following call.
+	comp
+	ret
