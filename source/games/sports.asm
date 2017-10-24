@@ -10,6 +10,8 @@
 ;	2,0 	horizontal distance from basket.
 ;	2,6 	bit 3 set if initialisation changed.
 ;	2,9 	movement timer.
+; 	2,10 	B temporary
+;
 	page
 
 Football:
@@ -310,19 +312,42 @@ SUCheckCollisions:
 
 SUMoveDefenders:
 	jsrp 	SFXHighShortBeep 					; beep as moved.
-	lbi 	0,7 								; move all defenders
+	lbi 	0,6 								; move all defenders
 __SUMDLoop:
+	clra 										; make sure points at 0 to start with.
+	xabr
 
-	ld 		0
-	aisc 	15
-	clra
-	x 		0
+
+
 
 
 	ld 		0 									; loop around
 	xds 	0
 	jp 		__SUMDLoop
-
 	clra 										; return with A = $F because of X 0 following call.
 	comp
 	ret
+;
+;	Chase Bu:B to A, which is the 0/1 Player equivalent. (i.e. load A with player.X, point
+; 	B at defender.X and it will chase on X)
+;
+SUFollow:
+	ske 										; if already the same, don't move.
+	jp 		__SUFDifferent
+	ret
+__SUFDifferent:	
+	sc 											; calculate player.X - defender.X
+	casc 	
+	jp 		__SUFIncrement
+	clra
+	comp
+__SUFUpdate:
+	add 										; add it, write back
+	x 		0
+	ret
+;
+__SUFIncrement:
+	clra
+	aisc 	1
+	jp 		__SUFUpdate
+
