@@ -1280,7 +1280,7 @@
 6c8 :   8c       0292:  JSRP  SHOWHOLO1LIFELOST
 6c9 :   a0       0293:  JSRP  BUMPCOUNTER
 6ca :   8c       0294:  JSRP  SHOWHOLO1LIFELOST
-6cb :   48       0302:  RET
+6cb :   44       0302:  NOP
 6cc :    b       0303:  LBI  0,PLAYER
 6cd :   ba       0304:  JSRP  CHECKCOLLISION
 6ce :   48       0305:  RET
@@ -1295,43 +1295,81 @@
 6d9 : 23ab       0323:  XAD  2,11
 6db :   15       0324:  LD   1
 6dc : 23ac       0325:  XAD  2,12
-6de : 670a       0326:  JMP  SUMOVESINGLEPLAYER
-6e0 :    0       0328:  CLRA
-6e1 :   12       0329:  XABR
-6e2 :    0       0330:  CLRA
-6e3 :   57       0331:  AISC  7
-6e4 :   85       0332:  JSRP  CHECKCOLLISIONUPTO
-6e5 :   f1       0333:  JP   __SUMNEXT
-6e6 :    0       0336:  CLRA
-6e7 :   12       0337:  XABR
-6e8 : 232a       0338:  LDD  2,10
-6ea :   50       0339:  CAB
-6eb : 232b       0340:  LDD  2,11
-6ed :   16       0341:  X   1
-6ee : 232c       0342:  LDD  2,12
-6f0 :   16       0343:  X   1
-6f1 : 232a       0346:  LDD  2,10
-6f3 :   50       0347:  CAB
-6f4 :    5       0348:  LD   0
-6f5 :    7       0349:  XDS  0
-6f6 :   d3       0350:  JP   __SUMDLOOP
-6f7 :    0       0351:  CLRA
-6f8 :   40       0352:  COMP
-6f9 :   48       0353:  RET
-6fa :   21       0359:  SKE
-6fb : 66fe       0360:  JMP  __SUFDIFFERENT
-6fd :   48       0361:  RET
-6fe :   22       0363:  SC
-6ff :   10       0364:  CASC
-700 : 6707       0365:  JMP  __SUFINCREMENT
-702 :    0       0366:  CLRA
-703 :   40       0367:  COMP
-704 :   31       0369:  ADD
-705 :    6       0370:  X   0
-706 :   48       0371:  RET
-707 :    0       0374:  CLRA
-708 :   51       0375:  AISC  1
-709 :   c4       0376:  JP   __SUFUPDATE
-70a :   84       0379:  JSRP  MOVERIGHT
-70b :   44       0380:  NOP
-70c : 66e0       0381:  JMP  __SUMCHECKMOVE
+6de : 670e       0326:  JMP  SUMOVESINGLEPLAYER
+6e0 :    0       0331:  CLRA
+6e1 :   12       0332:  XABR
+6e2 :   15       0333:  LD   1
+6e3 :   15       0334:  LD   1
+6e4 :   57       0335:  AISC  7
+6e5 :   ea       0336:  JP   __SUMBADMOVE
+6e6 :    0       0337:  CLRA
+6e7 :   57       0338:  AISC  7
+6e8 :   85       0339:  JSRP  CHECKCOLLISIONUPTO
+6e9 :   f5       0340:  JP   __SUMNEXT
+6ea :    0       0345:  CLRA
+6eb :   12       0346:  XABR
+6ec : 232a       0347:  LDD  2,10
+6ee :   50       0348:  CAB
+6ef : 232b       0349:  LDD  2,11
+6f1 :   16       0350:  X   1
+6f2 : 232c       0351:  LDD  2,12
+6f4 :   16       0352:  X   1
+6f5 : 232a       0355:  LDD  2,10
+6f7 :   50       0356:  CAB
+6f8 :    5       0357:  LD   0
+6f9 :    7       0358:  XDS  0
+6fa :   d3       0359:  JP   __SUMDLOOP
+6fb :    0       0360:  CLRA
+6fc :   40       0361:  COMP
+6fd :   48       0362:  RET
+6fe :   21       0368:  SKE
+6ff : 6702       0369:  JMP  __SUFDIFFERENT
+701 :   48       0370:  RET
+702 :   22       0372:  SC
+703 :   10       0373:  CASC
+704 : 670b       0374:  JMP  __SUFINCREMENT
+706 :    0       0375:  CLRA
+707 :   40       0376:  COMP
+708 :   31       0378:  ADD
+709 :    6       0379:  X   0
+70a :   48       0380:  RET
+70b :    0       0383:  CLRA
+70c :   51       0384:  AISC  1
+70d :   c8       0385:  JP   __SUFUPDATE
+70e :   4e       0395:  CBA
+70f :   5b       0396:  AISC  11
+710 :   e3       0397:  JP   __SUMPFRONTROW
+711 :   a6       0402:  JSRP  RANDOM
+712 :   5b       0403:  AISC  11
+713 :   da       0404:  JP   __SUMPRANDOMX
+714 :   15       0405:  LD   1
+715 : 231c       0406:  LDD  1,PLAYER
+717 : 6efe       0407:  JSR  SUFOLLOW
+719 :   f6       0408:  JP   __SUMPEXIT
+71a :   a6       0411:  JSRP  RANDOM
+71b :   59       0412:  AISC  9
+71c :   e0       0413:  JP   __SUMPLEFT
+71d :   84       0414:  JSRP  MOVERIGHT
+71e :   44       0415:  NOP
+71f :   f6       0416:  JP   __SUMPEXIT
+720 :   9a       0418:  JSRP  MOVELEFT
+721 :   44       0419:  NOP
+722 :   f6       0420:  JP   __SUMPEXIT
+723 :   a6       0425:  JSRP  RANDOM
+724 :   58       0426:  AISC  8
+725 :   eb       0427:  JP   __SUMPNOCHASE
+726 : 230c       0429:  LDD  0,PLAYER
+728 : 6efe       0430:  JSR  SUFOLLOW
+72a :   f6       0431:  JP   __SUMPEXIT
+72b :   a6       0434:  JSRP  RANDOM
+72c :   54       0435:  AISC  4
+72d :   da       0436:  JP   __SUMPRANDOMX
+72e :   a6       0438:  JSRP  RANDOM
+72f :   58       0439:  AISC  8
+730 :   f4       0440:  JP   __SUMPUP
+731 :   b4       0441:  JSRP  MOVEDOWN
+732 :   44       0442:  NOP
+733 :   f6       0443:  JP   __SUMPEXIT
+734 :   b6       0445:  JSRP  MOVEUP
+735 :   44       0446:  NOP
+736 : 66e0       0448:  JMP  __SUMCHECKMOVE

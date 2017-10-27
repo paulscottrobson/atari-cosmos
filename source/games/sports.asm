@@ -299,7 +299,7 @@ __SUBTScore:
 ;
 ; **********************************************************************************************************
 SUCheckCollisions:
-	ret 										; this becomes NOP when not testing.
+	nop 										; this becomes NOP when not testing.
 	lbi 	0,Player 							; check player vs defender collision
 	jsrp 	CheckCollision
 	ret
@@ -330,6 +330,10 @@ __SUMDLoop:
 __SUMCheckMove:
 	clra 										; check collision with 0-7 e.g. not the player !
 	xabr
+	ld 		1 									; read Y
+	ld 		1
+	aisc 	7									; skip if Y > 8
+	jp 		__SUMBadMove 						; if Y == 8 Bad Move
 	clra
 	aisc 	7
 	jsrp 	CheckCollisionUpTo
@@ -365,7 +369,7 @@ SUFollow:
 	jmp 	__SUFDifferent
 	ret
 __SUFDifferent:	
-	sc 											; calculate player.X - defender.X
+	sc 											; calculate player.Y - defender.Y
 	casc 	
 	jmp 	__SUFIncrement
 	clra
@@ -387,7 +391,58 @@ __SUFIncrement:
 ; **********************************************************************************************************
 
 SUMoveSinglePlayer:
+
+	cba 										; get player number
+	aisc 	11 			 						; skip if 5 or 6, the front row.
+	jp 		__SUMPFrontRow
+;
+;	Back row
+;
+__SUMPBackRow:
+	jsrp 	Random
+	aisc 	11
+	jp 		__SUMPRandomX
+	ld 		1 									; point to Y
+	ldd 	1,Player 							; chase player.Y
+	jsr 	SUFollow	
+	jp 		__SUMPExit
+
+__SUMPRandomX:
+	jsrp 	Random
+	aisc 	9
+	jp 		__SUMPLeft
 	jsrp 	MoveRight
 	nop
-	jmp 	__SUMCheckMove
+	jp 		__SUMPExit
+__SUMPLeft:
+	jsrp 	MoveLeft
+	nop
+	jp 		__SUMPExit
+;
+;	Front row
+;
+__SUMPFrontRow:
+	jsrp 	Random
+	aisc 	8
+	jp 		__SUMPNoChase
 
+	ldd 	0,Player
+	jsr 	SUFollow
+	jp 		__SUMPExit
+
+__SUMPNoChase:
+	jsrp 	Random
+	aisc 	4
+	jp 		__SUMPRandomX
+
+	jsrp 	Random
+	aisc 	8
+	jp 		__SUMPUp
+	jsrp 	MoveDown
+	nop
+	jp 		__SUMPExit
+__SUMPUp:
+	jsrp 	MoveUp
+	nop
+__SUMPExit:
+	jmp 	__SUMCheckMove
