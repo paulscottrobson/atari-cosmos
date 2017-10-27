@@ -10,7 +10,7 @@
 ;	2,0 	horizontal distance from basket.
 ;	2,6 	bit 3 set if initialisation changed.
 ;	2,9 	movement timer.
-; 	2,10 	B temporary
+; 	2,10 	B temporary 2,11 X temporary 2,12 Y temporary 
 ;
 	page
 
@@ -91,7 +91,7 @@ SPNotOffEdge:
 
 	lbi 	2,9 								; update movement timer (/16)
 	ld 		0
-	aisc 	15
+	aisc 	14
 	jsr 	SUMoveDefenders
 	xad		2,9
 	jsr 	SUCheckCollisions 					; check any collisions.
@@ -292,6 +292,7 @@ __SUBTScore:
 	jsrp 	ShowHolo1LifeLost 					; show life lost.	
 	jsrp 	BumpCounter
 	jsrp 	ShowHolo1LifeLost
+
 ; **********************************************************************************************************
 ;
 ;	Check if player has hit any defender.
@@ -316,11 +317,39 @@ SUMoveDefenders:
 __SUMDLoop:
 	clra 										; make sure points at 0 to start with.
 	xabr
+	cba 										; save B
+	xad 	2,10 						
+	ld 		1 									; save X, switch to Y
+	xad 	2,11
+	ld 		1 									; save Y, switch to X
+	xad 	2,12
+	jmp 	SUMoveSinglePlayer 					; suggested move code, we jump back here.
+;
+;	Check that we haven't collided with any other defenders
+;												; it would be a subroutine call but save one level :)
+__SUMCheckMove:
+	clra 										; check collision with 0-7 e.g. not the player !
+	xabr
+	clra
+	aisc 	7
+	jsrp 	CheckCollisionUpTo
+	jp  	__SUMNext
+;
+;	If we did collide, reload the saved position.
+;
+__SUMBadMove:
+	clra 										; force into 0.B
+	xabr
+	ldd 	2,10 								; reload from temp
+	cab
+	ldd 	2,11
+	x 		1
+	ldd 	2,12
+	x 		1
 
-
-
-
-
+__SUMNext:
+	ldd 	2,10 								; reset B just in case.
+	cab
 	ld 		0 									; loop around
 	xds 	0
 	jp 		__SUMDLoop
@@ -333,12 +362,12 @@ __SUMDLoop:
 ;
 SUFollow:
 	ske 										; if already the same, don't move.
-	jp 		__SUFDifferent
+	jmp 	__SUFDifferent
 	ret
 __SUFDifferent:	
 	sc 											; calculate player.X - defender.X
 	casc 	
-	jp 		__SUFIncrement
+	jmp 	__SUFIncrement
 	clra
 	comp
 __SUFUpdate:
@@ -350,4 +379,15 @@ __SUFIncrement:
 	clra
 	aisc 	1
 	jp 		__SUFUpdate
+	
+; **********************************************************************************************************
+;
+;					Move defender B. It's a sort of subroutine but ends with a jump
+;
+; **********************************************************************************************************
+
+SUMoveSinglePlayer:
+	jsrp 	MoveRight
+	nop
+	jmp 	__SUMCheckMove
 

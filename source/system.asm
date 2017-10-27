@@ -609,6 +609,8 @@ CCCoordinates:
 	skc 									; if carry set, collision has occurred.
 	jmp 	CCNext
 
+	clra
+	xabr
 	ldd 	RowTemp 						; get collision ID, in A + B
 	cab
 	retsk
